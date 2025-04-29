@@ -24,13 +24,30 @@
 
     .social-links {
       margin-top: 20px;
+      display: flex;
+      gap: 20px;
     }
 
     .social-links a {
-      margin: 0 10px;
       color: white;
-      text-decoration: underline;
+      text-decoration: none;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(0,0,0,0.4);
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .social-links a:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    .social-links img {
+      width: 20px;
+      height: 20px;
     }
 
     .disclaimer {
@@ -38,6 +55,9 @@
       bottom: 10px;
       font-size: 12px;
       color: #ccc;
+      background-color: rgba(0,0,0,0.4);
+      padding: 5px 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -46,9 +66,15 @@
   <p>Це домашня сторінка нашого токена BAG.</p>
 
   <div class="social-links">
-    <a href="https://discord.gg/QgJVTKBg" target="_blank">Discord</a>
-    <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
-    <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord"> Discord
+    </a>
+    <a href="https://t.me/BONKBAG" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"> Telegram
+    </a>
+    <a href="https://x.com/b0nkbag?s=21" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"> Twitter
+    </a>
   </div>
 
   <div class="disclaimer">
