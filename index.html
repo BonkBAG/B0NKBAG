@@ -11,31 +11,27 @@
       background-color: #000;
       color: #fff;
       font-family: Arial, sans-serif;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url('bg.png') center center no-repeat;
-      background-size: contain;
-      opacity: 0.15;
-      z-index: -1;
+      background-image: url('bg.png'); /* Фон-картинка */
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: contain; /* Відображати всю картинку */
+      background-attachment: fixed;
     }
 
     .overlay {
+      background-color: rgba(0, 0, 0, 0.7);
       max-width: 600px;
       margin: 0 auto;
       padding: 30px 20px;
+      border-radius: 20px;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.75);
       min-height: 100vh;
       box-sizing: border-box;
     }
 
     .logo {
       width: 120px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     h1 {
@@ -72,6 +68,10 @@
       font-size: 16px;
     }
 
+    .socials {
+      margin-top: 20px;
+    }
+
     .socials a {
       margin: 0 10px;
       color: #00eaff;
@@ -92,7 +92,7 @@
 
     .disclaimer {
       font-size: 12px;
-      margin-top: 25px;
+      margin-top: 30px;
       color: #aaa;
     }
   </style>
