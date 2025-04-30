@@ -8,110 +8,121 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
+      color: white;
       background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
-      color: white;
       text-align: center;
     }
-
     .overlay {
-      background-color: rgba(0, 0, 0, 0.65);
-      padding: 40px 20px;
-      margin: auto;
-      max-width: 700px;
-      border-radius: 10px;
-      margin-top: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      margin: 2rem auto;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
     }
-
     h1 {
-      font-size: 40px;
+      font-size: 2.5rem;
       color: #FFD700;
     }
-
-    .btn {
-      background-color: #FFD700;
-      color: black;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 16px;
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
-      margin: 15px 0;
-    }
-
-    .section {
-      margin: 25px 0;
-    }
-
-    .links a {
-      display: block;
-      color: #FFD700;
-      text-decoration: none;
-      margin: 5px 0;
-      font-size: 16px;
-    }
-
-    .diagram {
-      display: none;
-      background: white;
+      background-color: #FFD700;
       color: black;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
+      cursor: pointer;
     }
-
-    .diagram h3 {
-      margin-bottom: 10px;
+    .tokenomics {
+      display: none;
+      margin-top: 1.5rem;
     }
-
-    .diagram ul {
-      list-style-type: none;
-      padding: 0;
+    .chart {
+      width: 100%;
+      max-width: 300px;
+      margin: 1rem auto;
     }
-
-    .diagram ul li {
-      margin: 5px 0;
-    }
-
-    .tokenomics-btn:hover + .diagram {
+    a {
+      color: #FFD700;
       display: block;
+      margin-top: 0.3rem;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="overlay">
+    <img src="logo.png" alt="BONK BAG Logo" style="max-width: 150px; margin-bottom: 20px;" />
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
-
-    <div class="section">
-      <button class="btn tokenomics-btn">Tokenomics</button>
-      <div class="diagram">
-        <h3>Token Distribution</h3>
-        <ul>
-          <li>60% — DEX Liquidity</li>
-          <li>20% — Owner</li>
-          <li>10% — Reserve</li>
-          <li>10% — Airdrop</li>
-        </ul>
-      </div>
+    
+    <button onclick="toggleTokenomics()">Tokenomics</button>
+    
+    <div id="tokenomics" class="tokenomics">
+      <h2>Tokenomics</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li><strong>Total Supply:</strong> 5,000,000,000 $BAG</li>
+        <li><strong>Decimals:</strong> 18</li>
+        <li><strong>Network:</strong> Polygon</li>
+        <li><strong>Chain ID:</strong> 137</li>
+        <li><strong>Token Address:</strong> 0x3686568eCB6cE7545765b641932044900d11e584</li>
+      </ul>
+      <h3>Distribution</h3>
+      <canvas id="distributionChart" class="chart"></canvas>
     </div>
 
-    <div class="section">
-      <h2>Coming Soon</h2>
-      <p>• Listing on DEX</p>
-      <p>• Airdrop</p>
-      <p>• Staking</p>
-      <p><em>Staking coming soon</em></p>
-    </div>
+    <h2>Coming Soon</h2>
+    <p>• Listing on DEX</p>
+    <p>• Airdrop</p>
+    <p>• Staking</p>
+    <em>Staking coming soon</em>
 
-    <div class="section links">
-      <h2>Links</h2>
-      <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
-      <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
-      <a href="https://bonkbag.github.io/BONKBAG" target="_blank">Website</a>
-      <a href="https://github.com/BonkBAG/BONKBAG" target="_blank">GitHub</a>
-    </div>
+    <h2>Links</h2>
+    <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
+    <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
+    <a href="https://bonkbag.github.io/BONKBAG/" target="_blank">Website</a>
+    <a href="https://github.com/BonkBAG/BONKBAG" target="_blank">GitHub</a>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function toggleTokenomics() {
+      const tokenomics = document.getElementById("tokenomics");
+      tokenomics.style.display = tokenomics.style.display === "block" ? "none" : "block";
+
+      if (!window.chartInitialized) {
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['DEX Liquidity (40%)', 'Owner (30%)', 'Reserve (10%)', 'Airdrop (20%)'],
+            datasets: [{
+              label: 'Token Distribution',
+              data: [40, 30, 10, 20],
+              backgroundColor: ['#FFD700', '#00CED1', '#FF6347', '#32CD32'],
+              borderColor: '#111',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'white'
+                }
+              }
+            }
+          }
+        });
+        window.chartInitialized = true;
+      }
+    }
+  </script>
 </body>
 </html>
