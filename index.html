@@ -6,67 +6,111 @@
   <title>Bonk BAG ($BAG)</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #fdfdfd;
-      color: #333;
+      background: url('bg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
     }
-    img.logo {
-      max-width: 160px;
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.65);
+      padding: 40px 20px;
     }
+
     h1 {
-      color: #c62828;
+      font-size: 3em;
+      color: #ff4d4d;
     }
-    h2 {
-      color: #2e7d32;
+
+    .logo {
+      width: 200px;
+      margin: 20px auto;
     }
-    a {
-      color: #1976d2;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+
     .section {
-      margin-bottom: 40px;
+      margin: 50px auto;
+      max-width: 800px;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+    }
+
+    .section h2 {
+      color: #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    .tokenomics-chart {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    a {
+      color: #00ffff;
+      text-decoration: none;
+      display: inline-block;
+      margin: 10px;
+    }
+
+    .btn-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #00ffcc;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .btn-link:hover {
+      background-color: #00ccaa;
     }
   </style>
 </head>
 <body>
-  <img src="bg.png" alt="Bonk BAG Logo" class="logo" />
-  <h1>Bonk BAG ($BAG)</h1>
+  <div class="overlay">
 
-  <div class="section">
-    <p><strong>Bonk BAG</strong> is a fun and community-driven meme token built on the Polygon network. Fairly launched with no presale, it's designed to be simple, transparent, and powered by its holders.</p>
-  </div>
+    <img class="logo" src="logo.png" alt="Bonk BAG Logo" />
 
-  <div class="section">
-    <h2>Tokenomics</h2>
-    <ul>
-      <li><strong>Total Supply:</strong> 5,000,000,000 $BAG</li>
-      <li><strong>Decimals:</strong> 18</li>
-      <li><strong>Network:</strong> Polygon</li>
-      <li><strong>Chain ID:</strong> 137</li>
-      <li><strong>Token Address:</strong> 0x3686568eCB6cE7545765b641932044900d11e584</li>
-    </ul>
-  </div>
+    <h1>Bonk BAG ($BAG)</h1>
 
-  <div class="section">
-    <h2>Distribution</h2>
-    <ul>
-      <li>60% — Team / Reserve</li>
-      <li>40% — DEX Liquidity</li>
-    </ul>
-  </div>
+    <div class="section">
+      <h2>About the Token</h2>
+      <p>
+        Bonk BAG is a fun and community-driven meme token built on the Polygon network.
+        Fairly launched with no presale, it's designed to empower holders with transparent
+        tokenomics and decentralized liquidity.
+      </p>
+      <a class="btn-link" href="about.html">Learn More</a>
+    </div>
 
-  <div class="section">
-    <h2>Links</h2>
-    <ul>
-      <li><a href="https://t.me/BONKBAG" target="_blank">Telegram</a></li>
-      <li><a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></li>
-      <li><a href="https://bonkbag.github.io/B0NKBAG/" target="_blank">Website</a></li>
-      <li><a href="https://github.com/BonkBAG/B0NKBAG" target="_blank">GitHub</a></li>
-    </ul>
+    <div class="section">
+      <h2>Tokenomics</h2>
+      <p><strong>Total Supply:</strong> 5,000,000,000 $BAG</p>
+      <p><strong>Decimals:</strong> 18</p>
+      <p><strong>Network:</strong> Polygon</p>
+      <p><strong>Chain ID:</strong> 137</p>
+      <p><strong>Token Address:</strong> 0x3686568eCB6cE7545765b641932044900d11e584</p>
+      <img class="tokenomics-chart" src="tokenomics.png" alt="Token Distribution Chart" />
+    </div>
+
+    <div class="section">
+      <h2>Distribution</h2>
+      <p><strong>60%</strong> — Team / Reserve</p>
+      <p><strong>40%</strong> — DEX Liquidity</p>
+    </div>
+
+    <div class="section">
+      <h2>Socials</h2>
+      <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
+      <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
+      <a href="https://bonkbag.github.io/BONKBAG/" target="_blank">Website</a>
+      <a href="https://github.com/BonkBAG/BONKBAG" target="_blank">GitHub</a>
+    </div>
+
   </div>
 </body>
 </html>
