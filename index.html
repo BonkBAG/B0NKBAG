@@ -8,53 +8,65 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: url('bg.png') no-repeat center center fixed;
-      background-size: contain;
+      background-color: #000;
       color: #fff;
       text-align: center;
     }
     .overlay {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 40px 20px;
-      min-height: 100vh;
+      background: url('bg.png') no-repeat center center fixed;
+      background-size: contain;
+      background-color: #000;
+      padding: 20px;
       box-sizing: border-box;
+      min-height: 100vh;
+    }
+    img.logo {
+      width: 140px;
+      margin-top: 10px;
     }
     h1 {
-      font-size: 36px;
+      font-size: 32px;
       margin-bottom: 10px;
     }
     .buttons a {
       display: inline-block;
       margin: 10px;
-      padding: 12px 24px;
+      padding: 12px 20px;
       background-color: #ffcc00;
-      color: black;
+      color: #000;
       text-decoration: none;
       border-radius: 6px;
       font-weight: bold;
     }
     .coming-soon {
-      margin: 30px 0;
-      font-size: 20px;
+      margin: 20px 0;
+      font-size: 18px;
+    }
+    .links {
+      margin: 20px 0;
     }
     .links a {
-      margin: 0 15px;
+      margin: 0 10px;
       color: #00eaff;
       text-decoration: none;
       font-weight: bold;
     }
-    .tokenomics {
-      margin-top: 40px;
+    .tokenomics-mini {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ccc;
     }
     .disclaimer {
       font-size: 12px;
       margin-top: 30px;
-      color: #ccc;
+      color: #888;
     }
   </style>
 </head>
 <body>
   <div class="overlay">
+    <img src="logo.png" alt="BONK BAG Logo" class="logo" />
+    
     <a href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank" style="color: #00eaff; font-weight: bold; font-size: 14px;">View on DEXTools</a>
 
     <h1>BONK BAG ($BAG)</h1>
@@ -78,9 +90,8 @@
       <a href="https://github.com/BonkBAG/B0NKBAG" target="_blank">GitHub</a>
     </div>
 
-    <div class="tokenomics" id="tokenomics">
-      <h2>Tokenomics</h2>
-      <img src="tokenomics_chart.png" alt="Tokenomics Chart" style="max-width: 100%; height: auto;">
+    <div class="tokenomics-mini" id="tokenomics">
+      Total Supply: 5,000,000,000 $BAG | 50% Owner | 40% DEX | 10% Reserve
     </div>
 
     <div class="disclaimer">
