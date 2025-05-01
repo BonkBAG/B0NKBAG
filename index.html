@@ -53,6 +53,7 @@
       border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .link a {
@@ -96,12 +97,6 @@
       color: #aaa;
     }
   </style>
-  <script>
-    function toggleChart() {
-      var chart = document.getElementById("chart");
-      chart.style.display = chart.style.display === "none" ? "block" : "none";
-    }
-  </script>
 </head>
 <body>
   <div class="overlay">
@@ -128,6 +123,31 @@
       <img src="tokenomics_chart.png" alt="Tokenomics Chart">
     </div>
 
+    <!-- Airdrop Collapsible Section -->
+    <div style="margin-top: 40px;">
+      <button onclick="toggleAirdrop()" style="
+        background-color: #ffcc00;
+        color: #000;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+      ">Airdrop Giveaway</button>
+
+      <div id="airdrop-content" style="display: none; margin-top: 20px; padding: 25px; background-color: rgba(255,255,255,0.05); border-radius: 12px; text-align: left;">
+        <p style="font-size: 16px; text-align: center;">Win your share of <strong>250,000,000 $BONKBAG</strong> — 10 random winners!</p>
+        <ul style="font-size: 15px; line-height: 1.6;">
+          <li>1. Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank" style="color:#ffcc00;">Twitter</a></li>
+          <li>2. Retweet this post: <a href="https://twitter.com/YOUR_POST_LINK" target="_blank" style="color:#ffcc00;">Click here</a></li>
+          <li>3. Join our <a href="https://t.me/BONKBAG" target="_blank" style="color:#ffcc00;">Telegram group</a></li>
+        </ul>
+        <div id="airdrop-timer" style="margin-top: 15px; font-size: 17px; color: #00eaff;"></div>
+        <div id="airdrop-expired" style="display:none; font-size: 17px; color: red;">Airdrop has ended</div>
+      </div>
+    </div>
+
     <div class="coming">
       <strong>Coming Soon:</strong><br>
       • Airdrop<br>
@@ -145,5 +165,43 @@
       This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
     </div>
   </div>
+
+  <script>
+    function toggleChart() {
+      var chart = document.getElementById("chart");
+      chart.style.display = chart.style.display === "none" ? "block" : "none";
+    }
+
+    function toggleAirdrop() {
+      const content = document.getElementById("airdrop-content");
+      content.style.display = content.style.display === "none" ? "block" : "none";
+    }
+
+    // Countdown timer
+    const endDate = new Date("2025-07-07T20:00:00+02:00").getTime();
+    const timerEl = document.getElementById("airdrop-timer");
+    const expiredEl = document.getElementById("airdrop-expired");
+
+    const airdropInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance <= 0) {
+        clearInterval(airdropInterval);
+        if (timerEl) timerEl.style.display = "none";
+        if (expiredEl) expiredEl.style.display = "block";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      if (timerEl) {
+        timerEl.innerHTML = `Airdrop ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
