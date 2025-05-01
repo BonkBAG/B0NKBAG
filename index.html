@@ -17,7 +17,6 @@
       background-size: contain;
       background-attachment: fixed;
     }
-
     .overlay {
       background-color: rgba(0, 0, 0, 0.7);
       max-width: 600px;
@@ -28,22 +27,18 @@
       min-height: 100vh;
       box-sizing: border-box;
     }
-
     .logo {
       width: 120px;
       margin-bottom: 15px;
     }
-
     h1 {
       font-size: 28px;
       margin: 10px 0;
     }
-
     p {
       font-size: 16px;
       margin-bottom: 20px;
     }
-
     .button {
       display: inline-block;
       margin: 10px 5px;
@@ -55,7 +50,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     .link a {
       color: #00eaff;
       font-weight: bold;
@@ -63,34 +57,24 @@
       display: block;
       margin: 10px 0;
     }
-
-    .coming {
-      margin: 20px 0;
-      font-size: 16px;
-    }
-
     .socials {
       margin-top: 20px;
     }
-
     .socials a {
       margin: 0 10px;
       color: #00eaff;
       text-decoration: none;
       font-weight: bold;
     }
-
     #chart {
       display: none;
       margin-top: 15px;
     }
-
     #chart img {
       max-width: 100%;
       height: auto;
       border-radius: 10px;
     }
-
     .disclaimer {
       font-size: 12px;
       margin-top: 30px;
@@ -101,29 +85,18 @@
 <body>
   <div class="overlay">
     <img src="logo.png" alt="BONK BAG Logo" class="logo" />
-
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
-
-    <a class="button" href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">
-      Buy $BAG on SusiSwap
-    </a>
-
+    <a class="button" href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy $BAG on SusiSwap</a>
     <div class="link">
-      <a href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">
-        View $BAG / USDC on DEXTools
-      </a>
+      <a href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">View $BAG / USDC on DEXTools</a>
     </div>
-
     <div>
       <div class="button" onclick="toggleChart()">Tokenomics</div>
     </div>
-
     <div id="chart">
       <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>
-
-    <!-- Airdrop Collapsible Section -->
+    </div>    <!-- Airdrop Collapsible Section -->
     <div style="margin-top: 40px;">
       <button onclick="toggleAirdrop()" style="
         background-color: #ffcc00;
@@ -137,7 +110,9 @@
       ">Airdrop Giveaway</button>
 
       <div id="airdrop-content" style="display: none; margin-top: 20px; padding: 25px; background-color: rgba(255,255,255,0.05); border-radius: 12px; text-align: left;">
-        <p style="font-size: 16px; text-align: center;">Win your share of <strong>250,000,000 $BONKBAG</strong> — 10 random winners!</p>
+        <p style="font-size: 16px; text-align: center;">
+          The <strong>10 most active supporters</strong> will receive a share of <strong>250,000,000 $BONKBAG</strong>!
+        </p>
         <ul style="font-size: 15px; line-height: 1.6;">
           <li>1. Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank" style="color:#ffcc00;">Twitter</a></li>
           <li>2. Retweet this post: <a href="https://twitter.com/YOUR_POST_LINK" target="_blank" style="color:#ffcc00;">Click here</a></li>
@@ -148,11 +123,10 @@
       </div>
     </div>
 
-    <div class="coming">
-      <strong>Coming Soon:</strong><br>
-      • Airdrop<br>
-      • Staking
-    </div>
+    <!-- Yellow Airdrop Button -->
+    <a class="button" style="background-color: #ffcc00; color: #000; font-size: 18px;" href="#">
+      Airdrop
+    </a>
 
     <div class="socials">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
@@ -164,9 +138,7 @@
     <div class="disclaimer">
       This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
     </div>
-  </div>
-
-  <script>
+  </div>  <script>
     function toggleChart() {
       var chart = document.getElementById("chart");
       chart.style.display = chart.style.display === "none" ? "block" : "none";
