@@ -96,7 +96,9 @@
     </div>
     <div id="chart">
       <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>    <!-- Airdrop Collapsible Section -->
+    </div>
+
+    <!-- Airdrop Collapsible Section -->
     <div style="margin-top: 40px;">
       <button onclick="toggleAirdrop()" style="
         background-color: #ffcc00;
@@ -107,7 +109,7 @@
         font-weight: bold;
         border-radius: 8px;
         cursor: pointer;
-      ">Airdrop Giveaway</button>
+      ">Airdrop</button>
 
       <div id="airdrop-content" style="display: none; margin-top: 20px; padding: 25px; background-color: rgba(255,255,255,0.05); border-radius: 12px; text-align: left;">
         <p style="font-size: 16px; text-align: center;">
@@ -123,9 +125,9 @@
       </div>
     </div>
 
-    <!-- Yellow Airdrop Button -->
+    <!-- Yellow Staking Button -->
     <a class="button" style="background-color: #ffcc00; color: #000; font-size: 18px;" href="#">
-      Airdrop
+      Staking
     </a>
 
     <div class="socials">
@@ -138,7 +140,9 @@
     <div class="disclaimer">
       This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
     </div>
-  </div>  <script>
+  </div>
+
+  <script>
     function toggleChart() {
       var chart = document.getElementById("chart");
       chart.style.display = chart.style.display === "none" ? "block" : "none";
