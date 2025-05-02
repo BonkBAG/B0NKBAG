@@ -7,107 +7,98 @@
   <style>
     body {
       margin: 0;
+      padding: 0;
+      background: url('bg.png') no-repeat center center fixed;
+      background-size: cover;
       font-family: Arial, sans-serif;
-      background: black;
       color: white;
       text-align: center;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 40px 20px;
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      border-radius: 20px;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
+
     .logo {
       width: 120px;
-      height: auto;
-      margin: 20px auto;
+      margin-bottom: 20px;
     }
+
     h1 {
-      font-size: 2em;
+      font-size: 28px;
+      margin-bottom: 10px;
     }
-    .btn {
-      background: #ffd700;
-      border: none;
-      padding: 15px 30px;
-      margin: 10px;
+
+    p {
       font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: block;
+      margin: 10px auto;
+      padding: 12px 20px;
+      background-color: #ffcc00;
       color: black;
-    }
-    .btn:hover {
-      background: #ffcc00;
-    }
-    .section {
-      display: none;
-      background: #111;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
-    .social-links a {
-      color: #00bfff;
-      margin: 0 10px;
       text-decoration: none;
       font-weight: bold;
+      border-radius: 8px;
+      width: 80%;
     }
-    .footer {
-      margin-top: 40px;
-      font-size: 0.8em;
-      color: #aaa;
+
+    .button-blue {
+      background-color: #00bfff;
+      color: white;
+    }
+
+    .links {
+      margin-top: 20px;
+    }
+
+    .links a {
+      color: #00eaff;
+      font-weight: bold;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://bonkbag.github.io/B0NKBAG/logo.png" alt="BONK BAG Logo" class="logo">
+  <div class="overlay">
+    <img src="logo.png" alt="BONK BAG Logo" class="logo" />
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
-    <a href="https://app.sushi.com" target="_blank" class="btn">Buy $BAG on SusiSwap</a>
-    <a href="https://www.dextools.io" target="_blank" class="btn">View $BAG / USDC on DEXTools</a>
+    <a class="button" href="https://sushi.com" target="_blank">Buy $BAG on SusiSwap</a>
+    <a class="button button-blue" href="https://www.dextools.io" target="_blank">View $BAG / USDC on DEXTools</a>
+    <a class="button" href="#tokenomics">Tokenomics</a>
+    <a class="button" href="#airdrop">Airdrop</a>
+    <a class="button" href="#staking">Staking</a>
+    <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
 
-    <button class="btn" onclick="toggleSection('tokenomics')">Tokenomics</button>
-    <button class="btn" onclick="toggleSection('airdrop')">Airdrop</button>
-    <button class="btn" onclick="toggleSection('staking')">Staking</button>
-    <button class="btn" onclick="toggleSection('liquidity')">Liquidity Lock</button>
-
-    <div id="tokenomics" class="section">
-      <p>Token distribution:<br>60% Owner<br>40% DEX<br>Total Supply: 5,000,000,000</p>
-    </div>
-
-    <div id="airdrop" class="section">
-      <h3>Airdrop Rules</h3>
-      <p>1. Follow our Twitter<br>2. Join Telegram<br>3. Fill the form<br>4. Share with friends<br><br>Allocation: 5% of total supply</p>
-    </div>
-
-    <div id="staking" class="section">
-      <p>Staking will be available soon. Stay tuned!</p>
-    </div>
-
-    <div id="liquidity" class="section">
-      <h3>Liquidity Lock</h3>
-      <p>LP tokens are locked until <strong>Nov 02, 2026</strong><br>Smart contract: <code>0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a</code><br><a href="https://app.unvest.io" target="_blank" style="color: #00bfff;">View lock on Unvest</a></p>
-    </div>
-
-    <div class="social-links">
+    <div class="links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
       <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
       <a href="https://bonkbag.github.io/B0NKBAG/" target="_blank">Website</a>
       <a href="https://github.com/bonkbag" target="_blank">GitHub</a>
     </div>
 
-    <div class="footer">
-      This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
-    </div>
+    <footer>
+      This is not financial advice. Always do your own research.<br>
+      The team holds no responsibility for financial decisions made by users.
+    </footer>
   </div>
-
-  <script>
-    function toggleSection(id) {
-      document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-  </script>
 </body>
 </html>
