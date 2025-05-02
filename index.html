@@ -5,110 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BONK BAG ($BAG)</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      background: url('bg.png') no-repeat center center fixed;
-      background-size: cover;
       font-family: Arial, sans-serif;
-      color: #fff;
+      background: black;
+      color: white;
       text-align: center;
     }
-
     .container {
-      background-color: rgba(0, 0, 0, 0.7);
-      min-height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
     }
-
     .logo {
-      width: 100px;
-      margin: 0 auto 15px;
+      width: 120px;
+      height: auto;
+      margin: 20px auto;
     }
-
     h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-size: 2em;
     }
-
-    p {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
     .btn {
-      background-color: #ffc400;
-      color: #000;
-      padding: 10px 20px;
+      background: #ffd700;
       border: none;
-      border-radius: 8px;
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 16px;
       font-weight: bold;
-      margin: 10px 0;
       cursor: pointer;
-      display: inline-block;
-      text-decoration: none;
+      border-radius: 8px;
+      color: black;
     }
-
-    .btn-blue {
-      background: none;
-      color: #00eaff;
-      text-decoration: underline;
-      margin-bottom: 20px;
-      display: inline-block;
+    .btn:hover {
+      background: #ffcc00;
     }
-
-    .socials a {
-      color: #00eaff;
+    .section {
+      display: none;
+      background: #111;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .social-links a {
+      color: #00bfff;
       margin: 0 10px;
       text-decoration: none;
       font-weight: bold;
     }
-
-    .disclaimer {
-      margin-top: 30px;
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    @media (max-width: 600px) {
-      .logo {
-        width: 80px;
-      }
-      h1 {
-        font-size: 24px;
-      }
+    .footer {
+      margin-top: 40px;
+      font-size: 0.8em;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="BONK BAG Logo" class="logo" />
+    <img src="https://bonkbag.github.io/B0NKBAG/logo.png" alt="BONK BAG Logo" class="logo">
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
-    <a class="btn" href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">
-      Buy $BAG on SusiSwap
-    </a><br>
+    <a href="https://app.sushi.com" target="_blank" class="btn">Buy $BAG on SusiSwap</a>
+    <a href="https://www.dextools.io" target="_blank" class="btn">View $BAG / USDC on DEXTools</a>
 
-    <a class="btn-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">
-      View $BAG / USDC on DEXTools
-    </a><br>
+    <button class="btn" onclick="toggleSection('tokenomics')">Tokenomics</button>
+    <button class="btn" onclick="toggleSection('airdrop')">Airdrop</button>
+    <button class="btn" onclick="toggleSection('staking')">Staking</button>
+    <button class="btn" onclick="toggleSection('liquidity')">Liquidity Lock</button>
 
-    <a class="btn" href="#" onclick="alert('Coming Soon')">Tokenomics</a><br>
-    <a class="btn" href="#" onclick="alert('Coming Soon')">Airdrop</a><br>
-    <a class="btn" href="#" onclick="alert('Coming Soon')">Staking</a><br>
+    <div id="tokenomics" class="section">
+      <p>Token distribution:<br>60% Owner<br>40% DEX<br>Total Supply: 5,000,000,000</p>
+    </div>
 
-    <div class="socials">
+    <div id="airdrop" class="section">
+      <h3>Airdrop Rules</h3>
+      <p>1. Follow our Twitter<br>2. Join Telegram<br>3. Fill the form<br>4. Share with friends<br><br>Allocation: 5% of total supply</p>
+    </div>
+
+    <div id="staking" class="section">
+      <p>Staking will be available soon. Stay tuned!</p>
+    </div>
+
+    <div id="liquidity" class="section">
+      <h3>Liquidity Lock</h3>
+      <p>LP tokens are locked until <strong>Nov 02, 2026</strong><br>Smart contract: <code>0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a</code><br><a href="https://app.unvest.io" target="_blank" style="color: #00bfff;">View lock on Unvest</a></p>
+    </div>
+
+    <div class="social-links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
       <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
       <a href="https://bonkbag.github.io/B0NKBAG/" target="_blank">Website</a>
-      <a href="https://github.com/BonkBAG/B0NKBAG" target="_blank">GitHub</a>
+      <a href="https://github.com/bonkbag" target="_blank">GitHub</a>
     </div>
 
-    <div class="disclaimer">
+    <div class="footer">
       This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
     </div>
   </div>
+
+  <script>
+    function toggleSection(id) {
+      document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+  </script>
 </body>
 </html>
