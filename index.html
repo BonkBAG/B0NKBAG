@@ -68,6 +68,23 @@
       text-decoration: none;
     }
 
+    .section {
+      display: none;
+      margin-top: 20px;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .section img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .airdrop-box p {
+      margin: 8px 0;
+    }
+
     footer {
       margin-top: 30px;
       font-size: 12px;
@@ -82,11 +99,32 @@
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
     <a class="button" href="https://sushi.com" target="_blank">Buy $BAG on SusiSwap</a>
-    <a class="button button-blue" href="https://www.dextools.io" target="_blank">View $BAG / USDC on DEXTools</a>
-    <a class="button" href="#tokenomics">Tokenomics</a>
-    <a class="button" href="#airdrop">Airdrop</a>
-    <a class="button" href="#staking">Staking</a>
+    <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">View $BAG / USDC on DEXTools</a>
+    <a class="button" href="#" onclick="showSection('tokenomics')">Tokenomics</a>
+    <a class="button" href="#" onclick="showSection('airdrop')">Airdrop</a>
+    <a class="button" href="#" onclick="showSection('staking')">Staking</a>
     <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+
+    <div class="section" id="tokenomics">
+      <h2>Tokenomics</h2>
+      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
+    </div>
+
+    <div class="section" id="airdrop">
+      <h2>Airdrop Rules</h2>
+      <div class="airdrop-box">
+        <p><strong>1.</strong> Join our <a href="https://t.me/BONKBAG" target="_blank">Telegram group</a></p>
+        <p><strong>2.</strong> Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></p>
+        <p><strong>3.</strong> Retweet our pinned post</p>
+        <p><strong>4.</strong> Submit your wallet in the airdrop form</p>
+        <p><strong>Reward:</strong> Participants will receive $BAG tokens once verified</p>
+      </div>
+    </div>
+
+    <div class="section" id="staking">
+      <h2>Staking</h2>
+      <p>Staking feature coming soon. Stay tuned!</p>
+    </div>
 
     <div class="links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
@@ -100,5 +138,13 @@
       The team holds no responsibility for financial decisions made by users.
     </footer>
   </div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
 </body>
 </html>
