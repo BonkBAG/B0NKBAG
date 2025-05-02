@@ -7,70 +7,70 @@
   <style>
     body {
       margin: 0;
+      padding: 0;
+      background: url('bg.png') no-repeat center center fixed;
+      background-size: cover;
       font-family: Arial, sans-serif;
-      background: #007f1d url('bg.png') center center no-repeat;
-      background-size: contain;
-      background-color: #007f1d;
       color: white;
       text-align: center;
     }
-
-    .container {
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
       max-width: 600px;
       margin: 0 auto;
       padding: 30px 20px;
+      border-radius: 20px;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
-
     .logo {
       width: 120px;
-      margin: 20px auto;
+      margin-bottom: 20px;
     }
-
     h1 {
       font-size: 28px;
-      margin: 10px 0 20px;
+      margin-bottom: 10px;
     }
-
     p {
       font-size: 16px;
       margin-bottom: 20px;
     }
-
-    .btn {
+    .button {
       display: block;
-      width: 80%;
       margin: 10px auto;
-      padding: 12px;
+      padding: 12px 20px;
       background-color: #ffcc00;
       color: black;
       text-decoration: none;
       font-weight: bold;
       border-radius: 8px;
+      width: 80%;
     }
-
-    .socials {
+    .button-blue {
+      background-color: #00bfff;
+      color: white;
+    }
+    .links {
       margin-top: 20px;
     }
-
-    .socials a {
-      margin: 0 10px;
-      color: #00ccff;
+    .links a {
+      color: #00eaff;
       font-weight: bold;
+      margin: 0 10px;
       text-decoration: none;
     }
-
-    .airdrop-box {
-      margin-top: 30px;
-      background-color: rgba(0, 0, 0, 0.6);
+    .section {
+      display: none;
+      margin-top: 20px;
+      background-color: #111;
       padding: 20px;
       border-radius: 10px;
     }
-
-    .airdrop-box a {
-      color: #00ccff;
+    .section img {
+      max-width: 100%;
+      border-radius: 10px;
     }
-
-    .disclaimer {
+    footer {
       margin-top: 30px;
       font-size: 12px;
       color: #ccc;
@@ -78,37 +78,58 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="overlay">
     <img src="logo.png" alt="BONK BAG Logo" class="logo" />
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
-    <a class="btn" href="https://www.sushi.com/swap" target="_blank">Buy $BAG on SushiSwap</a>
-    <a class="btn" href="https://www.dextools.io" target="_blank">View $BAG / USDC on DEXTools</a>
-    <a class="btn" href="#tokenomics">Tokenomics</a>
-    <a class="btn" href="#airdrop">Airdrop</a>
-    <a class="btn" href="#staking">Staking</a>
-    <a class="btn" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+    <a class="button" href="https://sushi.com" target="_blank">Buy $BAG on SusiSwap</a>
+    <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">View $BAG / USDC on DEXTools</a>
+    <a class="button" href="#" onclick="showSection('tokenomics')">Tokenomics</a>
+    <a class="button" href="#" onclick="showSection('airdrop')">Airdrop</a>
+    <a class="button" href="#" onclick="showSection('staking')">Staking</a>
+    <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
 
-    <div id="airdrop" class="airdrop-box">
+    <div class="section" id="tokenomics">
+      <h2>Tokenomics</h2>
+      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
+    </div>
+
+    <div class="section" id="airdrop">
       <h2>Airdrop Rules</h2>
-      <p>1. Join our <a href="https://t.me/BONKBAG" target="_blank">Telegram group</a></p>
-      <p>2. Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></p>
-      <p>3. Retweet our pinned post</p>
-      <p>4. Airdrop rewards will be distributed randomly among Telegram subscribers. Bonus if you're holding $BAG!</p>
+      <ol>
+        <li>Join our <a href="https://t.me/BONKBAG" target="_blank">Telegram group</a></li>
+        <li>Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></li>
+        <li>Retweet our pinned post</li>
+        <li>$BAG tokens will be raffled among Telegram subscribers. Bonus for holders of the token.</li>
+      </ol>
       <p><strong>Reward:</strong> Verified participants will receive $BAG tokens.</p>
     </div>
 
-    <div class="socials">
+    <div class="section" id="staking">
+      <h2>Staking</h2>
+      <p>Staking feature coming soon. Stay tuned!</p>
+    </div>
+
+    <div class="links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
       <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a>
       <a href="https://bonkbag.github.io/B0NKBAG/" target="_blank">Website</a>
       <a href="https://github.com/bonkbag" target="_blank">GitHub</a>
     </div>
 
-    <div class="disclaimer">
-      This is not financial advice. Always do your own research. The team holds no responsibility for financial decisions made by users.
-    </div>
+    <footer>
+      This is not financial advice. Always do your own research.<br>
+      The team holds no responsibility for financial decisions made by users.
+    </footer>
   </div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
 </body>
 </html>
