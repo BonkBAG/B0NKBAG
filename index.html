@@ -8,35 +8,28 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      background-image: url('bg.png');
-      background-repeat: no-repeat;
-      background-position: center center;
+      background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
-      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
     }
 
-    .overlay {
+    .container {
       background-color: rgba(0, 0, 0, 0.7);
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 30px 20px;
-      border-radius: 20px;
-      text-align: center;
       min-height: 100vh;
+      padding: 20px;
       box-sizing: border-box;
     }
 
     .logo {
-      width: 120px;
-      margin-bottom: 15px;
+      width: 100px;
+      margin: 0 auto 15px;
     }
 
     h1 {
       font-size: 28px;
-      margin: 10px 0;
+      margin-bottom: 10px;
     }
 
     p {
@@ -44,124 +37,67 @@
       margin-bottom: 20px;
     }
 
-    .button {
-      display: inline-block;
-      margin: 10px 5px;
-      padding: 10px 20px;
-      background-color: #ffcc00;
+    .btn {
+      background-color: #ffc400;
       color: #000;
-      border-radius: 6px;
-      text-decoration: none;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       font-weight: bold;
-    }
-
-    .link a {
-      color: #00eaff;
-      font-weight: bold;
-      text-decoration: none;
-      display: block;
       margin: 10px 0;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
     }
 
-    .coming {
-      margin: 20px 0;
-      font-size: 16px;
-    }
-
-    .socials {
-      margin-top: 20px;
+    .btn-blue {
+      background: none;
+      color: #00eaff;
+      text-decoration: underline;
+      margin-bottom: 20px;
+      display: inline-block;
     }
 
     .socials a {
-      margin: 0 10px;
       color: #00eaff;
+      margin: 0 10px;
       text-decoration: none;
       font-weight: bold;
     }
 
-    #chart {
-      display: none;
-      margin-top: 15px;
-    }
-
-    #chart img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
-
     .disclaimer {
-      font-size: 12px;
       margin-top: 30px;
-      color: #aaa;
+      font-size: 12px;
+      color: #ccc;
     }
 
-    @media screen and (max-width: 768px) {
-      .overlay {
-        width: 90%;
-        padding: 20px 10px;
-        border-radius: 10px;
-      }
-
-      h1 {
-        font-size: 22px;
-      }
-
-      p {
-        font-size: 14px;
-      }
-
-      .button {
-        padding: 8px 16px;
-        font-size: 14px;
-      }
-
-      .socials a {
-        display: block;
-        margin: 5px 0;
-      }
-
+    @media (max-width: 600px) {
       .logo {
         width: 80px;
       }
+      h1 {
+        font-size: 24px;
+      }
     }
   </style>
-  <script>
-    function toggleChart() {
-      var chart = document.getElementById("chart");
-      chart.style.display = chart.style.display === "none" ? "block" : "none";
-    }
-  </script>
 </head>
 <body>
-  <div class="overlay">
+  <div class="container">
     <img src="logo.png" alt="BONK BAG Logo" class="logo" />
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
-    <a class="button" href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">
+    <a class="btn" href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">
       Buy $BAG on SusiSwap
-    </a>
+    </a><br>
 
-    <div class="link">
-      <a href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">
-        View $BAG / USDC on DEXTools
-      </a>
-    </div>
+    <a class="btn-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xb17fb2da7b9720a66170b024f50ef89de633d2c8" target="_blank">
+      View $BAG / USDC on DEXTools
+    </a><br>
 
-    <div>
-      <div class="button" onclick="toggleChart()">Tokenomics</div>
-    </div>
-
-    <div id="chart">
-      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>
-
-    <div class="coming">
-      <strong>Coming Soon:</strong><br>
-      • Airdrop<br>
-      • Staking
-    </div>
+    <a class="btn" href="#" onclick="alert('Coming Soon')">Tokenomics</a><br>
+    <a class="btn" href="#" onclick="alert('Coming Soon')">Airdrop</a><br>
+    <a class="btn" href="#" onclick="alert('Coming Soon')">Staking</a><br>
 
     <div class="socials">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
