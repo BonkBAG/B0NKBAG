@@ -8,11 +8,11 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #00cc44; /* Зелений фон */
+      background-color: #00cc44;
       background-image: url('bg.png');
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: contain; /* Щоб пес повністю вміщувався */
+      background-size: contain;
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
@@ -23,7 +23,6 @@
       margin: 0 auto;
       padding: 30px 20px;
       border-radius: 20px;
-      min-height: 100vh;
       box-sizing: border-box;
     }
     .logo {
@@ -73,6 +72,12 @@
       max-width: 100%;
       border-radius: 10px;
     }
+    .tokenomics {
+      margin-top: 40px;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
     footer {
       margin-top: 30px;
       font-size: 12px;
@@ -86,21 +91,11 @@
     <h1>BONK BAG ($BAG)</h1>
     <p>Bonk BAG is a fun and community-driven meme token built on the Polygon network.</p>
 
-    <a class="button" href="https://www.sushi.com/swap?inputCurrency=0x3686568ecb6ce7545765b641932044900d11e584&outputCurrency=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&chainId=137" target="_blank">
-      Buy $BAG on SushiSwap
-    </a>
-    <a class="button button-blue" href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">
-      BAG/USDC on DexScreener
-    </a>
-    <a class="button" href="#" onclick="showSection('tokenomics')">Tokenomics</a>
-    <a class="button" href="#" onclick="showSection('airdrop')">Airdrop</a>
-    <a class="button" href="#" onclick="showSection('staking')">Staking</a>
-    <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+    <a class="button" href="https://www.sushi.com/swap?inputCurrency=0x3686568ecb6ce7545765b641932044900d11e584&outputCurrency=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&chainId=137" target="_blank">Buy $BAG on SushiSwap</a>
 
-    <div class="section" id="tokenomics">
-      <h2>Tokenomics</h2>
-      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>
+    <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">BAG/USDC on DEXTools</a>
+
+    <a class="button" href="#" onclick="toggleSection('airdrop')">Airdrop</a>
 
     <div class="section" id="airdrop">
       <h2>Airdrop Rules</h2>
@@ -113,9 +108,11 @@
       <p><strong>Reward:</strong> Verified participants will receive $BAG tokens.</p>
     </div>
 
-    <div class="section" id="staking">
-      <h2>Staking</h2>
-      <p>Staking feature coming soon. Stay tuned!</p>
+    <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+
+    <div class="tokenomics">
+      <h2>Tokenomics</h2>
+      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
     </div>
 
     <div class="links">
@@ -132,10 +129,9 @@
   </div>
 
   <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-      window.scrollTo(0, document.body.scrollHeight);
+    function toggleSection(id) {
+      const section = document.getElementById(id);
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
     }
   </script>
 </body>
