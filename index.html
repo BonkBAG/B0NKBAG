@@ -70,6 +70,7 @@
     }
     .section img {
       max-width: 100%;
+      height: auto;
       border-radius: 10px;
     }
     .tokenomics {
@@ -77,6 +78,10 @@
       background-color: #111;
       padding: 20px;
       border-radius: 10px;
+    }
+    .tokenomics img {
+      max-width: 90%;
+      height: auto;
     }
     footer {
       margin-top: 30px;
@@ -96,7 +101,6 @@
     <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">BAG/USDC on DEXTools</a>
 
     <a class="button" href="#" onclick="toggleSection('airdrop')">Airdrop</a>
-
     <div class="section" id="airdrop">
       <h2>Airdrop Rules</h2>
       <ol>
@@ -106,6 +110,12 @@
         <li>$BAG tokens will be raffled among Telegram subscribers. Bonus for holders of the token.</li>
       </ol>
       <p><strong>Reward:</strong> Verified participants will receive $BAG tokens.</p>
+    </div>
+
+    <a class="button" href="#" onclick="toggleSection('staking')">Staking</a>
+    <div class="section" id="staking">
+      <h2>Staking</h2>
+      <p>Staking feature coming soon. Stay tuned!</p>
     </div>
 
     <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
