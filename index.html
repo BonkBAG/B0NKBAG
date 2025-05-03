@@ -61,13 +61,13 @@
       margin: 0 10px;
       text-decoration: none;
     }
-    .section {
-      margin-top: 20px;
+    .tokenomics {
+      margin-top: 40px;
       background-color: #111;
       padding: 20px;
       border-radius: 10px;
     }
-    .section img {
+    .tokenomics img {
       max-width: 100%;
       border-radius: 10px;
     }
@@ -88,12 +88,17 @@
       Buy $BAG on SushiSwap
     </a>
     <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f?t=1746215626327" target="_blank">
-      BAG/USDC on DEXTools
+      BAG/USDC on DexScreener
     </a>
     <a class="button" href="#">Tokenomics</a>
-    <a class="button" href="#" onclick="showSection('airdrop')">Airdrop</a>
-    <a class="button" href="#" onclick="showSection('staking')">Staking</a>
+    <a class="button" href="#">Airdrop</a>
+    <a class="button" href="#">Staking</a>
     <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+
+    <div class="tokenomics">
+      <h2>Tokenomics</h2>
+      <img src="tokenomics_chart.png" alt="BONK BAG Tokenomics Chart">
+    </div>
 
     <div class="links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
@@ -106,43 +111,6 @@
       This is not financial advice. Always do your own research.<br>
       The team holds no responsibility for financial decisions made by users.
     </footer>
-
-    <!-- Tokenomics (always visible, moved to bottom) -->
-    <div class="section" id="tokenomics">
-      <h2>Tokenomics</h2>
-      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>
-
-    <!-- Hidden sections -->
-    <div class="section" id="airdrop" style="display:none;">
-      <h2>Airdrop Rules</h2>
-      <ol>
-        <li>Join our <a href="https://t.me/BONKBAG" target="_blank">Telegram group</a></li>
-        <li>Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></li>
-        <li>Retweet our pinned post</li>
-        <li>$BAG tokens will be raffled among Telegram subscribers. Bonus for holders of the token.</li>
-      </ol>
-      <p><strong>Reward:</strong> Verified participants will receive $BAG tokens.</p>
-    </div>
-
-    <div class="section" id="staking" style="display:none;">
-      <h2>Staking</h2>
-      <p>Staking feature coming soon. Stay tuned!</p>
-    </div>
-
   </div>
-
-  <script>
-    function showSection(id) {
-      const sections = document.querySelectorAll('.section');
-      sections.forEach(section => {
-        if (section.id === id || section.id === 'tokenomics') {
-          section.style.display = 'block';
-        } else {
-          section.style.display = 'none';
-        }
-      });
-    }
-  </script>
 </body>
 </html>
