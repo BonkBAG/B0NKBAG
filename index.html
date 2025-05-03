@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #00cc44; /* Зелений фон */
+      background-color: #00cc44;
       background-image: url('bg.png');
       background-repeat: no-repeat;
       background-position: center center;
@@ -23,7 +23,6 @@
       margin: 0 auto;
       padding: 30px 20px;
       border-radius: 20px;
-      min-height: 100vh;
       box-sizing: border-box;
     }
     .logo {
@@ -88,15 +87,13 @@
     <a class="button" href="https://www.sushi.com/swap?inputCurrency=0x3686568ecb6ce7545765b641932044900d11e584&outputCurrency=0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174&chainId=137" target="_blank">
       Buy $BAG on SushiSwap
     </a>
-    <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">
-      View $BAG / USDC on DEXTools
+    <a class="button button-blue" href="https://www.dextools.io/app/en/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f?t=1746215626327" target="_blank">
+      BAG/USDC on DEXTools
     </a>
+    <a class="button" href="#">Tokenomics</a>
+    <a class="button" href="#" onclick="showSection('airdrop')">Airdrop</a>
+    <a class="button" href="#" onclick="showSection('staking')">Staking</a>
     <a class="button" href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
-
-    <div class="section">
-      <h2>Tokenomics</h2>
-      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
-    </div>
 
     <div class="links">
       <a href="https://t.me/BONKBAG" target="_blank">Telegram</a>
@@ -109,6 +106,43 @@
       This is not financial advice. Always do your own research.<br>
       The team holds no responsibility for financial decisions made by users.
     </footer>
+
+    <!-- Tokenomics (always visible, moved to bottom) -->
+    <div class="section" id="tokenomics">
+      <h2>Tokenomics</h2>
+      <img src="tokenomics_chart.png" alt="Tokenomics Chart">
+    </div>
+
+    <!-- Hidden sections -->
+    <div class="section" id="airdrop" style="display:none;">
+      <h2>Airdrop Rules</h2>
+      <ol>
+        <li>Join our <a href="https://t.me/BONKBAG" target="_blank">Telegram group</a></li>
+        <li>Follow us on <a href="https://x.com/b0nkbag?s=21" target="_blank">Twitter</a></li>
+        <li>Retweet our pinned post</li>
+        <li>$BAG tokens will be raffled among Telegram subscribers. Bonus for holders of the token.</li>
+      </ol>
+      <p><strong>Reward:</strong> Verified participants will receive $BAG tokens.</p>
+    </div>
+
+    <div class="section" id="staking" style="display:none;">
+      <h2>Staking</h2>
+      <p>Staking feature coming soon. Stay tuned!</p>
+    </div>
+
   </div>
+
+  <script>
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        if (section.id === id || section.id === 'tokenomics') {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
