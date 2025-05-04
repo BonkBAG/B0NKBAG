@@ -4,97 +4,44 @@
   <meta charset="UTF-8" />
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('background.png') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .title {
-      font-size: 32px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .logo {
-      height: 50px;
-    }
-
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
-      padding: 40px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .btn {
-      background-color: #00c853;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .hero-image {
-      text-align: center;
-      margin: 30px auto;
-    }
-
-    .hero-image img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 28px;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
+  <!-- Верхні кнопки праворуч -->
   <header>
-    <span class="title">BAG</span>
-    <img src="logo.png" alt="Logo" class="logo" />
+    <div class="top-right-buttons">
+      <a class="top-btn">Connect Wallet</a>
+      <a class="top-btn">About</a>
+      <a class="top-btn">Roadmap</a>
+      <a class="top-btn">Contact</a>
+    </div>
   </header>
 
-  <main>
-    <div class="button-grid">
-      <a class="btn" href="#">Tokenomics</a>
-      <a class="btn" href="#">Airdrop</a>
-      <a class="btn" href="#">Roadmap</a>
-      <a class="btn" href="#">Staking</a>
-      <a class="btn" href="#">Contact</a>
-      <a class="btn" href="#">Liquidity Lock</a>
-      <a class="btn" href="#">Buy on DEX</a>
-      <a class="btn" href="#">Connect Wallet</a>
-    </div>
+  <!-- Логотип та надпис BAG -->
+  <div class="logo-section">
+    <h1 class="title">BAG</h1>
+    <img src="logo.png" class="logo" alt="Logo" />
+  </div>
 
-    <div class="hero-image">
-      <img src="dog-money.png" alt="Dog with Money" />
-    </div>
-  </main>
+  <!-- Кнопки сходинками -->
+  <div class="button-stairs">
+    <a class="btn" style="margin-left: 0px;">Buy BAG/USDC on SushiSwap</a>
+    <a class="btn" style="margin-left: 20px;">Airdrop</a>
+    <a class="btn" style="margin-left: 40px;">BAG/USDC on DEXScreener</a>
+    <a class="btn" style="margin-left: 60px;">BAG/USDT on DEXTools</a>
+    <a class="btn" style="margin-left: 80px;">Tokenomics</a>
+    <a class="btn" style="margin-left: 100px;">Staking</a>
+    <a class="btn" style="margin-left: 120px;">Liquidity Lock</a>
+  </div>
 
+  <!-- Пес із мішком -->
+  <div class="dog-img">
+    <img src="dog-money.png" alt="BONK DOG" />
+  </div>
+
+  <!-- Напис внизу зліва -->
   <footer>
-    BONK BAG
+    <span class="footer-title">BONK BAG</span>
   </footer>
-
 </body>
 </html>
