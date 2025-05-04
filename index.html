@@ -126,25 +126,29 @@
     function hideBackButton() {
       document.getElementById('back-button').style.display = 'none';
     }
+function resetView() {
+  document.querySelectorAll('.section').forEach(s => {
+    s.classList.remove('show');
+  });
+  document.querySelector('.top-left-logo').style.display = 'flex';
+  document.querySelector('.top-right-menu').style.display = 'flex';
+  document.querySelector('.side-buttons').style.display = 'flex';
+  document.querySelector('footer').style.display = 'block';
+  hideBackButton();
+}
 
-    function resetView() {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelector('.top-left-logo').style.display = 'flex';
-      document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
-      document.querySelector('footer').style.display = 'block';
-      hideBackButton();
-    }
-
-    function showSection(id) {
-      resetView();
-      document.getElementById(id).style.display = 'block';
-      document.querySelector('.top-left-logo').style.display = 'none';
-      document.querySelector('.top-right-menu').style.display = 'none';
-      document.querySelector('.side-buttons').style.display = 'none';
-      document.querySelector('footer').style.display = 'none';
-      showBackButton();
-    }
+function showSection(id) {
+  resetView();
+  const section = document.getElementById(id);
+  if (section) {
+    section.classList.add('show');
+  }
+  document.querySelector('.top-left-logo').style.display = 'none';
+  document.querySelector('.top-right-menu').style.display = 'none';
+  document.querySelector('.side-buttons').style.display = 'none';
+  document.querySelector('footer').style.display = 'none';
+  showBackButton();
+}
   </script>
 </head>
 <body>
