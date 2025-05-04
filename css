@@ -1,29 +1,94 @@
-@media screen and (max-width: 768px) {
-  .overlay {
-    padding: 20px 10px;
-    border-radius: 10px;
-    width: 90%;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background: url('background.png') no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+}
 
-  h1 {
-    font-size: 22px;
-  }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
 
-  p {
-    font-size: 14px;
-  }
+.top-left {
+  display: flex;
+  align-items: center;
+}
 
-  .button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #69f542;
+}
 
-  .socials a {
-    display: block;
-    margin: 5px 0;
-  }
+.logo {
+  height: 50px;
+}
 
-  .logo {
-    width: 80px;
-  }
+.top-right {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  background-color: #39d353;
+  padding: 10px 16px;
+  border-radius: 5px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.left-buttons {
+  position: absolute;
+  top: 150px;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dex-buttons {
+  position: absolute;
+  top: 160px;
+  left: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  background-color: #00c853;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  max-width: 240px;
+}
+
+.hero-image {
+  text-align: right;
+  padding-top: 80px;
+  padding-right: 50px;
+}
+
+.hero-image img {
+  max-width: 360px;
+  height: auto;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #59e350;
 }
