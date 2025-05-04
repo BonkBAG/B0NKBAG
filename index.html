@@ -17,34 +17,53 @@
       overflow-x: hidden;
     }
 
-    header {
+    .top-left {
       position: absolute;
       top: 20px;
       left: 20px;
       display: flex;
-      align-items: center;
+      gap: 10px;
     }
 
-    .title {
-      font-size: 40px;
-      margin-right: 10px;
+    .top-left a {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .top-right-logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .top-right-logo .title {
+      font-size: 36px;
+      font-weight: bold;
       color: #66ff66;
     }
 
-    .logo {
-      height: 50px;
+    .top-right-logo img {
+      height: 48px;
     }
 
-    .button-stairs {
+    .vertical-buttons {
       position: absolute;
-      bottom: 120px;
-      right: 20px;
+      top: 100px;
+      right: 40px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .btn {
+    .vertical-buttons a {
       background-color: #00c853;
       padding: 14px 20px;
       border-radius: 6px;
@@ -53,84 +72,50 @@
       font-weight: bold;
       font-size: 18px;
       width: fit-content;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-
-    .btn:nth-child(1) { margin-right: 0px; animation-delay: 0.2s; }
-    .btn:nth-child(2) { margin-right: 20px; animation-delay: 0.4s; }
-    .btn:nth-child(3) { margin-right: 40px; animation-delay: 0.6s; }
-    .btn:nth-child(4) { margin-right: 60px; animation-delay: 0.8s; }
-    .btn:nth-child(5) { margin-right: 80px; animation-delay: 1.0s; }
-    .btn:nth-child(6) { margin-right: 100px; animation-delay: 1.2s; }
-    .btn:nth-child(7) { margin-right: 120px; animation-delay: 1.4s; }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    .dog-img {
-      position: absolute;
-      bottom: 60px;
-      left: 20px;
-    }
-
-    .dog-img img {
-      max-height: 400px;
-      width: auto;
     }
 
     footer {
       position: absolute;
       bottom: 10px;
       left: 20px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #59e350;
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .disclaimer {
+      right: 20px;
+      text-align: center;
       font-size: 12px;
-      font-weight: normal;
-      color: #ccc;
-      max-width: 300px;
+      color: #cccccc;
     }
   </style>
 </head>
 <body>
 
-  <!-- Верхній лівий кут: BAG + логотип -->
-  <header>
-    <span class="title">BAG</span>
-    <img src="logo.png" class="logo" alt="">
-  </header>
-
-  <!-- Кнопки сходинками справа, що відступають вліво -->
-  <div class="button-stairs">
-    <a class="btn" href="#">Buy BAG/USDC on SushiSwap</a>
-    <a class="btn" href="#">Airdrop</a>
-    <a class="btn" href="#">BAG/USDC on DEXScreener</a>
-    <a class="btn" href="#">BAG/USDT on DEXTools</a>
-    <a class="btn" href="#">Tokenomics</a>
-    <a class="btn" href="#">Staking</a>
-    <a class="btn" href="#">Liquidity Lock</a>
+  <!-- Верхній лівий кут: кнопки -->
+  <div class="top-left">
+    <a href="#">About</a>
+    <a href="#">Roadmap</a>
+    <a href="#">Contact</a>
+    <a href="#">Connect Wallet</a>
   </div>
 
-  <!-- Зображення пса -->
-  <div class="dog-img">
-    <img src="dog-money.png" />
+  <!-- Верхній правий кут: BONK BAG + логотип -->
+  <div class="top-right-logo">
+    <div class="title">BONK BAG</div>
+    <img src="logo.png" alt="" />
+  </div>
+
+  <!-- Вертикальний стовпчик кнопок -->
+  <div class="vertical-buttons">
+    <a href="#">Buy BAG/USDC on SushiSwap</a>
+    <a href="#">Airdrop</a>
+    <a href="#">BAG/USDC on DEXScreener</a>
+    <a href="#">BAG/USDT on DEXTools</a>
+    <a href="#">Tokenomics</a>
+    <a href="#">Staking</a>
+    <a href="#">Liquidity Lock</a>
   </div>
 
   <!-- Футер -->
   <footer>
-    BONK BAG
-    <span class="disclaimer">
-      Цей проєкт створено виключно в розважальних цілях і не є фінансовою порадою. Автори не несуть відповідальності за будь-які наслідки.
-    </span>
+    This project is for entertainment purposes only and does not constitute financial advice.
+    The creators bear no responsibility for any outcomes.
   </footer>
 
 </body>
