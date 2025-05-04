@@ -95,7 +95,8 @@
       padding: 0 20px;
     }
 
-    #about-section {
+    #about-section,
+    #roadmap-section {
       display: none;
       position: absolute;
       top: 120px;
@@ -109,7 +110,8 @@
       text-align: center;
     }
 
-    #about-section h2 {
+    #about-section h2,
+    #roadmap-section h2 {
       color: #66ff66;
     }
 
@@ -153,6 +155,16 @@
   <script>
     function showAbout() {
       document.getElementById('about-section').style.display = 'block';
+      document.getElementById('roadmap-section').style.display = 'none';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+    }
+
+    function showRoadmap() {
+      document.getElementById('roadmap-section').style.display = 'block';
+      document.getElementById('about-section').style.display = 'none';
       document.querySelector('.top-left-logo').style.display = 'none';
       document.querySelector('.top-right-menu').style.display = 'none';
       document.querySelector('.side-buttons').style.display = 'none';
@@ -171,7 +183,7 @@
   <!-- Вгорі справа: кнопки меню -->
   <div class="top-right-menu">
     <a onclick="showAbout()">About</a>
-    <a href="#">Roadmap</a>
+    <a onclick="showRoadmap()">Roadmap</a>
     <a href="#">Contact</a>
     <a href="#">Connect Wallet</a>
   </div>
@@ -194,6 +206,25 @@
       BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
       It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
       There’s no financial advice here — just pure BONK energy.
+    </p>
+  </div>
+
+  <!-- Секція Roadmap -->
+  <div id="roadmap-section">
+    <h2>Roadmap</h2>
+    <p style="font-size: 16px; line-height: 1.6;">
+      <strong>2 квартал 2025</strong><br>
+      – Запуск BONK BAG<br>
+      – Сайт + Airdrop<br>
+      – Лістинг на DEX (SushiSwap)<br><br>
+      <strong>3 квартал 2025</strong><br>
+      – Запуск стейкінгу<br>
+      – Конкурси для спільноти<br>
+      – Подання заявки на CEX<br><br>
+      <strong>4 квартал 2025</strong><br>
+      – Випуск мерчу<br>
+      – Партнерства<br>
+      – Шлях до 10 000 холдерів
     </p>
   </div>
 
