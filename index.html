@@ -19,72 +19,51 @@
 
     header {
       position: absolute;
-      top: 0;
-      right: 0;
-      padding: 15px;
-    }
-
-    .top-right-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .top-btn {
-      background-color: #00c853;
-      padding: 10px 14px;
-      border-radius: 6px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .logo-section {
-      position: absolute;
       top: 20px;
       left: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
     }
 
     .title {
       font-size: 40px;
-      margin: 0;
+      margin-right: 10px;
       color: #66ff66;
     }
 
     .logo {
       height: 50px;
-      margin-top: 5px;
     }
 
     .button-stairs {
       position: absolute;
       bottom: 120px;
-      left: 20px;
+      right: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .btn {
       background-color: #00c853;
-      padding: 10px 16px;
+      padding: 14px 20px;
       border-radius: 6px;
       color: white;
       text-decoration: none;
       font-weight: bold;
+      font-size: 18px;
       width: fit-content;
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
 
-    .btn:nth-child(1) { margin-left: 0px; animation-delay: 0.2s; }
-    .btn:nth-child(2) { margin-left: 20px; animation-delay: 0.4s; }
-    .btn:nth-child(3) { margin-left: 40px; animation-delay: 0.6s; }
-    .btn:nth-child(4) { margin-left: 60px; animation-delay: 0.8s; }
-    .btn:nth-child(5) { margin-left: 80px; animation-delay: 1.0s; }
-    .btn:nth-child(6) { margin-left: 100px; animation-delay: 1.2s; }
-    .btn:nth-child(7) { margin-left: 120px; animation-delay: 1.4s; }
+    .btn:nth-child(1) { margin-right: 0px; animation-delay: 0.2s; }
+    .btn:nth-child(2) { margin-right: 20px; animation-delay: 0.4s; }
+    .btn:nth-child(3) { margin-right: 40px; animation-delay: 0.6s; }
+    .btn:nth-child(4) { margin-right: 60px; animation-delay: 0.8s; }
+    .btn:nth-child(5) { margin-right: 80px; animation-delay: 1.0s; }
+    .btn:nth-child(6) { margin-right: 100px; animation-delay: 1.2s; }
+    .btn:nth-child(7) { margin-right: 120px; animation-delay: 1.4s; }
 
     @keyframes fadeIn {
       to { opacity: 1; }
@@ -93,7 +72,7 @@
     .dog-img {
       position: absolute;
       bottom: 60px;
-      right: 20px;
+      left: 20px;
     }
 
     .dog-img img {
@@ -105,30 +84,32 @@
       position: absolute;
       bottom: 10px;
       left: 20px;
-      font-size: 36px;
+      font-size: 32px;
       font-weight: bold;
       color: #59e350;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      font-weight: normal;
+      color: #ccc;
+      max-width: 300px;
     }
   </style>
 </head>
 <body>
-  <!-- Верхні кнопки праворуч -->
+
+  <!-- Верхній лівий кут: BAG + логотип -->
   <header>
-    <div class="top-right-buttons">
-      <a class="top-btn" href="#">Connect Wallet</a>
-      <a class="top-btn" href="#">About</a>
-      <a class="top-btn" href="#">Roadmap</a>
-      <a class="top-btn" href="#">Contact</a>
-    </div>
+    <span class="title">BAG</span>
+    <img src="logo.png" class="logo" alt="">
   </header>
 
-  <!-- Лівий верх: BAG + логотип -->
-  <div class="logo-section">
-    <h1 class="title">BAG</h1>
-    <img src="logo.png" class="logo" alt="Logo" />
-  </div>
-
-  <!-- Зелені кнопки сходинками зліва -->
+  <!-- Кнопки сходинками справа, що відступають вліво -->
   <div class="button-stairs">
     <a class="btn" href="#">Buy BAG/USDC on SushiSwap</a>
     <a class="btn" href="#">Airdrop</a>
@@ -139,14 +120,18 @@
     <a class="btn" href="#">Liquidity Lock</a>
   </div>
 
-  <!-- Пес з мішком -->
+  <!-- Зображення пса -->
   <div class="dog-img">
-    <img src="dog-money.png" alt="BONK DOG" />
+    <img src="dog-money.png" />
   </div>
 
-  <!-- Футер зліва -->
+  <!-- Футер -->
   <footer>
     BONK BAG
+    <span class="disclaimer">
+      Цей проєкт створено виключно в розважальних цілях і не є фінансовою порадою. Автори не несуть відповідальності за будь-які наслідки.
+    </span>
   </footer>
+
 </body>
 </html>
