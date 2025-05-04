@@ -5,6 +5,10 @@
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -14,6 +18,10 @@
       color: white;
       height: 100vh;
       overflow-x: hidden;
+    }
+
+    .top-left-logo, .top-right-menu, .side-buttons, footer {
+      transition: opacity 0.3s ease;
     }
 
     .top-left-logo {
@@ -53,6 +61,7 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
+      cursor: pointer;
     }
 
     .side-buttons {
@@ -84,6 +93,24 @@
       font-size: 12px;
       color: #cccccc;
       padding: 0 20px;
+    }
+
+    #about-section {
+      display: none;
+      position: absolute;
+      top: 120px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    #about-section h2 {
+      color: #66ff66;
     }
 
     @media (max-width: 600px) {
@@ -123,6 +150,15 @@
       }
     }
   </style>
+  <script>
+    function showAbout() {
+      document.getElementById('about-section').style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+    }
+  </script>
 </head>
 <body>
 
@@ -134,7 +170,7 @@
 
   <!-- Вгорі справа: кнопки меню -->
   <div class="top-right-menu">
-    <a href="#">About</a>
+    <a onclick="showAbout()">About</a>
     <a href="#">Roadmap</a>
     <a href="#">Contact</a>
     <a href="#">Connect Wallet</a>
@@ -150,7 +186,17 @@
     <a href="#">Staking</a>
     <a href="#">Liquidity Lock</a>
   </div>
-  
+
+  <!-- Секція About -->
+  <div id="about-section">
+    <h2>About BONK BAG</h2>
+    <p>
+      BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
+      It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
+      There’s no financial advice here — just pure BONK energy.
+    </p>
+  </div>
+
   <!-- Футер -->
   <footer>
     This project is for entertainment purposes only and does not constitute financial advice.
