@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -145,6 +146,29 @@
       document.querySelector('footer').style.display = 'none';
       showBackButton();
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const ctx = document.getElementById('tokenomicsChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['DEX Liquidity', 'Airdrop', 'Owner', 'Reserve'],
+            datasets: [{
+              data: [50, 20, 15, 15],
+              backgroundColor: ['#ffb300', '#ff7043', '#ec407a', '#ef5350']
+            }]
+          },
+          options: {
+            plugins: {
+              legend: {
+                labels: { color: 'white' }
+              }
+            }
+          }
+        });
+      }
+    });
   </script>
 </head>
 <body>
@@ -176,35 +200,25 @@
 </div>
 
 <div id="tokenomics-section" class="section">
-  <h2 style="color: #66ff66;">BONK BAG Tokenomics</h2>
-  <img src="bonk_bag_tokenomics_matched.svg" alt="Tokenomics Chart" style="max-width: 80%; margin: 20px auto; display: block;">
-  <button onclick="resetView()" style="margin-top: 30px; background-color: #00c853; color: white; border: none; padding: 12px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">
-    Back
-  </button>
+  <h2>BONK BAG Tokenomics</h2>
+  <canvas id="tokenomicsChart" width="300" height="300" style="margin: 20px auto; display: block;"></canvas>
 </div>
 
 <div id="staking-section" class="section">
   <h2>Staking</h2>
-  <p>
-    Staking is coming soon!<br>
-    You’ll be able to stake your BAG tokens and earn rewards.<br>
-    Stay tuned!
-  </p>
+  <p>Staking is coming soon!<br>You’ll be able to stake your BAG tokens and earn rewards.<br>Stay tuned!</p>
 </div>
 
 <div id="about-section" class="section">
   <h2>About BONK BAG</h2>
-  <p>
-    BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
+  <p>BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
     It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
-    There’s no financial advice here — just pure BONK energy.
-  </p>
+    There’s no financial advice here — just pure BONK energy.</p>
 </div>
 
 <div id="roadmap-section" class="section">
   <h2>Roadmap</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    <strong>Q2 2025</strong><br>
+  <p><strong>Q2 2025</strong><br>
     – Launch BONK BAG<br>
     – Website + Airdrop<br>
     – Listing on DEX (SushiSwap)<br><br>
@@ -215,31 +229,26 @@
     <strong>Q4 2025</strong><br>
     – Merchandise drop<br>
     – Partnerships<br>
-    – Road to 10,000 holders
-  </p>
+    – Road to 10,000 holders</p>
 </div>
 
 <div id="contact-section" class="section">
   <h2>Contact Us</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Have questions or want to get in touch?<br>
+  <p>Have questions or want to get in touch?<br>
     Join our community or reach out via:<br><br>
     Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">t.me/BONKBAG</a><br>
     Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">x.com/b0nkbag</a><br>
-    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a>
-  </p>
+    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
 </div>
 
 <div id="wallet-section" class="section">
   <h2>Connect Wallet</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Coming soon: you'll be able to connect your wallet directly here<br>
-    to use staking, airdrop, and more!
-  </p>
+  <p>Coming soon: you'll be able to connect your wallet directly here<br>
+    to use staking, airdrop, and more!</p>
 </div>
 
 <footer>
-  This project is for entertainment purposes only and does not constitute financial advice.
+  This project is for entertainment purposes only and does not constitute financial advice.<br>
   The creators bear no responsibility for any outcomes.
 </footer>
 
