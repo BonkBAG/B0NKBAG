@@ -42,6 +42,7 @@
       right: 20px;
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .top-right-menu a {
@@ -84,6 +85,43 @@
       color: #cccccc;
       padding: 0 20px;
     }
+
+    @media (max-width: 600px) {
+      .top-left-logo .title {
+        font-size: 28px;
+      }
+
+      .top-left-logo img {
+        height: 36px;
+      }
+
+      .top-right-menu {
+        top: 80px;
+        right: 10px;
+        gap: 6px;
+      }
+
+      .top-right-menu a {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .side-buttons {
+        top: 160px;
+        left: 10px;
+        gap: 8px;
+      }
+
+      .side-buttons a {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      footer {
+        font-size: 10px;
+        padding: 0 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -102,7 +140,7 @@
     <a href="#">Connect Wallet</a>
   </div>
 
-  <!-- Вертикальний стовпчик кнопок -->
+  <!-- Лівий вертикальний стовпчик кнопок -->
   <div class="side-buttons">
     <a href="#">Buy BAG/USDC on SushiSwap</a>
     <a href="#">Airdrop</a>
