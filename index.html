@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,10 @@
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -92,7 +96,7 @@
       padding: 0 20px;
     }
 
-    .section {
+    #about-section {
       display: none;
       position: absolute;
       top: 120px;
@@ -106,19 +110,64 @@
       text-align: center;
     }
 
-    h2 { color: #66ff66; }
+    #about-section h2 {
+      color: #66ff66;
+    }
 
     @media (max-width: 600px) {
-      .top-left-logo .title { font-size: 28px; }
-      .top-left-logo img { height: 36px; }
-      .top-right-menu { top: 80px; right: 10px; gap: 6px; }
-      .top-right-menu a { padding: 8px 12px; font-size: 12px; }
-      .side-buttons { top: 160px; left: 10px; gap: 8px; }
-      .side-buttons a { font-size: 14px; padding: 10px 14px; }
-      footer { font-size: 10px; padding: 0 10px; }
+      .top-left-logo .title {
+        font-size: 28px;
+      }
+
+      .top-left-logo img {
+        height: 36px;
+      }
+
+      .top-right-menu {
+        top: 80px;
+        right: 10px;
+        gap: 6px;
+      }
+
+      .top-right-menu a {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .side-buttons {
+        top: 160px;
+        left: 10px;
+        gap: 8px;
+      }
+
+      .side-buttons a {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      footer {
+        font-size: 10px;
+        padding: 0 10px;
+      }
     }
   </style>
   <script>
+    function showAbout() {
+      document.getElementById('about-section').style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+    }
+  
+    function showRoadmap() {
+      document.getElementById('roadmap-section').style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+    }
+    
     function showBackButton() {
       document.getElementById('back-button').style.display = 'block';
     }
@@ -127,103 +176,173 @@
       document.getElementById('back-button').style.display = 'none';
     }
 
-    function resetView() {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelector('.top-left-logo').style.display = 'flex';
-      document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
-      document.querySelector('footer').style.display = 'block';
-      hideBackButton();
-    }
-
-    function showSection(id) {
-      resetView();
-      document.getElementById(id).style.display = 'block';
+    function showAbout() {
+      document.getElementById('about-section').style.display = 'block';
+      document.getElementById('roadmap-section').style.display = 'none';
       document.querySelector('.top-left-logo').style.display = 'none';
       document.querySelector('.top-right-menu').style.display = 'none';
       document.querySelector('.side-buttons').style.display = 'none';
       document.querySelector('footer').style.display = 'none';
       showBackButton();
     }
-  </script>
+
+    function showRoadmap() {
+      document.getElementById('roadmap-section').style.display = 'block';
+      document.getElementById('about-section').style.display = 'none';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+
+    function goBack() {
+      document.getElementById('about-section').style.display = 'none';
+      document.getElementById('roadmap-section').style.display = 'none';
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      hideBackButton();
+    }
+    
+    function showContact() {
+      document.getElementById('contact-section').style.display = 'block';
+      document.getElementById('about-section').style.display = 'none';
+      document.getElementById('roadmap-section').style.display = 'none';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+    
+    function showWallet() {
+      resetView();
+      document.getElementById('wallet-section').style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+    
+    function showStaking() {
+      resetView();
+      document.getElementById('staking-section').style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+    </script>
+    
+    
+    
+    
+    
 </head>
+
 <body>
+  <button id="back-button" onclick="goBack()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">
+    Back
+  </button>
+    
 
-<button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">
-  Back
-</button>
+  <!-- ÐÐ³Ð¾ÑÑ Ð·Ð»ÑÐ²Ð°: BONK BAG + Ð»Ð¾Ð³Ð¾ÑÐ¸Ð¿ -->
+  <div class="top-left-logo">
+    <div class="title">BONK BAG</div>
+    <img src="logo.png" alt="">
+  </div>
 
-<div class="top-left-logo">
-  <div class="title">BONK BAG</div>
-  <img src="logo.png" alt="">
-</div>
+  <!-- ÐÐ³Ð¾ÑÑ ÑÐ¿ÑÐ°Ð²Ð°: ÐºÐ½Ð¾Ð¿ÐºÐ¸ Ð¼ÐµÐ½Ñ -->
+  <div class="top-right-menu">
+    <a onclick="showAbout()">About</a>
+    <a onclick="showRoadmap()">Roadmap</a>
+    <a onclick="showContact()">Contact</a>
+    <a onclick="showWallet()">Connect Wallet</a>
+  </div>
 
-<div class="top-right-menu">
-  <a onclick="showSection('about-section')">About</a>
-  <a onclick="showSection('roadmap-section')">Roadmap</a>
-  <a onclick="showSection('contact-section')">Contact</a>
-  <a onclick="showSection('wallet-section')">Connect Wallet</a>
-</div>
+  <!-- ÐÑÐ²Ð¸Ð¹ Ð²ÐµÑÑÐ¸ÐºÐ°Ð»ÑÐ½Ð¸Ð¹ ÑÑÐ¾Ð²Ð¿ÑÐ¸Ðº ÐºÐ½Ð¾Ð¿Ð¾Ðº -->
+  <div class="side-buttons">
+    <a href="#">Buy BAG/USDC on SushiSwap</a>
+    <a href="#">Airdrop</a>
+    <a href="#">BAG/USDC on DEXScreener</a>
+    <a href="#">BAG/USDT on DEXTools</a>
+    <a href="#">Tokenomics</a>
+    <a onclick="showStaking()">Staking</a>
+    <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
+  </div>
 
-<div class="side-buttons">
-  <a href="#">Buy BAG/USDC on SushiSwap</a>
-  <a href="#">Airdrop</a>
-  <a href="#">BAG/USDC on DEXScreener</a>
-  <a href="#">BAG/USDT on DEXTools</a>
-  <a href="#">Tokenomics</a>
-  <a href="#">Staking</a>
-  <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
-</div>
-</div>
+  <!-- Ð¡ÐµÐºÑÑÑ About -->
+  <div id="about-section">
+    <h2>About BONK BAG</h2>
+    <p>
+      BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
+      It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
+      Thereâs no financial advice here â just pure BONK energy.
+    </p>
+  </div>
 
-<div id="about-section" class="section">
-  <h2>About BONK BAG</h2>
-  <p>
-    BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
-    It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
-    There’s no financial advice here — just pure BONK energy.
-  </p>
-</div><div id="roadmap-section" class="section">
-  <h2>Roadmap</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    <strong>Q2 2025</strong><br>
-    – Launch BONK BAG<br>
-    – Website + Airdrop<br>
-    – Listing on DEX (SushiSwap)<br><br>
-    <strong>Q3 2025</strong><br>
-    – Staking goes live<br>
-    – Community contests<br>
-    – CEX listing application<br><br>
-    <strong>Q4 2025</strong><br>
-    – Merchandise drop<br>
-    – Partnerships<br>
-    – Road to 10,000 holders
-  </p>
-</div>
+  <!-- Ð¤ÑÑÐµÑ -->
+  <footer>
+    This project is for entertainment purposes only and does not constitute financial advice.
+    The creators bear no responsibility for any outcomes.
+  </footer>
 
-<div id="contact-section" class="section">
-  <h2>Contact Us</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Have questions or want to get in touch?<br>
-    Join our community or reach out via:<br><br>
-    Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">t.me/BONKBAG</a><br>
-    Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">x.com/b0nkbag</a><br>
-    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a>
-  </p>
-</div>
 
-<div id="wallet-section" class="section">
-  <h2>Connect Wallet</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Coming soon: you'll be able to connect your wallet directly here<br>
-    to use staking, airdrop, and more!
-  </p>
-</div>
+  <!-- Ð¡ÐµÐºÑÑÑ Roadmap -->
+  <div id="roadmap-section" style="display: none; position: absolute; top: 120px; left: 0; right: 0; margin: auto; max-width: 800px; background-color: rgba(0, 0, 0, 0.6); border-radius: 12px; padding: 40px 20px; text-align: center;">
+    <h2 style="color: #66ff66;">Roadmap</h2>
+    <p style="font-size: 16px; line-height: 1.6;">
+      <strong>2 ÐºÐ²Ð°ÑÑÐ°Ð» 2025</strong><br>
+      â ÐÐ°Ð¿ÑÑÐº BONK BAG<br>
+      â Ð¡Ð°Ð¹Ñ + Airdrop<br>
+      â ÐÑÑÑÐ¸Ð½Ð³ Ð½Ð° DEX (SushiSwap)<br><br>
+      <strong>3 ÐºÐ²Ð°ÑÑÐ°Ð» 2025</strong><br>
+      â ÐÐ°Ð¿ÑÑÐº ÑÑÐµÐ¹ÐºÑÐ½Ð³Ñ<br>
+      â ÐÐ¾Ð½ÐºÑÑÑÐ¸ Ð´Ð»Ñ ÑÐ¿ÑÐ»ÑÐ½Ð¾ÑÐ¸<br>
+      â ÐÐ¾Ð´Ð°Ð½Ð½Ñ Ð·Ð°ÑÐ²ÐºÐ¸ Ð½Ð° CEX<br><br>
+      <strong>4 ÐºÐ²Ð°ÑÑÐ°Ð» 2025</strong><br>
+      â ÐÐ¸Ð¿ÑÑÐº Ð¼ÐµÑÑÑ<br>
+      â ÐÐ°ÑÑÐ½ÐµÑÑÑÐ²Ð°<br>
+      â Ð¨Ð»ÑÑ Ð´Ð¾ 10 000 ÑÐ¾Ð»Ð´ÐµÑÑÐ²
+    </p>
+  </div>
 
-<footer>
-  This project is for entertainment purposes only and does not constitute financial advice.
-  The creators bear no responsibility for any outcomes.
-</footer>
+  <!-- Ð¡ÐµÐºÑÑÑ Contact -->
+  <div id="contact-section" style="display: none; position: absolute; top: 120px; left: 0; right: 0; margin: auto; max-width: 800px; background-color: rgba(0, 0, 0, 0.6); border-radius: 12px; padding: 40px 20px; text-align: center;">
+    <h2 style="color: #66ff66;">Contact Us</h2>
+    <p style="font-size: 16px; line-height: 1.6;">
+      Have questions or want to get in touch?<br>
+      Join our community or reach out via:<br><br>
+      Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">t.me/BONKBAG</a><br>
+      Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">x.com/b0nkbag</a><br>
+      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a>
+    </p>
+  </div>
 
+  <!-- Connect Wallet Section -->
+  <div id="wallet-section" style="display: none; position: absolute; top: 120px; left: 0; right: 0; margin: auto; max-width: 800px; background-color: rgba(0, 0, 0, 0.6); border-radius: 12px; padding: 40px 20px; text-align: center;">
+    <h2 style="color: #66ff66;">Connect Wallet</h2>
+    <p style="font-size: 16px; line-height: 1.6;">
+      Coming soon: you'll be able to connect your wallet directly here<br>
+      to use staking, airdrop, and more!
+    </p>
+  </div>
+
+  <!-- Staking Section -->
+  <div id="staking-section" class="section">
+    <h2>Staking</h2>
+    <p style="font-size: 16px; line-height: 1.6;">
+      Staking is coming soon! Youâll be able to stake your BAG tokens<br>
+      and earn rewards once the system goes live. Stay tuned!
+    </p>
+  </div>
 </body>
+
+
+
+
 </html>
