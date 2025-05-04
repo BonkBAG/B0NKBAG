@@ -13,19 +13,38 @@
       background-size: cover;
       color: white;
       height: 100vh;
-      position: relative;
       overflow-x: hidden;
     }
 
-    .top-left {
+    .top-left-logo {
       position: absolute;
       top: 20px;
       left: 20px;
       display: flex;
+      align-items: center;
       gap: 10px;
     }
 
-    .top-left a {
+    .top-left-logo .title {
+      font-size: 36px;
+      font-weight: bold;
+      color: #66ff66;
+      text-transform: uppercase;
+    }
+
+    .top-left-logo img {
+      height: 48px;
+    }
+
+    .top-right-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .top-right-menu a {
       background-color: #00c853;
       padding: 10px 16px;
       border-radius: 6px;
@@ -35,74 +54,56 @@
       font-size: 14px;
     }
 
-    .top-right-logo {
+    .side-buttons {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .top-right-logo .title {
-      font-size: 36px;
-      font-weight: bold;
-      color: #66ff66;
-    }
-
-    .top-right-logo img {
-      height: 48px;
-    }
-
-    .vertical-buttons {
-      position: absolute;
-      top: 100px;
-      right: 40px;
+      top: 140px;
+      left: 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .vertical-buttons a {
+    .side-buttons a {
       background-color: #00c853;
-      padding: 14px 20px;
+      padding: 12px 18px;
       border-radius: 6px;
       color: white;
       text-decoration: none;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       width: fit-content;
     }
 
     footer {
       position: absolute;
-      bottom: 10px;
-      left: 20px;
-      right: 20px;
+      bottom: 20px;
+      left: 0;
+      right: 0;
       text-align: center;
       font-size: 12px;
       color: #cccccc;
+      padding: 0 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Верхній лівий кут: кнопки -->
-  <div class="top-left">
+  <!-- Вгорі зліва: BONK BAG + логотип -->
+  <div class="top-left-logo">
+    <div class="title">BONK BAG</div>
+    <img src="logo.png" alt="">
+  </div>
+
+  <!-- Вгорі справа: кнопки меню -->
+  <div class="top-right-menu">
     <a href="#">About</a>
     <a href="#">Roadmap</a>
     <a href="#">Contact</a>
     <a href="#">Connect Wallet</a>
   </div>
 
-  <!-- Верхній правий кут: BONK BAG + логотип -->
-  <div class="top-right-logo">
-    <div class="title">BONK BAG</div>
-    <img src="logo.png" alt="" />
-  </div>
-
   <!-- Вертикальний стовпчик кнопок -->
-  <div class="vertical-buttons">
+  <div class="side-buttons">
     <a href="#">Buy BAG/USDC on SushiSwap</a>
     <a href="#">Airdrop</a>
     <a href="#">BAG/USDC on DEXScreener</a>
