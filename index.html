@@ -4,44 +4,149 @@
   <meta charset="UTF-8" />
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 15px;
+    }
+
+    .top-right-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .top-btn {
+      background-color: #00c853;
+      padding: 10px 14px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .logo-section {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 40px;
+      margin: 0;
+      color: #66ff66;
+    }
+
+    .logo {
+      height: 50px;
+      margin-top: 5px;
+    }
+
+    .button-stairs {
+      position: absolute;
+      bottom: 120px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      width: fit-content;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    .btn:nth-child(1) { margin-left: 0px; animation-delay: 0.2s; }
+    .btn:nth-child(2) { margin-left: 20px; animation-delay: 0.4s; }
+    .btn:nth-child(3) { margin-left: 40px; animation-delay: 0.6s; }
+    .btn:nth-child(4) { margin-left: 60px; animation-delay: 0.8s; }
+    .btn:nth-child(5) { margin-left: 80px; animation-delay: 1.0s; }
+    .btn:nth-child(6) { margin-left: 100px; animation-delay: 1.2s; }
+    .btn:nth-child(7) { margin-left: 120px; animation-delay: 1.4s; }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .dog-img {
+      position: absolute;
+      bottom: 60px;
+      right: 20px;
+    }
+
+    .dog-img img {
+      max-height: 400px;
+      width: auto;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 36px;
+      font-weight: bold;
+      color: #59e350;
+    }
+  </style>
 </head>
 <body>
   <!-- Верхні кнопки праворуч -->
   <header>
     <div class="top-right-buttons">
-      <a class="top-btn">Connect Wallet</a>
-      <a class="top-btn">About</a>
-      <a class="top-btn">Roadmap</a>
-      <a class="top-btn">Contact</a>
+      <a class="top-btn" href="#">Connect Wallet</a>
+      <a class="top-btn" href="#">About</a>
+      <a class="top-btn" href="#">Roadmap</a>
+      <a class="top-btn" href="#">Contact</a>
     </div>
   </header>
 
-  <!-- Логотип та надпис BAG -->
+  <!-- Лівий верх: BAG + логотип -->
   <div class="logo-section">
     <h1 class="title">BAG</h1>
     <img src="logo.png" class="logo" alt="Logo" />
   </div>
 
-  <!-- Кнопки сходинками -->
+  <!-- Зелені кнопки сходинками зліва -->
   <div class="button-stairs">
-    <a class="btn" style="margin-left: 0px;">Buy BAG/USDC on SushiSwap</a>
-    <a class="btn" style="margin-left: 20px;">Airdrop</a>
-    <a class="btn" style="margin-left: 40px;">BAG/USDC on DEXScreener</a>
-    <a class="btn" style="margin-left: 60px;">BAG/USDT on DEXTools</a>
-    <a class="btn" style="margin-left: 80px;">Tokenomics</a>
-    <a class="btn" style="margin-left: 100px;">Staking</a>
-    <a class="btn" style="margin-left: 120px;">Liquidity Lock</a>
+    <a class="btn" href="#">Buy BAG/USDC on SushiSwap</a>
+    <a class="btn" href="#">Airdrop</a>
+    <a class="btn" href="#">BAG/USDC on DEXScreener</a>
+    <a class="btn" href="#">BAG/USDT on DEXTools</a>
+    <a class="btn" href="#">Tokenomics</a>
+    <a class="btn" href="#">Staking</a>
+    <a class="btn" href="#">Liquidity Lock</a>
   </div>
 
-  <!-- Пес із мішком -->
+  <!-- Пес з мішком -->
   <div class="dog-img">
     <img src="dog-money.png" alt="BONK DOG" />
   </div>
 
-  <!-- Напис внизу зліва -->
+  <!-- Футер зліва -->
   <footer>
-    <span class="footer-title">BONK BAG</span>
+    BONK BAG
   </footer>
 </body>
 </html>
