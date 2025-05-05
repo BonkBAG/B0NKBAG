@@ -101,6 +101,57 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
+
+    /* --- АДАПТИВНІ СТИЛІ ДЛЯ МОБІЛЬНИХ --- */
+    @media screen and (max-width: 768px) {
+      .top-left-logo {
+        top: 10px;
+        left: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .top-left-logo .title {
+        font-size: 24px;
+      }
+      .top-left-logo img {
+        height: 36px;
+      }
+      .top-right-menu {
+        top: 80px;
+        right: 10px;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      .top-right-menu a {
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+      .side-buttons {
+        position: static;
+        margin: 140px auto 0;
+        align-items: center;
+      }
+      .side-buttons a {
+        width: 90%;
+        font-size: 14px;
+        text-align: center;
+      }
+      .section {
+        top: 80px;
+        padding: 20px 10px;
+        width: 90%;
+      }
+      footer {
+        position: static;
+        margin-top: 40px;
+        font-size: 11px;
+      }
+      #back-button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
   </style>
   <script>
     function showBackButton() {
@@ -142,9 +193,7 @@
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
   <a onclick="showSection('wallet-section')">Connect Wallet</a>
-</div>
-
-<div class="side-buttons">
+</div><div class="side-buttons">
   <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
   <a onclick="showSection('airdrop-section')">Airdrop</a>
   <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
@@ -227,7 +276,7 @@
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
     document.getElementById("countdown").innerText =
-      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+      Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes;
   }
 
   setInterval(updateCountdown, 1000);
