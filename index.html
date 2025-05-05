@@ -151,7 +151,10 @@
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">
   Back
-</button><div class="top-left-logo"><div class="title">BONK BAG</div>
+</button>
+
+<div class="top-left-logo">
+  <div class="title">BONK BAG</div>
   <img src="logo.png" alt="">
 </div>
 
@@ -168,12 +171,12 @@
   <a href="#">BAG/USDC on DEXScreener</a>
   <a href="#">BAG/USDT on DEXTools</a>
 
+  <a onclick="showSection('tokenomics-section')">Tokenomics</a>
   <a onclick="showSection('staking-section')">Staking</a>
   <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks/0x7601b3d68ae621f91d62a37acb2f3a8fef83e59a" target="_blank">Liquidity Lock</a>
 </div>
-</div>
 
-  <div class="section" id="staking-section">
+<div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>
     Staking is coming soon!<br>
@@ -182,13 +185,15 @@
   </p>
 </div>
 
-  <div id="tokenomics-section" class="section" style="display: none; text-align: center;">
+<div id="tokenomics-section" class="section" style="display: none; text-align: center;">
   <h2 style="color: white;">BONK BAG Tokenomics</h2>
-  <img src="bonk_bag_tokenomics_matched.svg" alt="Tokenomics Chart" style="max-width: 80%; margin: 20px auto;">
+  <img src="tokenomics_chart.png" alt="Tokenomics Chart" style="max-width: 100%; height: auto; margin: 20px auto; display: block;">
   <br>
-  <button onclick="hideSections()" style="margin-top: 20px;" class="green-button">Back</button>
+  <button onclick="resetView()" style="margin-top: 20px; background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">
+    Back
+  </button>
 </div>
-  
+
 <div id="about-section" class="section">
   <h2>About BONK BAG</h2>
   <p>
@@ -196,7 +201,9 @@
     It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
     There’s no financial advice here — just pure BONK energy.
   </p>
-</div><div id="roadmap-section" class="section">
+</div>
+
+<div id="roadmap-section" class="section">
   <h2>Roadmap</h2>
   <p style="font-size: 16px; line-height: 1.6;">
     <strong>Q2 2025</strong><br>
