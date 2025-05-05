@@ -10,17 +10,12 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: url('background.png') no-repeat center center fixed;
-      background-size: cover;
+      background-color: #000;
       color: white;
-      height: 100vh;
+      min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
-
-    .top-left-logo, .top-right-menu, .side-buttons, footer {
-      transition: opacity 0.3s ease;
-    }
-
     .top-left-logo {
       position: absolute;
       top: 20px;
@@ -29,18 +24,13 @@
       align-items: center;
       gap: 10px;
     }
-
     .top-left-logo .title {
       font-size: 36px;
       font-weight: bold;
       color: #66ff66;
       text-transform: uppercase;
     }
-
-    .top-left-logo img {
-      height: 48px;
-    }
-
+    .top-left-logo img { height: 48px; }
     .top-right-menu {
       position: absolute;
       top: 20px;
@@ -49,7 +39,6 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .top-right-menu a {
       background-color: #00c853;
       padding: 10px 16px;
@@ -60,7 +49,6 @@
       font-size: 14px;
       cursor: pointer;
     }
-
     .side-buttons {
       position: absolute;
       top: 140px;
@@ -69,7 +57,6 @@
       flex-direction: column;
       gap: 12px;
     }
-
     .side-buttons a {
       background-color: #00c853;
       padding: 12px 18px;
@@ -80,60 +67,154 @@
       font-size: 16px;
       width: fit-content;
     }
-
-    footer {
-      position: absolute;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 12px;
-      color: #cccccc;
-      padding: 0 20px;
-    }
-
     .section {
       display: none;
-      position: absolute;
-      top: 120px;
-      left: 0;
-      right: 0;
-      margin: auto;
+      margin-top: 100px;
       max-width: 800px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      padding: 40px 20px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba(0,0,0,0.6);
+      padding: 30px;
+      border-radius: 10px;
       text-align: center;
     }
-
-    h2 { color: #66ff66; }
-
-    @media (max-width: 600px) {
-      .top-left-logo .title { font-size: 28px; }
-      .top-left-logo img { height: 36px; }
-      .top-right-menu { top: 80px; right: 10px; gap: 6px; }
-      .top-right-menu a { padding: 8px 12px; font-size: 12px; }
-      .side-buttons { top: 160px; left: 10px; gap: 8px; }
-      .side-buttons a { font-size: 14px; padding: 10px 14px; }
-      footer { font-size: 10px; padding: 0 10px; }
+    .section h2 {
+      color: #66ff66;
+    }
+    #back-button {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #00c853;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .social-links {
+      text-align: center;
+      margin-top: 80px;
+    }
+    .social-links a {
+      display: inline-block;
+      margin: 10px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .social-links img {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      margin-right: 8px;
     }
   </style>
+</head>
+<body>
+
+  <button id="back-button" onclick="resetView()">Back</button>
+
+  <div class="top-left-logo">
+    <div class="title">BONK BAG</div>
+    <img src="logo.png" alt="Logo">
+  </div>
+
+  <div class="top-right-menu">
+    <a onclick="showSection('about-section')">About</a>
+    <a onclick="showSection('roadmap-section')">Roadmap</a>
+    <a onclick="showSection('contact-section')">Contact</a>
+    <a onclick="showSection('wallet-section')">Connect Wallet</a>
+  </div>
+
+  <div class="side-buttons">
+    <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
+    <a onclick="showSection('airdrop-section')">Airdrop</a>
+    <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
+    <a href="https://www.dextools.io/app/ru/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f?t=1746429986605" target="_blank">BAG/USDT on DEXTools</a>
+    <a onclick="showSection('tokenomics-section')">Tokenomics</a>
+    <a onclick="showSection('staking-section')">Staking</a>
+    <p><a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank" rel="noopener noreferrer">🔗 View Lock Details</a></p>
+  </div>
+
+  <div id="airdrop-section" class="section">
+    <h2>Airdrop</h2>
+    <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
+    <p style="line-height: 1.8;">
+      We are giving away a total of <strong>250,000,000 BAG tokens</strong> in the main airdrop draw!<br><br>
+      To participate in the BONK BAG Airdrop, please complete all of the following steps:<br><br>
+      1. Like and retweet the pinned tweet<br>
+      2. Follow us on Twitter<br>
+      3. Join our Telegram group<br>
+      4. Hold any amount of BAG tokens in your wallet<br><br>
+      <strong>Note:</strong> Only real and active users will be rewarded.
+    </p>
+    <p>
+      <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Join Telegram</a><br>
+      <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Follow on Twitter</a>
+    </p>
+    <button onclick="resetView()" style="margin-top: 20px; background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">Back</button>
+  </div>
+
+  <div id="staking-section" class="section">
+    <h2>Staking</h2>
+    <p>Staking is coming soon!<br>You’ll be able to stake your BAG tokens and earn rewards.</p>
+  </div>
+
+  <div id="tokenomics-section" class="section">
+    <h2 style="color: white;">BONK BAG Tokenomics</h2>
+    <img src="tokenomics_chart.png" alt="Tokenomics Chart" style="max-width: 100%; height: auto; margin: 20px auto; display: block;">
+    <button onclick="resetView()" style="margin-top: 20px; background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">Back</button>
+  </div>
+
+  <div id="about-section" class="section">
+    <h2>About BONK BAG</h2>
+    <p>BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>There’s no financial advice here — just pure BONK energy.</p>
+  </div>
+
+  <div id="roadmap-section" class="section">
+    <h2>Roadmap</h2>
+    <p><strong>Q2 2025</strong><br>– Launch BONK BAG<br>– Website + Airdrop<br>– Listing on DEX<br><br>
+    <strong>Q3 2025</strong><br>– Staking goes live<br>– Contests<br><br>
+    <strong>Q4 2025</strong><br>– Merch drop<br>– Partnerships</p>
+  </div>
+
+  <div id="contact-section" class="section">
+    <h2>Contact Us</h2>
+    <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">t.me/BONKBAG</a><br>
+    Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">x.com/b0nkbag</a><br>
+    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
+  </div>
+
+  <div id="wallet-section" class="section">
+    <h2>Connect Wallet</h2>
+    <p>Coming soon: you'll be able to connect your wallet directly here.</p>
+  </div>
+
+  <footer>
+    <p style="text-align: center; font-size: 12px; color: #ccc;">This project is for entertainment purposes only and does not constitute financial advice.</p>
+  </footer>
+
+  <div class="social-links">
+    <p style="color:#66ff66; font-weight:bold;">Follow BONK BAG</p>
+    <a href="https://t.me/BONKBAG" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram">Telegram</a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord">Discord</a>
+    <a href="https://x.com/b0nkbag?s=21" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" alt="Twitter">Twitter</a>
+  </div>
+
   <script>
-    function showBackButton() {
-      document.getElementById('back-button').style.display = 'block';
-    }
-
-    function hideBackButton() {
-      document.getElementById('back-button').style.display = 'none';
-    }
-
     function resetView() {
       document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
       document.querySelector('.top-left-logo').style.display = 'flex';
       document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('.side-buttons')?.style.display = 'flex';
       document.querySelector('footer').style.display = 'block';
-      hideBackButton();
+      document.getElementById("back-button")?.style.display = "none";
     }
 
     function showSection(id) {
@@ -141,160 +222,36 @@
       document.getElementById(id).style.display = 'block';
       document.querySelector('.top-left-logo').style.display = 'none';
       document.querySelector('.top-right-menu').style.display = 'none';
-      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('.side-buttons')?.style.display = 'none';
       document.querySelector('footer').style.display = 'none';
-      showBackButton();
+      document.getElementById("back-button")?.style.display = "block";
     }
+
+    function updateCountdown() {
+      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+      const now = new Date().getTime();
+      const diff = deadline - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Airdrop has ended.";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById("countdown").innerText =
+        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    window.onload = function() {
+      resetView();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
   </script>
-</head>
-<body>
 
-<button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">
-  Back
-</button>
-
-<div class="top-left-logo">
-  <div class="title">BONK BAG</div>
-  <img src="logo.png" alt="">
-</div>
-
-<div class="top-right-menu">
-  <a onclick="showSection('about-section')">About</a>
-  <a onclick="showSection('roadmap-section')">Roadmap</a>
-  <a onclick="showSection('contact-section')">Contact</a>
-  <a onclick="showSection('wallet-section')">Connect Wallet</a>
-</div>
-
-<div class="side-buttons">
-    <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
-  <a onclick="showSection('airdrop-section')">Airdrop</a>
-  <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
-  <a href="https://www.dextools.io/app/ru/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f?t=1746429986605" target="_blank">BAG/USDT on DEXTools</a>
-
-  <a onclick="showSection('tokenomics-section')">Tokenomics</a>
-  <a onclick="showSection('staking-section')">Staking</a>
-  <p><a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank" rel="noopener noreferrer">🔗 View Lock Details</a></p
-</div>
-
-  <div id="airdrop-section" class="section" style="display: none;">
-  <h2>Airdrop</h2>
-  <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
-
-  <p style="line-height: 1.8;">
-    We are giving away a total of <strong>250,000,000 BAG tokens</strong> in the main airdrop draw!<br><br>
-    To participate in the BONK BAG Airdrop, please complete all of the following steps:<br><br>
-    1. Like and retweet the pinned tweet<br>
-    2. Follow us on Twitter<br>
-    3. Join our Telegram group<br>
-    4. Hold any amount of BAG tokens in your wallet<br><br>
-    <strong>Note:</strong> Only real and active users will be rewarded. Bots or duplicate accounts will be disqualified.
-  </p>
-
-  <p>
-    <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Join Telegram</a><br>
-    <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Follow on Twitter</a>
-  </p>
-
-  <button onclick="resetView()" style="margin-top: 20px; background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">
-    Back
-  </button>
-  
-<div id="staking-section" class="section">
-  <h2>Staking</h2>
-  <p>
-    Staking is coming soon!<br>
-    You’ll be able to stake your BAG tokens and earn rewards.<br>
-    Stay tuned!
-  </p>
-</div>
-
-<div id="tokenomics-section" class="section" style="display: none; text-align: center;">
-  <h2 style="color: white;">BONK BAG Tokenomics</h2>
-  <img src="tokenomics_chart.png" alt="Tokenomics Chart" style="max-width: 100%; height: auto; margin: 20px auto; display: block;">
-  <br>
-  <button onclick="resetView()" style="margin-top: 20px; background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer;">
-    Back
-  </button>
-</div>
-
-<div id="about-section" class="section">
-  <h2>About BONK BAG</h2>
-  <p>
-    BONK BAG is a community-driven memecoin project created purely for fun, culture, and crypto entertainment.<br>
-    It brings together fans of decentralized finance and meme culture into one energetic and growing ecosystem.<br>
-    There’s no financial advice here — just pure BONK energy.
-  </p>
-</div>
-
-<div id="roadmap-section" class="section">
-  <h2>Roadmap</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    <strong>Q2 2025</strong><br>
-    – Launch BONK BAG<br>
-    – Website + Airdrop<br>
-    – Listing on DEX (SushiSwap)<br><br>
-    <strong>Q3 2025</strong><br>
-    – Staking goes live<br>
-    – Community contests<br>
-    – CEX listing application<br><br>
-    <strong>Q4 2025</strong><br>
-    – Merchandise drop<br>
-    – Partnerships<br>
-    – Road to 10,000 holders
-  </p>
-</div>
-
-<div id="contact-section" class="section">
-  <h2>Contact Us</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Have questions or want to get in touch?<br>
-    Join our community or reach out via:<br><br>
-    Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">t.me/BONKBAG</a><br>
-    Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">x.com/b0nkbag</a><br>
-    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a>
-  </p>
-</div>
-
-<div id="wallet-section" class="section">
-  <h2>Connect Wallet</h2>
-  <p style="font-size: 16px; line-height: 1.6;">
-    Coming soon: you'll be able to connect your wallet directly here<br>
-    to use staking, airdrop, and more!
-  </p>
-</div>
-
-<footer>
-  This project is for entertainment purposes only and does not constitute financial advice.
-  The creators bear no responsibility for any outcomes.
-</footer>
-<script>
-  function updateCountdown() {
-    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
-    const now = new Date().getTime();
-    const diff = deadline - now;
-
-    if (diff <= 0) {
-      document.getElementById("countdown").innerText = "Airdrop has ended.";
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    document.getElementById("countdown").innerText =
-      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
-  }
-
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-  
-  window.onload = function() {
-  resetView();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-</script>
-</footer>
-  
 </body>
 </html>
