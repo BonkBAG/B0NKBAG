@@ -288,6 +288,11 @@
 
   setInterval(updateCountdown, 1000);
   updateCountdown();
+  
+  window.onload = function() {
+  resetView();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 </script>
 </footer>
   
