@@ -268,6 +268,28 @@
   This project is for entertainment purposes only and does not constitute financial advice.
   The creators bear no responsibility for any outcomes.
 </footer>
+<script>
+  function updateCountdown() {
+    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const diff = deadline - now;
 
+    if (diff <= 0) {
+      document.getElementById("countdown").innerText = "Airdrop has ended.";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("countdown").innerText =
+      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+  
 </body>
 </html>
