@@ -199,4 +199,45 @@
 
 <div id="wallet-section" class="section">
   <h2>Connect Wallet</h2>
-  <p>Coming soon: Connect wallet to access staking, airdrop &
+  <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<footer>
+  <div class="social-icons" style="margin-bottom: 8px;">
+    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
+    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
+  </div>
+  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
+</footer>
+
+<script>
+  function updateCountdown() {
+    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const diff = deadline - now;
+
+    if (diff <= 0) {
+      document.getElementById("countdown").innerText = "Airdrop has ended.";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("countdown").innerText =
+      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  window.onload = function () {
+    resetView();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+</script>
+</body>
+</html>
