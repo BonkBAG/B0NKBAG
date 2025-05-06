@@ -177,7 +177,256 @@
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BONK BAG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+    .top-left-logo, .top-right-menu, .side-buttons, footer {
+      transition: opacity 0.3s ease;
+    }
+    .top-left-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-left-logo .title {
+      font-size: 36px;
+      font-weight: bold;
+      color: #66ff66;
+      text-transform: uppercase;
+    }
+    .top-left-logo img {
+      height: 48px;
+    }
+    .top-right-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .top-right-menu a {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .side-buttons {
+      position: absolute;
+      top: 140px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .side-buttons a {
+      background-color: #00c853;
+      padding: 12px 18px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      width: fit-content;
+    }
+    .section {
+      display: none;
+      position: absolute;
+      top: 120px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    footer {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #cccccc;
+      padding: 0 20px;
+    }
+    .social-icons a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+    h2 { color: #66ff66; }
+  </style>
+  <script>
+    function showBackButton() {
+      document.getElementById('back-button').style.display = 'block';
+    }
+    function hideBackButton() {
+      document.getElementById('back-button').style.display = 'none';
+    }
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      hideBackButton();
+    }
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+  </script>
+</head>
+<body>
+
+<button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
+
+<div class="top-left-logo">
+  <div class="title">BONK BAG</div>
+  <img src="logo.png" alt="Logo">
+</div>
+
+<div class="top-right-menu">
+  <a onclick="showSection('about-section')">About</a>
+  <a onclick="showSection('roadmap-section')">Roadmap</a>
+  <a onclick="showSection('contact-section')">Contact</a>
+  <a onclick="showSection('wallet-section')">Connect Wallet</a>
+</div>
+
+<div class="side-buttons">
+  <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
+  <a onclick="showSection('airdrop-section')">Airdrop</a>
+  <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
+  <a href="https://www.dextools.io/app/ru/polygon/pair-explorer/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f?t=1746429986605" target="_blank">BAG/USDT on DEXTools</a>
+  <a onclick="showSection('tokenomics-section')">Tokenomics</a>
+  <a onclick="showSection('staking-section')">Staking</a>
+  <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
+</div>
+
+<div id="airdrop-section" class="section">
+  <h2>Airdrop</h2>
+  <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
+  <p>We are giving away 250,000,000 BAG tokens!</p>
+  <p>1. Like and retweet<br>2. Follow on Twitter<br>3. Join Telegram<br>4. Hold any BAG</p>
+  <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Telegram</a> |
+  <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Twitter</a>
+  <br><br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="tokenomics-section" class="section">
+  <h2>BONK BAG Tokenomics</h2>
+  <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="staking-section" class="section">
+  <h2>Staking</h2>
+  <p>Staking coming soon! Earn rewards by staking your BAG tokens.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<!-- About Section -->
 <div id="about-section" style="display: none; background-color: rgba(0, 0, 0, 0.85); padding: 30px; border-radius: 10px; max-width: 800px; margin: 100px auto; text-align: center;">
+  <h2 style="color: #00ff00; font-size: 28px;">About BONK BAG</h2>
+  <p style="font-size: 18px; color: white; margin-top: 15px;">
+    BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.
+  </p>
+  <p style="font-size: 18px; color: white; margin-top: 15px;">
+    The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers. We are committed to transparency, creativity, and meme-powered innovation.
+  </p>
+  <button onclick="hideAllSections()" style="margin-top: 25px; background-color: #00cc00; color: white; border: none; padding: 10px 25px; border-radius: 5px; font-size: 16px;">Back</button>
+</div>
+
+<div id="roadmap-section" class="section">
+  <h2>Roadmap</h2>
+  <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="contact-section" class="section">
+  <h2>Contact Us</h2>
+  <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
+  Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
+  Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="wallet-section" class="section">
+  <h2>Connect Wallet</h2>
+  <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<footer>
+  <div class="social-icons" style="margin-bottom: 8px;">
+    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
+    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
+  </div>
+  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
+</footer>
+
+<script>
+  function updateCountdown() {
+    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const diff = deadline - now;
+
+    if (diff <= 0) {
+      document.getElementById("countdown").innerText = "Airdrop has ended.";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("countdown").innerText =
+      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  window.onload = function () {
+    resetView();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+</script>
+</body>
+</html>
+
   <h2 style="color: #00ff00;">About BONK BAG</h2>
   <p style="font-size: 18px; color: white; margin-top: 10px;">
     BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.
