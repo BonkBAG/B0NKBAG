@@ -120,3 +120,25 @@ h2 {
   .side-buttons a { font-size: 14px; padding: 10px 14px; }
   footer { font-size: 10px; padding: 0 10px; }
 }
+
+.top-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 100px; /* можна збільшити, якщо ще перекриває логотип */
+  padding: 0 10px;
+}
+
+.top-buttons a {
+  flex-shrink: 0;
+  background-color: #00cc66;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  text-decoration: none;
+}
