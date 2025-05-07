@@ -199,7 +199,7 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <h2>Connect Wallet</h2>
+  <button onclick="connectWallet()">Connect Wallet</button>
   <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
@@ -239,6 +239,25 @@
     resetView();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+<script>
+  async function connectWallet() {
+    if (window.ethereum) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        alert("Wallet connected: " + address);
+      } catch (err) {
+        console.error("Connection rejected", err);
+        alert("Connection failed. Please try again.");
+      }
+    } else {
+      alert("MetaMask is not installed. Please install it to use this feature.");
+    }
+  }
 </script>
 </body>
 </html>
