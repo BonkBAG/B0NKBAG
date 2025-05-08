@@ -241,14 +241,24 @@
   };
 </script>
 <script>
+  let isRequesting = false;
+
   async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
+      if (isRequesting) {
+        alert("Please wait... Wallet connection already in progress.");
+        return;
+      }
+      isRequesting = true;
+
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
         alert("Wallet connected: " + address);
       } catch (error) {
         alert("Connection failed: " + error.message);
+      } finally {
+        isRequesting = false;
       }
     } else {
       alert("MetaMask is not installed. Please install it to use this feature.");
