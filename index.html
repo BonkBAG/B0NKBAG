@@ -133,18 +133,16 @@
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
-<div class="mobile-top-bar">
-  <div class="logo-title">
-    <img src="logo.png" alt="Logo">
-    <div class="title">BONK BAG</div>
-  </div>
-  <a onclick="showSection('wallet-section')" class="wallet-btn">Connect</a>
+<div class="top-left-logo">
+  <div class="title">BONK BAG</div>
+  <img src="logo.png" alt="Logo">
 </div>
 
-<div class="menu-row">
+<div class="top-right-menu">
   <a onclick="showSection('about-section')">About</a>
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
+  <a onclick="showSection('wallet-section')">Connect Wallet</a>
 </div>
 
 <div class="side-buttons">
