@@ -112,49 +112,64 @@ h2 {
 }
 
 @media screen and (max-width: 600px) {
-  .top-right-menu {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: #001a26;
+  }
+
+  .mobile-logo {
+    display: flex;
     align-items: center;
     gap: 10px;
-    top: 100px;
-    right: 0;
-    left: 0;
-    position: static;
-    margin-top: 20px;
   }
 
-  .side-buttons {
-    position: static;
-    margin: 20px auto;
-    align-items: center;
+  .mobile-logo .title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #66ff66;
   }
 
-  .side-buttons a {
-    width: 90%;
-    text-align: center;
-    font-size: 16px;
+  .mobile-logo img {
+    height: 28px;
+    width: 28px;
   }
 
-  .top-left-logo {
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
+  .wallet-btn {
+    background-color: #00c853;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
   }
 
-  .top-left-logo .title {
-    font-size: 28px;
-    text-align: center;
+  .mobile-menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    background-color: #002233;
   }
 
-  .section {
-    max-width: 90%;
-    padding: 20px 10px;
+  .mobile-menu a {
+    background-color: #00c853;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
   }
 
-  footer {
-    position: static;
-    margin-top: 40px;
-    padding-bottom: 40px;
+  /* Ховаємо десктопне меню */
+  .top-left-logo,
+  .top-right-menu {
+    display: none !important;
   }
 }
