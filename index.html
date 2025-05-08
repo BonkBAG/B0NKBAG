@@ -240,26 +240,22 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-    <script>
-    // Функція для підключення гаманця
-    async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const walletAddress = accounts[0];
-          document.getElementById('walletAddress').innerText = 'Connected: ' + walletAddress;
-        } catch (error) {
-          console.error('User rejected the request.');
-        }
-      } else {
-        alert('Please install MetaMask or Trust Wallet to use this feature.');
+<script>
+  async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const walletAddress = accounts[0];
+        document.getElementById('walletAddress').innerText = 'Connected: ' + walletAddress;
+      } catch (error) {
+        console.error('User rejected the request.');
       }
+    } else {
+      alert('Please install MetaMask or Trust Wallet to use this feature.');
     }
+  }
 
-    // Додаємо обробник події для кнопки підключення
-    document.getElementById('connectButton').addEventListener('click', connectWallet);
-
-    // Ваші інші скрипти залишаються без змін
-  </script>
+  document.getElementById('connectButton').addEventListener('click', connectWallet);
+</script>
 </body>
 </html>
