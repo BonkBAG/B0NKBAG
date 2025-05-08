@@ -155,7 +155,7 @@ h2 {
     gap: 10px;
     padding: 10px;
     background-color: #002233;
-    margin-top: 14px; /* Відступ вниз */
+    margin-top: 20px;
   }
 
   .menu-row a {
@@ -168,10 +168,8 @@ h2 {
     font-size: 14px;
   }
 
-  /* Приховати стандартне меню лише на мобілці */
   .top-left-logo,
   .top-right-menu {
     display: none !important;
   }
 }
-
