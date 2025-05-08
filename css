@@ -113,9 +113,10 @@ h2 {
 
 @media screen and (max-width: 600px) {
   .top-right-menu {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     top: 100px;
     right: 0;
     left: 0;
