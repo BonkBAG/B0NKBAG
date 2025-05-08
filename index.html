@@ -240,19 +240,15 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 <script>
   async function connectWallet() {
-    if (window.ethereum) {
+    if (typeof window.ethereum !== 'undefined') {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
         alert("Wallet connected: " + address);
-      } catch (err) {
-        console.error("Connection rejected", err);
-        alert("Connection failed. Please try again.");
+      } catch (error) {
+        alert("Connection failed: " + error.message);
       }
     } else {
       alert("MetaMask is not installed. Please install it to use this feature.");
