@@ -198,11 +198,11 @@
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
-<div id="wallet-section" class="section">
-  <button onclick="connectWallet()">Connect Wallet</button>
-  <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
+  <div id="wallet-section" class="section">
+    <button id="connectButton">Connect Wallet</button>
+    <p id="walletAddress">Wallet not connected</p>
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
 
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
@@ -240,6 +240,26 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+    <script>
+    // Функція для підключення гаманця
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const walletAddress = accounts[0];
+          document.getElementById('walletAddress').innerText = 'Connected: ' + walletAddress;
+        } catch (error) {
+          console.error('User rejected the request.');
+        }
+      } else {
+        alert('Please install MetaMask or Trust Wallet to use this feature.');
+      }
+    }
+
+    // Додаємо обробник події для кнопки підключення
+    document.getElementById('connectButton').addEventListener('click', connectWallet);
+
+    // Ваші інші скрипти залишаються без змін
   </script>
 </body>
 </html>
