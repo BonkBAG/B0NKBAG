@@ -112,7 +112,7 @@ h2 {
 }
 
 @media screen and (max-width: 600px) {
-  .mobile-header {
+  .mobile-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -120,19 +120,19 @@ h2 {
     background-color: #001a26;
   }
 
-  .mobile-logo {
+  .logo-title {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .mobile-logo .title {
-    font-size: 18px;
+  .logo-title .title {
+    font-size: 20px;
     font-weight: bold;
     color: #66ff66;
   }
 
-  .mobile-logo img {
+  .logo-title img {
     height: 28px;
     width: 28px;
   }
@@ -148,18 +148,18 @@ h2 {
     white-space: nowrap;
   }
 
-  .mobile-menu {
+  .menu-row {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     padding: 10px;
     background-color: #002233;
   }
 
-  .mobile-menu a {
+  .menu-row a {
     background-color: #00c853;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 6px;
     color: white;
     text-decoration: none;
@@ -167,7 +167,6 @@ h2 {
     font-size: 14px;
   }
 
-  /* Ховаємо десктопне меню */
   .top-left-logo,
   .top-right-menu {
     display: none !important;
