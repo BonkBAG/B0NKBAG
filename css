@@ -111,12 +111,49 @@ h2 {
   color: #66ff66;
 }
 
-@media (max-width: 600px) {
-  .top-left-logo .title { font-size: 28px; }
-  .top-left-logo img { height: 36px; }
-  .top-right-menu { top: 80px; right: 10px; gap: 6px; }
-  .top-right-menu a { padding: 8px 12px; font-size: 12px; }
-  .side-buttons { top: 160px; left: 10px; gap: 8px; }
-  .side-buttons a { font-size: 14px; padding: 10px 14px; }
-  footer { font-size: 10px; padding: 0 10px; }
+@media screen and (max-width: 600px) {
+  .top-right-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    top: 100px;
+    right: 0;
+    left: 0;
+    position: static;
+    margin-top: 20px;
+  }
+
+  .side-buttons {
+    position: static;
+    margin: 20px auto;
+    align-items: center;
+  }
+
+  .side-buttons a {
+    width: 90%;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .top-left-logo {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .top-left-logo .title {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .section {
+    max-width: 90%;
+    padding: 20px 10px;
+  }
+
+  footer {
+    position: static;
+    margin-top: 40px;
+    padding-bottom: 40px;
+  }
 }
