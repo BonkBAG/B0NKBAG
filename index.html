@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/ethereum-provider@2.10.1/dist/index.umd.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -110,53 +109,44 @@
 <body>
 
 <script>
-  let web3Modal;
-  let provider;
-  let selectedAccount;
-
-  async function initWalletConnect() {
-    const providerOptions = {
-      walletconnect: {
-        package: window.WalletConnectProvider.default,
-        options: {
-          rpc: {
-            137: "https://polygon-rpc.com"
-          },
-          chainId: 137
-        }
-      }
-    };
-
-    web3Modal = new window.Web3Modal.default({
-      cacheProvider: false,
-      providerOptions
-    });
-  }
+  let provider = null;
+  let web3 = null;
+  let connectedAccount = null;
 
   async function connectWallet() {
     try {
-      provider = await web3Modal.connect();
-      const web3 = new Web3(provider);
+      provider = await WalletConnectEthereumProvider.default.init({
+        projectId: "7dcc60e6a3ad9568973804685417021d",
+        chains: [137], // Polygon
+        showQrModal: true
+      });
+
+      await provider.enable();
+
+      web3 = new Web3(provider);
       const accounts = await web3.eth.getAccounts();
-      selectedAccount = accounts[0];
-      document.getElementById('connect-wallet-btn').innerText = "Disconnect Wallet";
-      document.getElementById('connect-wallet-btn').onclick = disconnectWallet;
-      alert("Connected: " + selectedAccount);
-    } catch (error) {
-      console.error("Connection failed:", error);
+      connectedAccount = accounts[0];
+
+      const shortAddress = connectedAccount.slice(0, 6) + "..." + connectedAccount.slice(-4);
+      const btn = document.getElementById('connect-wallet-btn');
+      btn.innerText = "Disconnect (" + shortAddress + ")";
+      btn.onclick = disconnectWallet;
+    } catch (err) {
+      console.error("Connection error:", err);
       alert("Підключення скасовано або помилка.");
     }
   }
 
   function disconnectWallet() {
-    if (provider && provider.close) {
-      provider.close();
+    if (provider && provider.disconnect) {
+      provider.disconnect();
     }
     provider = null;
-    selectedAccount = null;
-    document.getElementById('connect-wallet-btn').innerText = "Connect Wallet";
-    document.getElementById('connect-wallet-btn').onclick = connectWallet;
-    alert("Wallet disconnected.");
+    connectedAccount = null;
+    const btn = document.getElementById('connect-wallet-btn');
+    btn.innerText = "Connect Wallet";
+    btn.onclick = connectWallet;
+    alert("Гаманець відключено.");
   }
 
   function showBackButton() {
@@ -201,7 +191,6 @@
   }
 
   window.onload = function () {
-    initWalletConnect();
     resetView();
     updateCountdown();
     setInterval(updateCountdown, 1000);
@@ -240,8 +229,7 @@
   <p>1. Like and retweet<br>2. Follow on Twitter<br>3. Join Telegram<br>4. Hold any BAG</p>
   <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Telegram</a> |
   <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Twitter</a>
-  <br><br>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  <br><br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
 <div id="tokenomics-section" class="section">
