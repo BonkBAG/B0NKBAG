@@ -173,3 +173,31 @@ h2 {
     display: none !important;
   }
 }
+.mobile-top-menu {
+  display: none;
+}
+
+.mobile-top-menu a {
+  background-color: #00c853;
+  padding: 10px 14px;
+  margin: 4px;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* показувати лише на мобільних */
+@media (max-width: 768px) {
+  .top-right-menu {
+    display: none !important;
+  }
+  .mobile-top-menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 80px;
+    gap: 8px;
+  }
+}
