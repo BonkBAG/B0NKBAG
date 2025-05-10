@@ -6,49 +6,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('background.png') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
+ <style>
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .top-left-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .top-left-logo .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #66ff66;
+    text-transform: uppercase;
+  }
+  .top-left-logo img {
+    height: 40px;
+  }
+  .top-right-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .top-right-menu a {
+    background-color: #00c853;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .connect-button {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #00c853;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .mobile-top-menu {
+    display: none;
+  }
+  .side-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .side-buttons a {
+    background-color: #00c853;
+    padding: 12px 18px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    width: fit-content;
+  }
+  .section {
+    display: none;
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 100px auto;
+  }
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+    color: #cccccc;
+    padding: 0 20px;
+  }
+  .social-icons a {
+    margin: 0 12px;
+    text-decoration: none;
+    font-size: 20px;
+  }
+  h2 { color: #66ff66; }
+  #back-button {
+    display:none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #00c853;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  /* --- МОБІЛЬНА ВЕРСІЯ --- */
+  @media (max-width: 768px) {
+    .top-right-menu {
+      display: none !important;
     }
-    .top-left-logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .top-left-logo .title {
-      font-size: 28px;
-      font-weight: bold;
-      color: #66ff66;
-      text-transform: uppercase;
-    }
-    .top-left-logo img {
-      height: 40px;
-    }
+
     .connect-button {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: #00c853;
-      padding: 10px 16px;
-      border-radius: 6px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 10;
+      display: block;
     }
+
     .mobile-top-menu {
       display: flex;
       justify-content: center;
@@ -58,6 +146,7 @@
       position: relative;
       z-index: 10;
     }
+
     .mobile-top-menu a {
       background-color: #00c853;
       padding: 10px 16px;
@@ -68,100 +157,9 @@
       font-size: 14px;
       cursor: pointer;
     }
-    .side-buttons {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .side-buttons a {
-      background-color: #00c853;
-      padding: 12px 18px;
-      border-radius: 6px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
-      width: fit-content;
-    }
-    .section {
-      display: none;
-      max-width: 800px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      padding: 40px 20px;
-      text-align: center;
-      margin: 100px auto;
-    }
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 12px;
-      color: #cccccc;
-      padding: 0 20px;
-    }
-    .social-icons a {
-      margin: 0 12px;
-      text-decoration: none;
-      font-size: 20px;
-    }
-    h2 { color: #66ff66; }
-    #back-button {
-      display:none;
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #00c853;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-    @media (max-width: 768px) {
-  .top-left-logo {
-    top: 20px;
-    left: 20px;
-    flex-direction: row;
   }
-
-  .connect-button {
-    top: 20px;
-    right: 20px;
-    display: block;
-  }
-
-  .mobile-top-menu {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 80px;
-    position: relative;
-    z-index: 10;
-  }
-
-  .mobile-top-menu a {
-    background-color: #00c853;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .top-right-menu {
-    display: none !important;
-  }
-}
-  </style><script>
+</style>
+  <script>
   async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
       try {
