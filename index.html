@@ -104,6 +104,99 @@
     h2 { color: #66ff66; }
   </style>
   <script>
+  async function connectWallet() {
+    const walletButton = document.getElementById("wallet-button");
+    const topWalletButton = document.getElementById("top-wallet-button");
+    const disconnectButton = document.getElementById("disconnect-button");
+
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const shortAddress = address.slice(0, 6) + "..." + address.slice(-4);
+
+        localStorage.setItem("connectedWallet", shortAddress);
+
+        if (walletButton) {
+          walletButton.textContent = shortAddress;
+          walletButton.disabled = true;
+          walletButton.style.backgroundColor = "#00e676";
+          walletButton.style.cursor = "default";
+        }
+
+        if (topWalletButton) {
+          topWalletButton.textContent = shortAddress;
+          topWalletButton.style.backgroundColor = "#00e676";
+          topWalletButton.style.pointerEvents = "none";
+        }
+
+        if (disconnectButton) {
+          disconnectButton.style.display = "inline-block";
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert("Connection failed or rejected.");
+      }
+    } else {
+      alert("MetaMask or Trust Wallet not detected. Please install it.");
+    }
+  }
+
+  function disconnectWallet() {
+    localStorage.removeItem("connectedWallet");
+
+    const walletButton = document.getElementById("wallet-button");
+    const topWalletButton = document.getElementById("top-wallet-button");
+    const disconnectButton = document.getElementById("disconnect-button");
+
+    if (walletButton) {
+      walletButton.textContent = "Connect Wallet";
+      walletButton.disabled = false;
+      walletButton.style.backgroundColor = "#00c853";
+      walletButton.style.cursor = "pointer";
+    }
+
+    if (topWalletButton) {
+      topWalletButton.textContent = "Connect Wallet";
+      topWalletButton.style.backgroundColor = "#00c853";
+      topWalletButton.style.pointerEvents = "auto";
+    }
+
+    if (disconnectButton) {
+      disconnectButton.style.display = "none";
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedAddress = localStorage.getItem("connectedWallet");
+    if (savedAddress) {
+      const walletButton = document.getElementById("wallet-button");
+      const topWalletButton = document.getElementById("top-wallet-button");
+      const disconnectButton = document.getElementById("disconnect-button");
+
+      if (walletButton) {
+        walletButton.textContent = savedAddress;
+        walletButton.disabled = true;
+        walletButton.style.backgroundColor = "#00e676";
+        walletButton.style.cursor = "default";
+      }
+
+      if (topWalletButton) {
+        topWalletButton.textContent = savedAddress;
+        topWalletButton.style.backgroundColor = "#00e676";
+        topWalletButton.style.pointerEvents = "none";
+      }
+
+      if (disconnectButton) {
+        disconnectButton.style.display = "inline-block";
+      }
+    }
+  });
+</script>
+  <script>
     function showBackButton() {
       document.getElementById('back-button').style.display = 'block';
     }
@@ -142,7 +235,7 @@
   <a onclick="showSection('about-section')">About</a>
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
-  <a onclick="showSection('wallet-section')">Connect Wallet</a>
+  <a id="top-wallet-button" onclick="connectWallet()">Connect Wallet</a>
 </div>
 
 <div class="side-buttons">
@@ -197,13 +290,14 @@
   Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
+  
+<div id="wallet-section" class="section">
+  <button id="wallet-button" onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:bold;font-size:16px;">Connect Wallet</button>
+  <button id="disconnect-button" onclick="disconnectWallet()" style="display:none; margin-top: 10px; background:#ff5252; color:white; padding:10px 20px; border:none; border-radius:8px; font-weight:bold;">Disconnect</button>
+  <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
 
-  <div id="wallet-section" class="section">
-    <button id="connectButton">Connect Wallet</button>
-    <p id="walletAddress">Wallet not connected</p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
- 
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
     <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
