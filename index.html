@@ -104,6 +104,21 @@
     h2 { color: #66ff66; }
   </style>
   <script>
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const address = accounts[0];
+          alert("Connected: " + address);
+        } catch (error) {
+          console.error(error);
+          alert("Connection failed or rejected.");
+        }
+      } else {
+        alert("Wallet not detected. Please use MetaMask or Trust Wallet browser.");
+      }
+    }
+
     function showBackButton() {
       document.getElementById('back-button').style.display = 'block';
     }
@@ -127,6 +142,30 @@
       document.querySelector('footer').style.display = 'none';
       showBackButton();
     }
+    function updateCountdown() {
+      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+      const now = new Date().getTime();
+      const diff = deadline - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Airdrop has ended.";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById("countdown").innerText =
+        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+    }
+
+    window.onload = function () {
+      resetView();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
   </script>
 </head>
 <body>
@@ -149,8 +188,7 @@
   <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
   <a onclick="showSection('airdrop-section')">Airdrop</a>
   <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
-  <a href="https://www.geckoterminal.com/polygon_pos/pools/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">
-  View BONK BAG on CoinTerminal
+  <a href="https://www.geckoterminal.com/polygon_pos/pools/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">View BONK BAG on CoinTerminal</a>
   <a onclick="showSection('tokenomics-section')">Tokenomics</a>
   <a onclick="showSection('staking-section')">Staking</a>
   <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
@@ -200,7 +238,7 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button onclick="connectWallet()">Connect Wallet</button>
+  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
   <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
@@ -214,33 +252,5 @@
   <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
 </footer>
 
-<script>
-  function updateCountdown() {
-    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
-    const now = new Date().getTime();
-    const diff = deadline - now;
-
-    if (diff <= 0) {
-      document.getElementById("countdown").innerText = "Airdrop has ended.";
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    document.getElementById("countdown").innerText =
-      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
-  }
-
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  window.onload = function () {
-    resetView();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  </script>
 </body>
 </html>
