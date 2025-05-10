@@ -5,6 +5,8 @@
   <title>BONK BAG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -334,23 +336,7 @@
     resetView();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-<script>
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const walletAddress = accounts[0];
-        document.getElementById('walletAddress').innerText = 'Connected: ' + walletAddress;
-      } catch (error) {
-        console.error('User rejected the request.');
-      }
-    } else {
-      alert('Please install MetaMask or Trust Wallet to use this feature.');
-    }
-  }
-
-  document.getElementById('connectButton').addEventListener('click', connectWallet);
+.getElementById('connectButton').addEventListener('click', connectWallet);
 </script>
 </body>
 </html>
