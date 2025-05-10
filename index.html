@@ -6,148 +6,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
- <style>
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: url('background.png') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  .top-left-logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .top-left-logo .title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #66ff66;
-    text-transform: uppercase;
-  }
-  .top-left-logo img {
-    height: 40px;
-  }
-  .top-right-menu {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .top-right-menu a {
-    background-color: #00c853;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .connect-button {
-    display: none;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #00c853;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    z-index: 10;
-  }
-  .mobile-top-menu {
-    display: none;
-  }
-  .side-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-  .side-buttons a {
-    background-color: #00c853;
-    padding: 12px 18px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    width: fit-content;
-  }
-  .section {
-    display: none;
-    max-width: 800px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
-    padding: 40px 20px;
-    text-align: center;
-    margin: 100px auto;
-  }
-  footer {
-    margin-top: 40px;
-    text-align: center;
-    font-size: 12px;
-    color: #cccccc;
-    padding: 0 20px;
-  }
-  .social-icons a {
-    margin: 0 12px;
-    text-decoration: none;
-    font-size: 20px;
-  }
-  h2 { color: #66ff66; }
-  #back-button {
-    display:none;
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #00c853;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-
-  /* --- МОБІЛЬНА ВЕРСІЯ --- */
-  @media (max-width: 768px) {
-    .top-right-menu {
-      display: none !important;
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-
-    .connect-button {
-      display: block;
-    }
-
-    .mobile-top-menu {
+    .top-left-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
       display: flex;
-      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-left-logo .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #66ff66;
+      text-transform: uppercase;
+    }
+    .top-left-logo img {
+      height: 40px;
+    }
+    .top-right-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 80px;
-      position: relative;
-      z-index: 10;
     }
-
-    .mobile-top-menu a {
+    .top-right-menu a {
       background-color: #00c853;
       padding: 10px 16px;
       border-radius: 6px;
@@ -157,9 +53,111 @@
       font-size: 14px;
       cursor: pointer;
     }
-  }
-</style>
-  <script>
+    .connect-button {
+      display: none;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .mobile-top-menu {
+      display: none;
+    }
+    .side-buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }    .side-buttons a {
+      background-color: #00c853;
+      padding: 12px 18px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      width: fit-content;
+    }
+    .section {
+      display: none;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      margin: 100px auto;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #cccccc;
+      padding: 0 20px;
+    }
+    .social-icons a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+    h2 { color: #66ff66; }
+    #back-button {
+      display:none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #00c853;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* --- МОБІЛЬНА АДАПТАЦІЯ --- */
+    @media (max-width: 768px) {
+      .top-right-menu {
+        display: none !important;
+      }
+
+      .connect-button {
+        display: block;
+      }
+
+      .mobile-top-menu {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 80px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .mobile-top-menu a {
+        background-color: #00c853;
+        padding: 10px 16px;
+        border-radius: 6px;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+  </style><script>
   async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -205,6 +203,7 @@
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
     document.querySelector('.top-left-logo').style.display = 'flex';
     document.querySelector('.mobile-top-menu').style.display = 'flex';
+    document.querySelector('.top-right-menu').style.display = 'flex';
     document.querySelector('.connect-button').style.display = 'block';
     document.querySelector('.side-buttons').style.display = 'flex';
     document.querySelector('footer').style.display = 'block';
@@ -215,6 +214,7 @@
     document.getElementById(id).style.display = 'block';
     document.querySelector('.top-left-logo').style.display = 'none';
     document.querySelector('.mobile-top-menu').style.display = 'none';
+    document.querySelector('.top-right-menu').style.display = 'none';
     document.querySelector('.connect-button').style.display = 'none';
     document.querySelector('.side-buttons').style.display = 'none';
     document.querySelector('footer').style.display = 'none';
@@ -243,9 +243,7 @@
   };
 </script>
 </head>
-<body>
-
-<button id="back-button" onclick="resetView()">Back</button>
+<body><button id="back-button" onclick="resetView()">Back</button>
 
 <div class="top-left-logo">
   <div class="title">BONK BAG</div>
@@ -254,11 +252,20 @@
 
 <div class="connect-button" onclick="showSection('wallet-section')">Connect Wallet</div>
 
+<div class="top-right-menu">
+  <a onclick="showSection('about-section')">About</a>
+  <a onclick="showSection('roadmap-section')">Roadmap</a>
+  <a onclick="showSection('contact-section')">Contact</a>
+  <a onclick="showSection('wallet-section')">Connect</a>
+</div>
+
 <div class="mobile-top-menu">
   <a onclick="showSection('about-section')">About</a>
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
-</div><div class="side-buttons">
+</div>
+
+<div class="side-buttons">
   <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
   <a onclick="showSection('airdrop-section')">Airdrop</a>
   <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
@@ -295,19 +302,19 @@
   <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
   <p>The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers. We are committed to transparency, creativity, and meme-powered innovation.</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<div id="roadmap-section" class="section">
+</div><div id="roadmap-section" class="section">
   <h2>Roadmap</h2>
-  <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
+  <p><strong>Q2:</strong> Launch, Website, DEX Listing<br>
+     <strong>Q3:</strong> Staking, Contests<br>
+     <strong>Q4:</strong> Merch, Partnerships</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
 <div id="contact-section" class="section">
   <h2>Contact Us</h2>
   <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
-  Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
-  Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
+     Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
+     Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
@@ -319,7 +326,9 @@
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
   <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div><footer>
+</div>
+
+<footer>
   <div class="social-icons" style="margin-bottom: 8px;">
     <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
     <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
