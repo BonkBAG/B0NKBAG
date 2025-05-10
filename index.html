@@ -254,55 +254,21 @@
   <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
 </footer>
 
-  <script>
-    const BAG_TOKEN = "0x3686568eCB6cE7545765b641932044900d11e584";
-    const USDC_TOKEN = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
-    const USDT_TOKEN = "0x3813e82e6f7098b9583FC0F33a962D02018B6803";
-
-    const ERC20_ABI = [
-      { "constant":true,"inputs":[{"name":"_owner","type":"address"}],
-        "name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],
-        "type":"function" },
-      { "constant":true,"inputs":[],"name":"decimals",
-        "outputs":[{"name":"","type":"uint8"}],"type":"function" }
-    ];
-
-    let web3;
-
+    <script>
     async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
+      if (window.ethereum) {
         try {
+          const web3 = new Web3(window.ethereum);
           await window.ethereum.request({ method: 'eth_requestAccounts' });
-          web3 = new Web3(window.ethereum);
           const accounts = await web3.eth.getAccounts();
-          const user = accounts[0];
-
-          const maticBalance = await web3.eth.getBalance(user);
-          let result = "Wallet: " + user + "<br>";
-          result += "MATIC: " + parseFloat(web3.utils.fromWei(maticBalance, 'ether')).toFixed(4) + "<br>";
-
-          const bag = new web3.eth.Contract(ERC20_ABI, BAG_TOKEN);
-          const usdc = new web3.eth.Contract(ERC20_ABI, USDC_TOKEN);
-          const usdt = new web3.eth.Contract(ERC20_ABI, USDT_TOKEN);
-
-          const bagDecimals = await bag.methods.decimals().call();
-          const usdcDecimals = await usdc.methods.decimals().call();
-          const usdtDecimals = await usdt.methods.decimals().call();
-
-          const bagBalance = await bag.methods.balanceOf(user).call();
-          const usdcBalance = await usdc.methods.balanceOf(user).call();
-          const usdtBalance = await usdt.methods.balanceOf(user).call();
-
-          result += "BAG: " + (bagBalance / (10 ** bagDecimals)).toFixed(2) + "<br>";
-          result += "USDC: " + (usdcBalance / (10 ** usdcDecimals)).toFixed(2) + "<br>";
-          result += "USDT: " + (usdtBalance / (10 ** usdtDecimals)).toFixed(2);
-
-          document.getElementById('wallet-info').innerHTML = result;
+          const address = accounts[0];
+          document.getElementById('address').innerText = "Connected: " + address;
         } catch (err) {
-          alert("Connection error: " + err.message);
+          console.error(err);
+          alert("Connection error or rejected.");
         }
       } else {
-        alert("MetaMask or compatible wallet not found.");
+        alert("MetaMask not detected. Open in MetaMask browser.");
       }
     }
   </script>
