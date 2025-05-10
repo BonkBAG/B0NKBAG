@@ -104,12 +104,16 @@
     h2 { color: #66ff66; }
   </style>
   <script>
+    let connectedAccount = null;
+
     async function connectWallet() {
       if (typeof window.ethereum !== 'undefined') {
         try {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const address = accounts[0];
-          alert("Connected: " + address);
+          connectedAccount = accounts[0];
+          document.getElementById('connect-wallet-btn').innerText = "Disconnect Wallet";
+          document.getElementById('connect-wallet-btn').onclick = disconnectWallet;
+          alert("Connected: " + connectedAccount);
         } catch (error) {
           console.error(error);
           alert("Connection failed or rejected.");
@@ -117,6 +121,13 @@
       } else {
         alert("Wallet not detected. Please use MetaMask or Trust Wallet browser.");
       }
+    }
+
+    function disconnectWallet() {
+      connectedAccount = null;
+      document.getElementById('connect-wallet-btn').innerText = "Connect Wallet";
+      document.getElementById('connect-wallet-btn').onclick = connectWallet;
+      alert("Wallet disconnected.");
     }
 
     function showBackButton() {
@@ -238,9 +249,8 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
-  <p>Coming soon: Connect wallet to access staking, airdrop & more.</p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  <button id="connect-wallet-btn" onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top: 20px;">Back</button>
 </div>
 
 <footer>
