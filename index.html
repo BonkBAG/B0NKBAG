@@ -105,6 +105,32 @@
     }
     h2 { color: #66ff66; }
   </style>
+  
+  <script>
+    function showBackButton() {
+      document.getElementById('back-button').style.display = 'block';
+    }
+    function hideBackButton() {
+      document.getElementById('back-button').style.display = 'none';
+    }
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      hideBackButton();
+    }
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+  </script>
   <script>
   async function connectWallet() {
     const walletButton = document.getElementById("wallet-button");
@@ -113,10 +139,8 @@
 
     if (typeof window.ethereum !== 'undefined') {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
         const shortAddress = address.slice(0, 6) + "..." + address.slice(-4);
 
         localStorage.setItem("connectedWallet", shortAddress);
@@ -143,86 +167,9 @@
         alert("Connection failed or rejected.");
       }
     } else {
-      alert("MetaMask or Trust Wallet not detected. Please install it.");
+      alert("Wallet not detected. Please use MetaMask or Trust Wallet browser.");
     }
   }
-
-  function disconnectWallet() {
-    localStorage.removeItem("connectedWallet");
-
-    const walletButton = document.getElementById("wallet-button");
-    const topWalletButton = document.getElementById("top-wallet-button");
-    const disconnectButton = document.getElementById("disconnect-button");
-
-    if (walletButton) {
-      walletButton.textContent = "Connect Wallet";
-      walletButton.disabled = false;
-      walletButton.style.backgroundColor = "#00c853";
-      walletButton.style.cursor = "pointer";
-    }
-
-    if (topWalletButton) {
-      topWalletButton.textContent = "Connect Wallet";
-      topWalletButton.style.backgroundColor = "#00c853";
-      topWalletButton.style.pointerEvents = "auto";
-    }
-
-    if (disconnectButton) {
-      disconnectButton.style.display = "none";
-    }
-  }
-
-  window.addEventListener("DOMContentLoaded", () => {
-    const savedAddress = localStorage.getItem("connectedWallet");
-    if (savedAddress) {
-      const walletButton = document.getElementById("wallet-button");
-      const topWalletButton = document.getElementById("top-wallet-button");
-      const disconnectButton = document.getElementById("disconnect-button");
-
-      if (walletButton) {
-        walletButton.textContent = savedAddress;
-        walletButton.disabled = true;
-        walletButton.style.backgroundColor = "#00e676";
-        walletButton.style.cursor = "default";
-      }
-
-      if (topWalletButton) {
-        topWalletButton.textContent = savedAddress;
-        topWalletButton.style.backgroundColor = "#00e676";
-        topWalletButton.style.pointerEvents = "none";
-      }
-
-      if (disconnectButton) {
-        disconnectButton.style.display = "inline-block";
-      }
-    }
-  });
-</script>
-  <script>
-    function showBackButton() {
-      document.getElementById('back-button').style.display = 'block';
-    }
-    function hideBackButton() {
-      document.getElementById('back-button').style.display = 'none';
-    }
-    function resetView() {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelector('.top-left-logo').style.display = 'flex';
-      document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
-      document.querySelector('footer').style.display = 'block';
-      hideBackButton();
-    }
-    function showSection(id) {
-      resetView();
-      document.getElementById(id).style.display = 'block';
-      document.querySelector('.top-left-logo').style.display = 'none';
-      document.querySelector('.top-right-menu').style.display = 'none';
-      document.querySelector('.side-buttons').style.display = 'none';
-      document.querySelector('footer').style.display = 'none';
-      showBackButton();
-    }
-  </script>
 </head>
 <body>
 
