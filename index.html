@@ -120,9 +120,9 @@
       try {
         const web3 = new Web3(window.ethereum);
 
-        // Перевірка чи на Polygon
+        // Перевірка мережі (Polygon = 0x89)
         const chainId = await ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x89') { // Polygon = 137 = 0x89
+        if (chainId !== '0x89') {
           try {
             await ethereum.request({
               method: 'wallet_switchEthereumChain',
@@ -142,29 +142,10 @@
         const address = accounts[0];
         currentAccount = address;
 
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
-        const btn = document.getElementById("wallet-action-btn");
-        btn.innerText = "Disconnect Wallet";
-        btn.style.backgroundColor = "#e53935";
+        document.getElementById("wallet-action-btn").innerText = "Disconnect Wallet";
+        document.getElementById("wallet-action-btn").style.backgroundColor = "#e53935";
 
-        const maticBalance = await web3.eth.getBalance(address);
-        document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-
-        const tokenList = [
-          { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-          { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-          { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-        ];
-
-        for (const token of tokenList) {
-          const contract = new web3.eth.Contract([
-            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
-            { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
-          ], token.address);
-          const balance = await contract.methods.balanceOf(address).call();
-          const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-          document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        }
+        await updateUIWithNewAccount(address);
       } catch (error) {
         console.error(error);
         document.getElementById("wallet-address").innerText = "Connection rejected or failed.";
@@ -186,64 +167,40 @@
     btn.style.backgroundColor = "#00c853";
   }
 
+  async function updateUIWithNewAccount(address) {
+    const web3 = new Web3(window.ethereum);
+    document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+    const maticBalance = await web3.eth.getBalance(address);
+    document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
+        { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+    }
+  }
+
   if (typeof window.ethereum !== 'undefined') {
     window.ethereum.on('accountsChanged', function (accounts) {
       if (accounts.length > 0) {
         currentAccount = accounts[0];
-        connectWallet();
+        updateUIWithNewAccount(currentAccount);
       } else {
         disconnectWallet();
       }
     });
   }
-
-  function showBackButton() {
-    document.getElementById('back-button').style.display = 'block';
-  }
-  function hideBackButton() {
-    document.getElementById('back-button').style.display = 'none';
-  }
-  function resetView() {
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.querySelector('.top-left-logo').style.display = 'flex';
-    document.querySelector('.top-right-menu').style.display = 'flex';
-    document.querySelector('.side-buttons').style.display = 'flex';
-    document.querySelector('footer').style.display = 'block';
-    hideBackButton();
-  }
-  function showSection(id) {
-    resetView();
-    document.getElementById(id).style.display = 'block';
-    document.querySelector('.top-left-logo').style.display = 'none';
-    document.querySelector('.top-right-menu').style.display = 'none';
-    document.querySelector('.side-buttons').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
-    showBackButton();
-  }
-  function updateCountdown() {
-    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
-    const now = new Date().getTime();
-    const diff = deadline - now;
-
-    if (diff <= 0) {
-      document.getElementById("countdown").innerText = "Airdrop has ended.";
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    document.getElementById("countdown").innerText =
-      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
-  }
-
-  window.onload = function () {
-    resetView();
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 </script>
 </head>
 <body>
