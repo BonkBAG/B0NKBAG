@@ -104,73 +104,75 @@
     }
     h2 { color: #66ff66; }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+div>
+
+<script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 <script>
   let currentAccount = null;
-
-  async function handleWalletAction() {
-    if (!currentAccount) {
-      await connectWallet();
-    } else {
-      disconnectWallet();
-    }
-  }
+  let web3;
+  let provider;
 
   async function connectWallet() {
+    const choice = prompt("Connect with:\\n1 - MetaMask\\n2 - WalletConnect");
+    if (choice === "2") {
+      await connectWalletConnect();
+    } else {
+      await connectMetaMask();
+    }
+    showSection('wallet');
+  }
+
+  async function connectMetaMask() {
     if (typeof window.ethereum !== 'undefined') {
+      provider = window.ethereum;
+      web3 = new Web3(provider);
       try {
-        const web3 = new Web3(window.ethereum);
-
-        // Перевірка мережі (Polygon = 0x89)
-        const chainId = await ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x89') {
-          try {
-            await ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x89' }],
-            });
-          } catch (switchError) {
-            if (switchError.code === 4902) {
-              alert('Polygon network is not available in MetaMask. Please add it manually.');
-            } else {
-              alert('Please switch to the Polygon network.');
-            }
-            return;
-          }
-        }
-
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        currentAccount = address;
-
-        document.getElementById("wallet-action-btn").innerText = "Disconnect Wallet";
-        document.getElementById("wallet-action-btn").style.backgroundColor = "#e53935";
-
-        await updateUIWithNewAccount(address);
-      } catch (error) {
-        console.error(error);
-        document.getElementById("wallet-address").innerText = "Connection rejected or failed.";
+        await provider.request({ method: 'eth_requestAccounts' });
+        await ensurePolygonNetwork();
+        const accounts = await web3.eth.getAccounts();
+        currentAccount = accounts[0];
+        document.getElementById("wallet-address").innerText = "Connected: " + currentAccount;
+        await loadBalances(currentAccount);
+      } catch (err) {
+        console.error(err);
+        alert("Connection failed or rejected.");
       }
     } else {
-      document.getElementById("wallet-address").innerText = "MetaMask not detected.";
+      alert("MetaMask not detected. Please install MetaMask.");
     }
   }
 
-  function disconnectWallet() {
-    currentAccount = null;
-    document.getElementById("wallet-address").innerText = "";
-    document.getElementById("matic-balance").innerText = "";
-    document.getElementById("bag-balance").innerText = "";
-    document.getElementById("usdc-balance").innerText = "";
-    document.getElementById("usdt-balance").innerText = "";
-    const btn = document.getElementById("wallet-action-btn");
-    btn.innerText = "Connect Wallet";
-    btn.style.backgroundColor = "#00c853";
+  async function connectWalletConnect() {
+    provider = new WalletConnectProvider.default({
+      rpc: { 137: "https://polygon-rpc.com" },
+      chainId: 137
+    });
+    await provider.enable();
+    web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    currentAccount = accounts[0];
+    document.getElementById("wallet-address").innerText = "Connected: " + currentAccount;
+    await loadBalances(currentAccount);
   }
 
-  async function updateUIWithNewAccount(address) {
-    const web3 = new Web3(window.ethereum);
-    document.getElementById("wallet-address").innerText = "Connected: " + address;
+  async function ensurePolygonNetwork() {
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    if (chainId !== '0x89') {
+      try {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x89' }]
+        });
+      } catch (error) {
+        alert("Please switch to the Polygon network.");
+      }
+    }
+  }
 
+  async function loadBalances(address) {
     const maticBalance = await web3.eth.getBalance(address);
     document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
 
@@ -191,16 +193,29 @@
     }
   }
 
-  if (typeof window.ethereum !== 'undefined') {
-    window.ethereum.on('accountsChanged', function (accounts) {
-      if (accounts.length > 0) {
-        currentAccount = accounts[0];
-        updateUIWithNewAccount(currentAccount);
-      } else {
-        disconnectWallet();
-      }
-    });
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('visible'));
+    document.getElementById(id).classList.add('visible');
   }
+
+  function updateCountdown() {
+    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const diff = deadline - now;
+    if (diff <= 0) {
+      document.getElementById("countdown").innerText = "Airdrop has ended.";
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById("countdown").innerText = `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+  }
+
+  window.onload = function () {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  };
 </script>
 </head>
 <body>
@@ -273,14 +288,18 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button id="wallet-action-btn" onclick="handleWalletAction()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+  <button id="wallet-action-btn" onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">
+    Connect Wallet
+  </button>
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
-</div>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">
+    Back
+  </button>
+</div>>
 
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
