@@ -112,7 +112,7 @@
   let provider;
 
   async function connectWallet() {
-    const choice = prompt("Connect with:\\n1 - MetaMask\\n2 - WalletConnect");
+   const choice = prompt("Connect with:\n\n1 — MetaMask\n2 — WalletConnect");
     if (choice === "2") {
       await connectWalletConnect();
     } else {
