@@ -119,7 +119,26 @@
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web3 = new Web3(window.ethereum);
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        // Перевірка чи на Polygon
+        const chainId = await ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x89') { // Polygon = 137 = 0x89
+          try {
+            await ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x89' }],
+            });
+          } catch (switchError) {
+            if (switchError.code === 4902) {
+              alert('Polygon network is not available in MetaMask. Please add it manually.');
+            } else {
+              alert('Please switch to the Polygon network.');
+            }
+            return;
+          }
+        }
+
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
         currentAccount = address;
 
