@@ -211,6 +211,15 @@ function showSection(id) {
     updateCountdown();
     setInterval(updateCountdown, 1000);
   };
+  function showSection(id) {
+  resetView();
+  document.getElementById(id).style.display = 'block';
+  document.querySelector('.top-left-logo').style.display = 'flex';
+  document.querySelector('.top-right-menu').style.display = 'none';
+  document.querySelector('.side-buttons').style.display = 'none';
+  document.querySelector('footer').style.display = 'none';
+  document.getElementById('back-button').style.display = 'block';
+}
 </script>
 </head>
 <body>
