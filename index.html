@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -103,40 +104,93 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
+
+    /* --- MOBILE STYLES --- */
+    @media (max-width: 768px) {
+      .top-left-logo, .top-right-menu, .side-buttons {
+        position: static;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 10px;
+        gap: 10px;
+      }
+      .top-left-logo .title {
+        font-size: 24px;
+      }
+      .top-right-menu a, .side-buttons a {
+        font-size: 14px;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
   <script>
+    let web3;
+    let currentProvider;
+
     async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const web3 = new Web3(window.ethereum);
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const address = accounts[0];
-          document.getElementById("wallet-address").innerText = "Connected: " + address;
-
-          const maticBalance = await web3.eth.getBalance(address);
-          document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-
-          const tokenList = [
-            { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-            { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-            { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-          ];
-
-          for (const token of tokenList) {
-            const contract = new web3.eth.Contract([
-              { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
-              { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
-            ], token.address);
-            const balance = await contract.methods.balanceOf(address).call();
-            const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-            document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Connection failed or rejected.");
+      try {
+        if (typeof window.ethereum !== 'undefined') {
+          currentProvider = window.ethereum;
+          web3 = new Web3(currentProvider);
+          await currentProvider.request({ method: 'eth_requestAccounts' });
+        } else {
+          currentProvider = new WalletConnectProvider.default({
+            rpc: {
+              137: "https://polygon-rpc.com"
+            },
+            chainId: 137
+          });
+          await currentProvider.enable();
+          web3 = new Web3(currentProvider);
         }
-      } else {
-        alert("MetaMask not detected. Please install MetaMask.");
+
+        const accounts = await web3.eth.getAccounts();
+        const address = accounts[0];
+        document.getElementById("wallet-address").innerText = "Connected: " + address;
+        document.querySelector("#wallet-section button").innerText = "Connected";
+        localStorage.setItem("walletAddress", address);
+
+        await loadBalances(address);
+
+        // Watch for account changes
+        if (currentProvider.on) {
+          currentProvider.on("accountsChanged", async (accounts) => {
+            const changedAddress = accounts[0];
+            document.getElementById("wallet-address").innerText = "Connected: " + changedAddress;
+            localStorage.setItem("walletAddress", changedAddress);
+            await loadBalances(changedAddress);
+          });
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Connection failed.");
+      }
+    }
+
+    async function loadBalances(address) {
+      const maticBalance = await web3.eth.getBalance(address);
+      const formattedMatic = (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+      document.getElementById("matic-balance").innerText = "MATIC: " + formattedMatic;
+      localStorage.setItem("matic", formattedMatic);
+
+      const tokenList = [
+        { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+        { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+        { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+      ];
+
+      for (const token of tokenList) {
+        const contract = new web3.eth.Contract([
+          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+        ], token.address);
+        const balance = await contract.methods.balanceOf(address).call();
+        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+        localStorage.setItem(token.name.toLowerCase(), formatted);
       }
     }
 
@@ -186,10 +240,22 @@
       updateCountdown();
       setInterval(updateCountdown, 1000);
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const savedAddress = localStorage.getItem("walletAddress");
+      if (savedAddress) {
+        document.getElementById("wallet-address").innerText = "Connected: " + savedAddress;
+        document.querySelector("#wallet-section button").innerText = "Connected";
+        document.getElementById("matic-balance").innerText = "MATIC: " + localStorage.getItem("matic");
+        ["bag", "usdc", "usdt"].forEach(token => {
+          const value = localStorage.getItem(token);
+          if (value) {
+            document.getElementById(token + "-balance").innerText = token.toUpperCase() + ": " + value;
+          }
+        });
+      }
     };
   </script>
-</head>
-<body>
+</head><body>
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
