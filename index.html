@@ -189,11 +189,10 @@
     }
   }
 
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('visible'));
-    document.getElementById(id).classList.add('visible');
-  }
-
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
   function updateCountdown() {
     const deadline = new Date("2025-07-01T00:00:00Z").getTime();
     const now = new Date().getTime();
