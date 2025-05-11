@@ -104,8 +104,6 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
-
-    /* --- MOBILE STYLES --- */
     @media (max-width: 768px) {
       .top-left-logo, .top-right-menu, .side-buttons {
         position: static;
@@ -129,18 +127,22 @@
   <script>
     let web3;
     let currentProvider;
+    let connected = false;
 
     async function connectWallet() {
       try {
+        if (connected) {
+          disconnectWallet();
+          return;
+        }
+
         if (typeof window.ethereum !== 'undefined') {
           currentProvider = window.ethereum;
           web3 = new Web3(currentProvider);
           await currentProvider.request({ method: 'eth_requestAccounts' });
         } else {
           currentProvider = new WalletConnectProvider.default({
-            rpc: {
-              137: "https://polygon-rpc.com"
-            },
+            rpc: { 137: "https://polygon-rpc.com" },
             chainId: 137
           });
           await currentProvider.enable();
@@ -149,25 +151,43 @@
 
         const accounts = await web3.eth.getAccounts();
         const address = accounts[0];
+        connected = true;
         document.getElementById("wallet-address").innerText = "Connected: " + address;
-        document.querySelector("#wallet-section button").innerText = "Connected";
+        document.querySelector("#wallet-section button").innerText = "Disconnect Wallet";
         localStorage.setItem("walletAddress", address);
-
         await loadBalances(address);
 
-        // Watch for account changes
-        if (currentProvider.on) {
+        if (currentProvider.on && currentProvider === window.ethereum) {
           currentProvider.on("accountsChanged", async (accounts) => {
-            const changedAddress = accounts[0];
-            document.getElementById("wallet-address").innerText = "Connected: " + changedAddress;
-            localStorage.setItem("walletAddress", changedAddress);
-            await loadBalances(changedAddress);
+            if (accounts.length === 0) {
+              disconnectWallet();
+            } else {
+              const newAddress = accounts[0];
+              document.getElementById("wallet-address").innerText = "Connected: " + newAddress;
+              localStorage.setItem("walletAddress", newAddress);
+              await loadBalances(newAddress);
+            }
           });
         }
 
       } catch (err) {
         console.error(err);
         alert("Connection failed.");
+      }
+    }
+
+    function disconnectWallet() {
+      connected = false;
+      localStorage.clear();
+      document.getElementById("wallet-address").innerText = "";
+      document.getElementById("matic-balance").innerText = "";
+      document.getElementById("bag-balance").innerText = "";
+      document.getElementById("usdc-balance").innerText = "";
+      document.getElementById("usdt-balance").innerText = "";
+      document.querySelector("#wallet-section button").innerText = "Connect Wallet";
+
+      if (currentProvider && currentProvider.disconnect) {
+        currentProvider.disconnect();
       }
     }
 
@@ -243,8 +263,9 @@
 
       const savedAddress = localStorage.getItem("walletAddress");
       if (savedAddress) {
+        connected = true;
         document.getElementById("wallet-address").innerText = "Connected: " + savedAddress;
-        document.querySelector("#wallet-section button").innerText = "Connected";
+        document.querySelector("#wallet-section button").innerText = "Disconnect Wallet";
         document.getElementById("matic-balance").innerText = "MATIC: " + localStorage.getItem("matic");
         ["bag", "usdc", "usdt"].forEach(token => {
           const value = localStorage.getItem(token);
@@ -255,7 +276,9 @@
       }
     };
   </script>
-</head><body>
+</head>
+
+<!-- Далі йде <body> з кнопками, секціями, футером — це залишилось без змін --><body>
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
