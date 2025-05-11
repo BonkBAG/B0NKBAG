@@ -105,13 +105,28 @@
     h2 { color: #66ff66; }
   </style>
 <script>
+  let currentAccount = null;
+
+  async function handleWalletAction() {
+    if (!currentAccount) {
+      await connectWallet();
+    } else {
+      disconnectWallet();
+    }
+  }
+
   async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web3 = new Web3(window.ethereum);
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
+        currentAccount = address;
+
         document.getElementById("wallet-address").innerText = "Connected: " + address;
+        const btn = document.getElementById("wallet-action-btn");
+        btn.innerText = "Disconnect Wallet";
+        btn.style.backgroundColor = "#e53935";
 
         const maticBalance = await web3.eth.getBalance(address);
         document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
@@ -141,11 +156,26 @@
   }
 
   function disconnectWallet() {
+    currentAccount = null;
     document.getElementById("wallet-address").innerText = "";
     document.getElementById("matic-balance").innerText = "";
     document.getElementById("bag-balance").innerText = "";
     document.getElementById("usdc-balance").innerText = "";
     document.getElementById("usdt-balance").innerText = "";
+    const btn = document.getElementById("wallet-action-btn");
+    btn.innerText = "Connect Wallet";
+    btn.style.backgroundColor = "#00c853";
+  }
+
+  if (typeof window.ethereum !== 'undefined') {
+    window.ethereum.on('accountsChanged', function (accounts) {
+      if (accounts.length > 0) {
+        currentAccount = accounts[0];
+        connectWallet();
+      } else {
+        disconnectWallet();
+      }
+    });
   }
 
   function showBackButton() {
@@ -267,8 +297,7 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
-  <button onclick="disconnectWallet()" style="background:#e53935;color:white;padding:10px 20px;border:none;border-radius:8px;margin-left:10px;">Disconnect Wallet</button>
+  <button id="wallet-action-btn" onclick="handleWalletAction()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
