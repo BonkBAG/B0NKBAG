@@ -104,42 +104,75 @@
     }
     h2 { color: #66ff66; }
   </style>
-  <script>
-    async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const web3 = new Web3(window.ethereum);
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const address = accounts[0];
-          document.getElementById("wallet-address").innerText = "Connected: " + address;
+<script>
+let connected = false;
 
-          const maticBalance = await web3.eth.getBalance(address);
-          document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+async function connectWallet() {
+  if (connected) {
+    connected = false;
+    document.getElementById("wallet-address").innerText = "";
+    document.getElementById("matic-balance").innerText = "";
+    document.getElementById("bag-balance").innerText = "";
+    document.getElementById("usdc-balance").innerText = "";
+    document.getElementById("usdt-balance").innerText = "";
+    document.getElementById("network-warning").innerText = "";
+    document.getElementById("connect-btn").innerText = "Connect Wallet";
+    return;
+  }
 
-          const tokenList = [
-            { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-            { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-            { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-          ];
+  if (typeof window.ethereum === 'undefined') {
+    alert("MetaMask not detected. Please install MetaMask.");
+    return;
+  }
 
-          for (const token of tokenList) {
-            const contract = new web3.eth.Contract([
-              { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
-              { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
-            ], token.address);
-            const balance = await contract.methods.balanceOf(address).call();
-            const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-            document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Connection failed or rejected.");
-        }
-      } else {
-        alert("MetaMask not detected. Please install MetaMask.");
+  const web3 = new Web3(window.ethereum);
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const address = accounts[0];
+    document.getElementById("wallet-address").innerText = "Connected: " + address;
+    document.getElementById("connect-btn").innerText = "Disconnect Wallet";
+    connected = true;
+
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 137) {
+      document.getElementById("network-warning").innerText = "⚠ Not on Polygon. Attempting to switch...";
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x89' }]
+        });
+        document.getElementById("network-warning").innerText = "";
+      } catch (err) {
+        document.getElementById("network-warning").innerText = "❌ Switch rejected or failed.";
+        return;
       }
     }
 
+    const maticBalance = await web3.eth.getBalance(address);
+    document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("Connection failed or rejected.");
+  }
+}
+</script>
+<script>
     function showBackButton() {
       document.getElementById('back-button').style.display = 'block';
     }
