@@ -123,162 +123,159 @@
         text-align: center;
       }
     }
-  </style>
-  <script>
-    let web3;
-    let currentProvider;
-    let connected = false;
+  </style><script>
+  let web3;
+  let currentProvider;
+  let connected = false;
 
-    async function connectWallet() {
-      try {
-        if (connected) {
-          disconnectWallet();
-          return;
-        }
-
-        if (typeof window.ethereum !== 'undefined') {
-          currentProvider = window.ethereum;
-          web3 = new Web3(currentProvider);
-          await currentProvider.request({ method: 'eth_requestAccounts' });
-        } else {
-          currentProvider = new WalletConnectProvider.default({
-            rpc: { 137: "https://polygon-rpc.com" },
-            chainId: 137
-          });
-          await currentProvider.enable();
-          web3 = new Web3(currentProvider);
-        }
-
-        const accounts = await web3.eth.getAccounts();
-        const address = accounts[0];
-        connected = true;
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
-        document.querySelector("#wallet-section button").innerText = "Disconnect Wallet";
-        localStorage.setItem("walletAddress", address);
-        await loadBalances(address);
-
-        if (currentProvider.on && currentProvider === window.ethereum) {
-          currentProvider.on("accountsChanged", async (accounts) => {
-            if (accounts.length === 0) {
-              disconnectWallet();
-            } else {
-              const newAddress = accounts[0];
-              document.getElementById("wallet-address").innerText = "Connected: " + newAddress;
-              localStorage.setItem("walletAddress", newAddress);
-              await loadBalances(newAddress);
-            }
-          });
-        }
-
-      } catch (err) {
-        console.error(err);
-        alert("Connection failed.");
-      }
-    }
-
-    function disconnectWallet() {
-      connected = false;
-      localStorage.clear();
-      document.getElementById("wallet-address").innerText = "";
-      document.getElementById("matic-balance").innerText = "";
-      document.getElementById("bag-balance").innerText = "";
-      document.getElementById("usdc-balance").innerText = "";
-      document.getElementById("usdt-balance").innerText = "";
-      document.querySelector("#wallet-section button").innerText = "Connect Wallet";
-
-      if (currentProvider && currentProvider.disconnect) {
-        currentProvider.disconnect();
-      }
-    }
-
-    async function loadBalances(address) {
-      const maticBalance = await web3.eth.getBalance(address);
-      const formattedMatic = (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-      document.getElementById("matic-balance").innerText = "MATIC: " + formattedMatic;
-      localStorage.setItem("matic", formattedMatic);
-
-      const tokenList = [
-        { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-        { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-        { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-      ];
-
-      for (const token of tokenList) {
-        const contract = new web3.eth.Contract([
-          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-        ], token.address);
-        const balance = await contract.methods.balanceOf(address).call();
-        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        localStorage.setItem(token.name.toLowerCase(), formatted);
-      }
-    }
-
-    function showBackButton() {
-      document.getElementById('back-button').style.display = 'block';
-    }
-    function hideBackButton() {
-      document.getElementById('back-button').style.display = 'none';
-    }
-    function resetView() {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelector('.top-left-logo').style.display = 'flex';
-      document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
-      document.querySelector('footer').style.display = 'block';
-      hideBackButton();
-    }
-    function showSection(id) {
-      resetView();
-      document.getElementById(id).style.display = 'block';
-      document.querySelector('.top-left-logo').style.display = 'none';
-      document.querySelector('.top-right-menu').style.display = 'none';
-      document.querySelector('.side-buttons').style.display = 'none';
-      document.querySelector('footer').style.display = 'none';
-      showBackButton();
-    }
-    function updateCountdown() {
-      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
-      const now = new Date().getTime();
-      const diff = deadline - now;
-
-      if (diff <= 0) {
-        document.getElementById("countdown").innerText = "Airdrop has ended.";
+  async function connectWallet() {
+    try {
+      if (connected) {
+        disconnectWallet();
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      if (typeof window.ethereum !== 'undefined') {
+        currentProvider = window.ethereum;
+        web3 = new Web3(currentProvider);
+        await currentProvider.request({ method: 'eth_requestAccounts' });
+      } else {
+        currentProvider = new WalletConnectProvider.default({
+          rpc: { 137: "https://polygon-rpc.com" },
+          chainId: 137
+        });
+        await currentProvider.enable();
+        web3 = new Web3(currentProvider);
+      }
 
-      document.getElementById("countdown").innerText =
-        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
-    }
+      const accounts = await web3.eth.getAccounts();
+      const address = accounts[0];
+      connected = true;
+      document.getElementById("wallet-address").innerText = "Connected: " + address;
+      document.getElementById("wallet-connect-button").innerText = "Disconnect Wallet";
+      localStorage.setItem("walletAddress", address);
+      await loadBalances(address);
 
-    window.onload = function () {
-      resetView();
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      const savedAddress = localStorage.getItem("walletAddress");
-      if (savedAddress) {
-        connected = true;
-        document.getElementById("wallet-address").innerText = "Connected: " + savedAddress;
-        document.querySelector("#wallet-section button").innerText = "Disconnect Wallet";
-        document.getElementById("matic-balance").innerText = "MATIC: " + localStorage.getItem("matic");
-        ["bag", "usdc", "usdt"].forEach(token => {
-          const value = localStorage.getItem(token);
-          if (value) {
-            document.getElementById(token + "-balance").innerText = token.toUpperCase() + ": " + value;
+      if (currentProvider.on && currentProvider === window.ethereum) {
+        currentProvider.on("accountsChanged", async (accounts) => {
+          if (accounts.length === 0) {
+            disconnectWallet();
+          } else {
+            const newAddress = accounts[0];
+            document.getElementById("wallet-address").innerText = "Connected: " + newAddress;
+            localStorage.setItem("walletAddress", newAddress);
+            await loadBalances(newAddress);
           }
         });
       }
-    };
-  </script>
-</head>
 
-<!-- Далі йде <body> з кнопками, секціями, футером — це залишилось без змін --><body>
+    } catch (err) {
+      console.error(err);
+      alert("Connection failed.");
+    }
+  }
+
+  function disconnectWallet() {
+    connected = false;
+    localStorage.clear();
+    document.getElementById("wallet-address").innerText = "";
+    document.getElementById("matic-balance").innerText = "";
+    document.getElementById("bag-balance").innerText = "";
+    document.getElementById("usdc-balance").innerText = "";
+    document.getElementById("usdt-balance").innerText = "";
+    document.getElementById("wallet-connect-button").innerText = "Connect Wallet";
+    if (currentProvider && currentProvider.disconnect) {
+      currentProvider.disconnect();
+    }
+  }
+
+  async function loadBalances(address) {
+    const maticBalance = await web3.eth.getBalance(address);
+    const formattedMatic = (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+    document.getElementById("matic-balance").innerText = "MATIC: " + formattedMatic;
+    localStorage.setItem("matic", formattedMatic);
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      localStorage.setItem(token.name.toLowerCase(), formatted);
+    }
+  }
+
+  function showBackButton() {
+    document.getElementById('back-button').style.display = 'block';
+  }
+  function hideBackButton() {
+    document.getElementById('back-button').style.display = 'none';
+  }
+  function resetView() {
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.querySelector('.top-left-logo').style.display = 'flex';
+    document.querySelector('.top-right-menu').style.display = 'flex';
+    document.querySelector('.side-buttons').style.display = 'flex';
+    document.querySelector('footer').style.display = 'block';
+    hideBackButton();
+  }
+  function showSection(id) {
+    resetView();
+    document.getElementById(id).style.display = 'block';
+    document.querySelector('.top-left-logo').style.display = 'none';
+    document.querySelector('.top-right-menu').style.display = 'none';
+    document.querySelector('.side-buttons').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    showBackButton();
+  }
+
+  function updateCountdown() {
+    const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const diff = deadline - now;
+
+    if (diff <= 0) {
+      document.getElementById("countdown").innerText = "Airdrop has ended.";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("countdown").innerText =
+      `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+  }
+
+  window.onload = function () {
+    resetView();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const savedAddress = localStorage.getItem("walletAddress");
+    if (savedAddress) {
+      connected = true;
+      document.getElementById("wallet-address").innerText = "Connected: " + savedAddress;
+      document.getElementById("wallet-connect-button").innerText = "Disconnect Wallet";
+      document.getElementById("matic-balance").innerText = "MATIC: " + localStorage.getItem("matic");
+      ["bag", "usdc", "usdt"].forEach(token => {
+        const value = localStorage.getItem(token);
+        if (value) {
+          document.getElementById(token + "-balance").innerText = token.toUpperCase() + ": " + value;
+        }
+      });
+    }
+  };
+</script>
+</head><body>
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
@@ -348,7 +345,7 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+  <button id="wallet-connect-button" onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
