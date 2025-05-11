@@ -194,8 +194,57 @@
       alert("Connection failed or rejected.");
     }
   }
-</script>
-</body>
+
+    function showBackButton() {
+      document.getElementById('back-button').style.display = 'block';
+    }
+    function hideBackButton() {
+      document.getElementById('back-button').style.display = 'none';
+    }
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      hideBackButton();
+    }
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      showBackButton();
+    }
+    function updateCountdown() {
+      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+      const now = new Date().getTime();
+      const diff = deadline - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Airdrop has ended.";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById("countdown").innerText =
+        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+    }
+
+    window.onload = function () {
+      resetView();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  </script>
+</head>
+<body>
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
@@ -265,15 +314,13 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <h1>BONK BAG WALLET</h1>
-  <button id="connect-btn" onclick="connectWallet()">Connect Wallet</button>
-  <p id="wallet-address"></p>
-  <p id="network-info"></p>
-  <p id="network-warning" style="color:#ff5252;font-weight:bold;"></p>
+  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+  <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
 </div>
 
 <footer>
