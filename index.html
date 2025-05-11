@@ -104,92 +104,98 @@
     }
     h2 { color: #66ff66; }
   </style>
-  <script>
-    async function connectWallet() {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const web3 = new Web3(window.ethereum);
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          const address = accounts[0];
-          document.getElementById("wallet-address").innerText = "Connected: " + address;
+<script>
+  let connected = false;
+  let currentAddress = "";
 
-          const maticBalance = await web3.eth.getBalance(address);
-          document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-
-          const tokenList = [
-            { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-            { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-            { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-          ];
-
-          for (const token of tokenList) {
-            const contract = new web3.eth.Contract([
-              { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
-              { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
-            ], token.address);
-            const balance = await contract.methods.balanceOf(address).call();
-            const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-            document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Connection failed or rejected.");
-        }
-      } else {
-        alert("MetaMask not detected. Please install MetaMask.");
-      }
+  async function connectWallet() {
+    if (typeof window.ethereum === 'undefined') {
+      alert("MetaMask not detected. Please install MetaMask.");
+      return;
     }
 
-    function showBackButton() {
-      document.getElementById('back-button').style.display = 'block';
-    }
-    function hideBackButton() {
-      document.getElementById('back-button').style.display = 'none';
-    }
-    function resetView() {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelector('.top-left-logo').style.display = 'flex';
-      document.querySelector('.top-right-menu').style.display = 'flex';
-      document.querySelector('.side-buttons').style.display = 'flex';
-      document.querySelector('footer').style.display = 'block';
-      hideBackButton();
-    }
-    function showSection(id) {
-      resetView();
-      document.getElementById(id).style.display = 'block';
-      document.querySelector('.top-left-logo').style.display = 'none';
-      document.querySelector('.top-right-menu').style.display = 'none';
-      document.querySelector('.side-buttons').style.display = 'none';
-      document.querySelector('footer').style.display = 'none';
-      showBackButton();
-    }
-    function updateCountdown() {
-      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
-      const now = new Date().getTime();
-      const diff = deadline - now;
+    const web3 = new Web3(window.ethereum);
 
-      if (diff <= 0) {
-        document.getElementById("countdown").innerText = "Airdrop has ended.";
+    try {
+      if (connected) {
+        connected = false;
+        currentAddress = "";
+        document.getElementById("wallet-address").innerText = "";
+        document.getElementById("matic-balance").innerText = "";
+        document.getElementById("bag-balance").innerText = "";
+        document.getElementById("usdc-balance").innerText = "";
+        document.getElementById("usdt-balance").innerText = "";
+        document.getElementById("network-info").innerText = "";
+        document.getElementById("network-warning").innerText = "";
+        document.getElementById("connect-btn").innerText = "Connect Wallet";
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const address = accounts[0];
+      currentAddress = address;
+      connected = true;
 
-      document.getElementById("countdown").innerText =
-        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
+      document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+      const maticBalance = await web3.eth.getBalance(address);
+      document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+      const tokenList = [
+        { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+        { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+        { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+      ];
+
+      for (const token of tokenList) {
+        const contract = new web3.eth.Contract([
+          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
+          { constant: true, inputs: [], name: "decimals", outputs: [{ name: "", type: "uint8" }], type: "function" }
+        ], token.address);
+        const balance = await contract.methods.balanceOf(address).call();
+        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      }
+
+      const chainId = await web3.eth.getChainId();
+      let network = "Unknown";
+      let icon = "";
+      let isCorrectNetwork = false;
+
+      if (chainId === 137) {
+        network = "Polygon";
+        icon = "https://cryptologos.cc/logos/polygon-matic-logo.png";
+        isCorrectNetwork = true;
+      }
+
+      document.getElementById("network-info").innerHTML = icon
+        ? `<img src="${icon}" alt="${network}" style="height:20px;vertical-align:middle;margin-right:8px;"> ${network} Network`
+        : `${network} Network`;
+
+      if (!isCorrectNetwork) {
+        document.getElementById("network-warning").innerText = "⚠ You are not connected to the Polygon network!";
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x89' }]
+          });
+          document.getElementById("network-warning").innerText = "";
+        } catch (switchError) {
+          console.warn("User did not switch network", switchError);
+        }
+      } else {
+        document.getElementById("network-warning").innerText = "";
+      }
+
+      document.getElementById("connect-btn").innerText = "Disconnect Wallet";
+
+    } catch (error) {
+      console.error(error);
+      alert("Connection failed or rejected.");
     }
-
-    window.onload = function () {
-      resetView();
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-  </script>
-</head>
-<body>
+  }
+</script>
+</body>
 
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
@@ -259,13 +265,15 @@
 </div>
 
 <div id="wallet-section" class="section">
-  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
-  <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
+  <h1>BONK BAG WALLET</h1>
+  <button id="connect-btn" onclick="connectWallet()">Connect Wallet</button>
+  <p id="wallet-address"></p>
+  <p id="network-info"></p>
+  <p id="network-warning" style="color:#ff5252;font-weight:bold;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
 </div>
 
 <footer>
