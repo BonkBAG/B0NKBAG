@@ -8,223 +8,225 @@
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<style>
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: url('background.png') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    height: 100vh;
-    overflow-x: hidden;
-  }
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      height: 100vh;
+      overflow-x: hidden;
+    }
 
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-  }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
 
-  .top-left-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+    .top-left-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-  .top-left-logo .title {
-    font-size: 36px;
-    font-weight: bold;
-    color: #66ff66;
-    text-transform: uppercase;
-  }
+    .top-left-logo .title {
+      font-size: 36px;
+      font-weight: bold;
+      color: #66ff66;
+      text-transform: uppercase;
+    }
 
-  .top-left-logo img {
-    height: 48px;
-  }
+    .top-left-logo img {
+      height: 48px;
+    }
 
-  .wallet-button a {
-    background-color: #00c853;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-  }
+    .wallet-button a {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
 
-  .nav-menu {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 80px;
-    z-index: 9;
-  }
+    .nav-menu {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 80px;
+      z-index: 9;
+    }
 
-  .nav-menu a {
-    background-color: #00c853;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-  }
+    .nav-menu a {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
 
-  .side-buttons {
-    position: absolute;
-    top: 160px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+    .side-buttons {
+      position: absolute;
+      top: 160px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-  .side-buttons a {
-    background-color: #00c853;
-    padding: 12px 18px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    width: fit-content;
-  }
+    .side-buttons a {
+      background-color: #00c853;
+      padding: 12px 18px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      width: fit-content;
+    }
 
-  .section {
-    display: none;
-    position: absolute;
-    top: 120px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    max-width: 800px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
-    padding: 40px 20px;
-    text-align: center;
-  }
+    .section {
+      display: none;
+      position: absolute;
+      top: 120px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+    }
 
-  footer {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 12px;
-    color: #cccccc;
-    padding: 0 20px;
-  }
+    footer {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #cccccc;
+      padding: 0 20px;
+    }
 
-  .social-icons a {
-    margin: 0 12px;
-    text-decoration: none;
-    font-size: 20px;
-  }
+    .social-icons a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-size: 20px;
+    }
 
-  h2 { color: #66ff66; }
-  button { cursor: pointer; }
+    h2 {
+      color: #66ff66;
+      font-size: 28px;
+    }
 
-  .staking-button {
-    background-color: #00c853;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-  }
+    button { cursor: pointer; }
 
-  .staking-button:hover {
-    background-color: #00b344;
-  }
+    .staking-button {
+      background-color: #00c853;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
 
-  input[type="range"] {
-    width: 100%;
-    margin: 10px 0;
-  }
+    .staking-button:hover {
+      background-color: #00b344;
+    }
 
-  /* ========= МОБІЛЬНА АДАПТАЦІЯ ========= */
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: row;
-    padding: 10px 16px;
-  }
+    input[type="range"] {
+      width: 100%;
+      margin: 10px 0;
+    }
 
-  .top-left-logo {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-  }
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: row;
+        padding: 10px 16px;
+      }
 
-  .top-left-logo .title {
-    font-size: 24px;
-  }
+      .top-left-logo {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+      }
 
-  .top-left-logo img {
-    height: 36px;
-  }
+      .top-left-logo .title {
+        font-size: 24px;
+      }
 
-  .wallet-button a {
-    font-size: 13px;
-    padding: 8px 14px;
-  }
+      .top-left-logo img {
+        height: 36px;
+      }
 
-  .nav-menu {
-    flex-wrap: nowrap;
-    gap: 6px;
-    margin-top: 70px;
-    justify-content: center;
-  }
+      .wallet-button a {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
 
-  .nav-menu a {
-    font-size: 13px;
-    padding: 8px 12px;
-  }
+      .nav-menu {
+        flex-wrap: nowrap;
+        gap: 6px;
+        margin-top: 70px;
+        justify-content: center;
+      }
 
-  .side-buttons {
-    margin-top: 100px;
-    position: absolute;
-    top: auto;
-    left: 20px;
-  }
+      .nav-menu a {
+        font-size: 13px;
+        padding: 8px 12px;
+      }
 
-  #back-button {
-    top: 10px !important;
-  }
-}
-</style>
-</head>
-<body>
+      .side-buttons {
+        margin-top: 100px;
+        position: absolute;
+        top: auto;
+        left: 20px;
+      }
+
+      #back-button {
+        top: 10px !important;
+      }
+    }
+  </style>
+</head><body>
 
   <!-- BACK BUTTON -->
   <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
- <!-- TOP BAR -->
-<div class="top-bar">
-  <div class="top-left-logo">
-    <div class="title">BONK BAG</div>
-    <img src="logo.png" alt="Logo">
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-left-logo">
+      <div class="title">BONK BAG</div>
+      <img src="logo.png" alt="Logo">
+    </div>
+    <div class="wallet-button">
+      <a onclick="showSection('wallet-section')">Connect Wallet</a>
+    </div>
   </div>
-  <div class="wallet-button">
-    <a onclick="showSection('wallet-section')">Connect Wallet</a>
-  </div>
-</div>
 
-<!-- NAV MENU -->
-<div class="nav-menu">
-  <a onclick="showSection('about-section')">About</a>
-  <a onclick="showSection('roadmap-section')">Roadmap</a>
-  <a onclick="showSection('contact-section')">Contact</a>
-</div>
+  <!-- NAV MENU -->
+  <div class="nav-menu">
+    <a onclick="showSection('about-section')">About</a>
+    <a onclick="showSection('roadmap-section')">Roadmap</a>
+    <a onclick="showSection('contact-section')">Contact</a>
+  </div>
 
   <!-- SIDE BUTTONS -->
   <div class="side-buttons">
@@ -233,7 +235,9 @@
     <a onclick="showSection('tokenomics-section')">Tokenomics</a>
     <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC</a>
     <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">DEX Screener</a>
+    <a href="https://www.geckoterminal.com/uk/polygon_pos/pools/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">GeckoTerminal</a>
     <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
+    <a onclick="showSection('nft-section')">NFT</a>
   </div>  <!-- Airdrop Section -->
   <div id="airdrop-section" class="section">
     <h2>Airdrop</h2>
@@ -251,6 +255,13 @@
     <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
     <p>Total Supply: 5,000,000,000 BAG</p>
     <p>15% Owner | 50% DEX | 20% Airdrop | 15% Staking Pool</p>
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
+
+  <!-- NFT Section -->
+  <div id="nft-section" class="section">
+    <h2>NFT Collection</h2>
+    <p>Coming soon: BONK BAG NFTs with exclusive perks and utility!</p>
     <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
   </div>
 
@@ -301,181 +312,9 @@
       <br>
       <button onclick="closeWalletConnectModal()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Close</button>
     </div>
-  </div>  <!-- Staking Section -->
-  <div id="staking-section" class="section">
-    <h2>Staking</h2>
-    <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
+  </div>
 
-    <button onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
-    <button onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
-    <button onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
-
-    <div id="staking-details" style="display:none; margin-top:20px;">
-      <p><strong>Selected:</strong> <span id="selected-duration"></span> months</p>
-      <p>Your BAG Balance: <span id="balance-bag">0</span></p>
-
-      <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
-      <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
-      <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
-
-      <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
-      <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
-    </div>
-  </div><script src="https://unpkg.com/@walletconnect/client@1.6.6/dist/umd/index.min.js"></script>
-<script src="https://unpkg.com/qrcode@1.5.0/build/qrcode.min.js"></script>
-
-<script>
-  let selectedMonths = 0;
-  let bagBalance = 0;
-  const rewardPool = 500000000;
-
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web3 = new Web3(window.ethereum);
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
-        await fetchBalances(web3, address);
-      } catch (error) {
-        console.error(error);
-        alert("Connection failed or rejected.");
-      }
-    } else {
-      alert("MetaMask not detected. Please install MetaMask.");
-    }
-  }
-
-  async function connectTrustWallet() {
-    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-    const connector = new WalletConnect.default({
-      bridge: "https://bridge.walletconnect.org",
-      qrcode: false,
-    });
-
-    if (!connector.connected) {
-      await connector.createSession();
-    }
-
-    const uri = connector.uri;
-
-    if (isMobile) {
-      window.location.href = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
-    } else {
-      showWalletConnectModal(uri);
-    }
-
-    connector.on("connect", async (error, payload) => {
-      if (error) return console.error(error);
-      const { accounts } = payload.params[0];
-      const address = accounts[0];
-      document.getElementById("wallet-address").innerText = "Connected: " + address;
-      const web3 = new Web3(connector);
-      await fetchBalances(web3, address);
-      closeWalletConnectModal();
-    });
-  }
-
-  function showWalletConnectModal(uri) {
-  document.getElementById('walletconnect-modal').style.display = 'flex';
-  const qrContainer = document.getElementById('walletconnect-qr');
-  qrContainer.innerHTML = '';
-
-  QRCode.toDataURL(uri)
-    .then(url => {
-      const img = new Image();
-      img.src = url;
-      img.style.maxWidth = '100%';
-      img.style.borderRadius = '8px';
-      qrContainer.appendChild(img);
-    })
-    .catch(err => {
-      console.error("QR error:", err);
-      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
-    });
-}
-
-  function closeWalletConnectModal() {
-    document.getElementById('walletconnect-modal').style.display = 'none';
-  }
-
-  async function fetchBalances(web3, address) {
-    const polBalance = await web3.eth.getBalance(address);
-    document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(polBalance, 'ether')).slice(0, 6);
-
-    const tokenList = [
-      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-    ];
-
-    for (const token of tokenList) {
-      const contract = new web3.eth.Contract([
-        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-      ], token.address);
-      const balance = await contract.methods.balanceOf(address).call();
-      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-      if (token.name === 'BAG') {
-        bagBalance = parseFloat(formatted);
-        document.getElementById('balance-bag').innerText = bagBalance;
-      }
-    }
-  }
-
-  function selectStaking(months) {
-    selectedMonths = months;
-    document.getElementById('selected-duration').innerText = months;
-    document.getElementById('staking-details').style.display = 'block';
-    updateStakingAmount();
-  }
-
-  function updateStakingAmount() {
-    const percent = parseInt(document.getElementById('amount-range').value);
-    const amount = (bagBalance * percent / 100).toFixed(2);
-    document.getElementById('amount-to-stake').innerText = amount;
-
-    let rewardPercent = 0;
-    if (selectedMonths === 3) rewardPercent = 15;
-    else if (selectedMonths === 6) rewardPercent = 30;
-    else if (selectedMonths === 12) rewardPercent = 60;
-
-    const reward = ((amount / 5000000000) * rewardPool * (rewardPercent / 100)).toFixed(2);
-    document.getElementById('estimated-reward').innerText = reward;
-  }
-
-  function resetStaking() {
-    document.getElementById('staking-details').style.display = 'none';
-    document.getElementById('amount-range').value = 0;
-    document.getElementById('amount-to-stake').innerText = '0';
-    document.getElementById('estimated-reward').innerText = '0';
-    document.getElementById('selected-duration').innerText = '';
-  }
-
-  function submitStaking() {
-    alert("Staking functionality coming soon!");
-  }
-
-  function resetView() {
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.querySelector('.top-left-logo').style.display = 'flex';
-    document.querySelector('.top-right-menu').style.display = 'flex';
-    document.querySelector('.side-buttons').style.display = 'flex';
-    document.querySelector('footer').style.display = 'block';
-    document.getElementById('back-button').style.display = 'none';
-    resetStaking();
-  }
-
-  function showSection(id) {
-    resetView();
-    document.getElementById(id).style.display = 'block';
-    document.querySelector('.top-left-logo').style.display = 'none';
-    document.querySelector('.top-right-menu').style.display = 'none';
-    document.querySelector('.side-buttons').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
-    document.getElementById('back-button').style.display = 'block';
-  }
-</script>  <!-- Footer -->
+  <!-- Footer -->
   <footer>
     <div class="social-icons" style="margin-bottom: 8px;">
       <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
@@ -484,6 +323,28 @@
     </div>
     <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
   </footer>
+
+  <!-- JS SCRIPT - showSection, resetView -->
+  <script>
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-bar').style.display = 'flex';
+      document.querySelector('.nav-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      document.getElementById('back-button').style.display = 'none';
+    }
+
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-bar').style.display = 'none';
+      document.querySelector('.nav-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('back-button').style.display = 'block';
+    }
+  </script>
 
 </body>
 </html>
