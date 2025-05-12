@@ -170,25 +170,8 @@
 
   <div id="staking-section" class="section">
     <h2>Staking</h2>
-    <p>Stake your BAG tokens and earn rewards!</p>
-    
-    <!-- Buttons to select staking duration -->
-    <button id="3-months" onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
-    <button id="6-months" onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
-    <button id="12-months" onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
-
-    <!-- Display selected staking details -->
-    <div id="staking-details" style="display:none;">
-      <p id="selected-duration"></p>
-      <p>Your balance: <span id="balance-bag">0</span> BAG</p>
-      
-      <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
-      <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
-      <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
-
-      <button onclick="submitStaking()">Confirm Staking</button>
-      <button onclick="resetStaking()" style="background-color: #ff4444;">Back</button>
-    </div>
+    <p>Staking coming soon! Earn rewards by staking your BAG tokens.</p>
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
   </div>
 
   <div id="about-section" class="section">
@@ -231,9 +214,59 @@
     <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
   </footer>
 
-<script>
-// JavaScript functions go here
-</script>
+  <script>
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const web3 = new Web3(window.ethereum);
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const address = accounts[0];
+          document.getElementById("wallet-address").innerText = "Connected: " + address;
 
+          const maticBalance = await web3.eth.getBalance(address);
+          document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+          const tokenList = [
+            { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+            { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+            { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+          ];
+
+          for (const token of tokenList) {
+            const contract = new web3.eth.Contract([
+              { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+            ], token.address);
+            const balance = await contract.methods.balanceOf(address).call();
+            const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+            document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+          }
+        } catch (error) {
+          console.error(error);
+          alert("Connection failed or rejected.");
+        }
+      } else {
+        alert("MetaMask not detected. Please install MetaMask.");
+      }
+    }
+
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      document.getElementById('back-button').style.display = 'none';
+    }
+
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('back-button').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
