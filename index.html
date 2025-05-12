@@ -87,7 +87,8 @@
       border-radius: 12px;
       padding: 40px 20px;
       text-align: center;
-    }    footer {
+    }
+    footer {
       position: absolute;
       bottom: 20px;
       left: 0;
@@ -103,38 +104,29 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
-    .staking-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .staking-buttons button {
-      background-color: #00c853;
-      border: none;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .staking-input {
-      margin-top: 20px;
-    }
-    input[type="range"] {
-      width: 100%;
-    }
-    .reward-output {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #66ff66;
+
+    @media (max-width: 768px) {
+      .top-left-logo, .top-right-menu, .side-buttons {
+        position: static;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 10px;
+        gap: 10px;
+      }
+      .top-left-logo .title {
+        font-size: 24px;
+      }
+      .top-right-menu a, .side-buttons a {
+        font-size: 14px;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
-<body>
-
-<button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
+<body><button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
 <div class="top-left-logo">
   <div class="title">BONK BAG</div>
@@ -146,7 +138,40 @@
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
   <a onclick="showSection('wallet-section')">Connect Wallet</a>
-</<div id="airdrop-section" class="section">
+</div>
+
+<div class="side-buttons">
+  <a href="https://www.sushi.com/polygon/swap?token0=0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359&token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG/USDC on SushiSwap</a>
+  <a onclick="showSection('airdrop-section')">Airdrop</a>
+  <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">BAG/USDT on DEXScreener</a>
+  <a href="https://www.geckoterminal.com/polygon_pos/pools/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">View BONK BAG on CoinTerminal</a>
+  <a onclick="showSection('tokenomics-section')">Tokenomics</a>
+  <a onclick="showSection('staking-section')">Staking</a>
+  <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
+</div>
+
+<div id="about-section" class="section">
+  <h2>About BONK BAG</h2>
+  <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
+  <p>The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers. We are committed to transparency, creativity, and meme-powered innovation.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="roadmap-section" class="section">
+  <h2>Roadmap</h2>
+  <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="contact-section" class="section">
+  <h2>Contact Us</h2>
+  <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
+  Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
+  Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="airdrop-section" class="section">
   <h2>Airdrop</h2>
   <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
   <p>We are giving away 250,000,000 BAG tokens!</p>
@@ -160,45 +185,7 @@
   <h2>BONK BAG Tokenomics</h2>
   <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<div id="staking-section" class="section">
-  <h2>Staking</h2>
-  <p id="bag-stake-balance" style="margin-bottom: 10px;">BAG Balance: 0</p>
-  <div class="staking-buttons">
-    <button onclick="selectStaking(3)">3 місяці - 15%</button>
-    <button onclick="selectStaking(6)">6 місяців - 30%</button>
-    <button onclick="selectStaking(12)">12 місяців - 60%</button>
-  </div>
-  <div class="staking-input" id="staking-input" style="display:none;">
-    <input type="range" min="0" max="100" value="0" id="stake-range" oninput="updateStakeAmount()">
-    <p>Stake %: <span id="stake-percent">0</span>%</p>
-    <p>Stake Amount: <span id="stake-amount">0</span> BAG</p>
-    <p class="reward-output">Reward: <span id="stake-reward">0</span> BAG</p>
-  </div>
-  <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div><div id="about-section" class="section">
-  <h2>About BONK BAG</h2>
-  <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
-  <p>The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers.</p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<div id="roadmap-section" class="section">
-  <h2>Roadmap</h2>
-  <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<div id="contact-section" class="section">
-  <h2>Contact Us</h2>
-  <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
-     Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
-     Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<div id="wallet-section" class="section">
+</div><div id="wallet-section" class="section">
   <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
@@ -206,6 +193,23 @@
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
+</div>
+
+<div id="staking-section" class="section">
+  <h2>Staking</h2>
+  <div id="staking-buttons">
+    <button onclick="selectStakingTerm(3, 15)" style="background:#00c853;margin:10px;">3 months — 15%</button>
+    <button onclick="selectStakingTerm(6, 30)" style="background:#00c853;margin:10px;">6 months — 30%</button>
+    <button onclick="selectStakingTerm(12, 60)" style="background:#00c853;margin:10px;">12 months — 60%</button>
+  </div>
+  <div id="staking-form" style="margin-top:20px; display:none;">
+    <p id="bagBalanceText" style="font-weight:bold;"></p>
+    <label for="stakeRange">Choose amount to stake:</label><br>
+    <input type="range" id="stakeRange" min="0" max="100" step="1" value="0" style="width:80%;" oninput="updateStakeValue()">
+    <p>Staking: <span id="stakeAmountText">0</span> BAG</p>
+    <p>Expected reward: <span id="rewardAmountText">0</span> BAG</p>
+  </div>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:30px;">Back</button>
 </div>
 
 <footer>
@@ -218,31 +222,28 @@
 </footer>
 
 <script>
-  let selectedMonths = 0;
-  const REWARD_POOL = 500000000;
+  let selectedDuration = 0;
+  let selectedPercent = 0;
 
-  function selectStaking(months) {
-    selectedMonths = months;
-    document.querySelectorAll('.staking-buttons button').forEach(btn => btn.style.display = 'none');
-    document.getElementById('staking-input').style.display = 'block';
-    updateStakeAmount();
+  function selectStakingTerm(months, percent) {
+    selectedDuration = months;
+    selectedPercent = percent;
+    document.getElementById("staking-buttons").style.display = "none";
+    document.getElementById("staking-form").style.display = "block";
+
+    const balance = parseFloat(localStorage.getItem("bag") || "0");
+    document.getElementById("bagBalanceText").innerText = "Your BAG balance: " + balance.toFixed(4);
+    updateStakeValue();
   }
 
-  function updateStakeAmount() {
-    const percent = parseInt(document.getElementById('stake-range').value);
-    document.getElementById('stake-percent').innerText = percent;
+  function updateStakeValue() {
+    const balance = parseFloat(localStorage.getItem("bag") || "0");
+    const percent = parseInt(document.getElementById("stakeRange").value);
+    const stakeAmount = (balance * percent / 100);
+    const reward = (stakeAmount * selectedPercent / 100);
 
-    const bagBalance = parseFloat(localStorage.getItem("bag") || "0");
-    const stakeAmount = (bagBalance * percent / 100).toFixed(2);
-    document.getElementById('stake-amount').innerText = stakeAmount;
-
-    let rewardPercent = 0;
-    if (selectedMonths === 3) rewardPercent = 0.15;
-    if (selectedMonths === 6) rewardPercent = 0.30;
-    if (selectedMonths === 12) rewardPercent = 0.60;
-
-    const reward = (stakeAmount * rewardPercent).toFixed(2);
-    document.getElementById('stake-reward').innerText = reward;
+    document.getElementById("stakeAmountText").innerText = stakeAmount.toFixed(4);
+    document.getElementById("rewardAmountText").innerText = reward.toFixed(4);
   }
 </script>
 
