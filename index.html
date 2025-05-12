@@ -153,75 +153,10 @@
     <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
   </div>
 
-  <!-- AirDrop Section -->
-  <div id="airdrop-section" class="section">
-    <h2>Airdrop</h2>
-    <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
-    <p>We are giving away 250,000,000 BAG tokens!</p>
-    <p>1. Like and retweet<br>2. Follow on Twitter<br>3. Join Telegram<br>4. Hold any BAG</p>
-    <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Telegram</a> |
-    <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Twitter</a>
-    <br><br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Tokenomics Section -->
-  <div id="tokenomics-section" class="section">
-    <h2>BONK BAG Tokenomics</h2>
-    <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Staking Section -->
-  <div id="staking-section" class="section">
-    <h2>Staking</h2>
-    <p>Staking starts in Q3! Stake your BAG tokens and earn rewards!</p>
-    
-    <!-- Buttons to select staking duration -->
-    <button id="3-months" onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
-    <button id="6-months" onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
-    <button id="12-months" onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
-
-    <!-- Display selected staking details -->
-    <div id="staking-details" style="display:none;">
-      <p id="selected-duration"></p>
-      <p>Your balance: <span id="balance-bag">0</span> BAG</p>
-      
-      <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
-      <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
-      <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
-
-      <button onclick="submitStaking()">Confirm Staking</button>
-      <button onclick="resetStaking()" style="background-color: #ff4444;">Back</button>
-    </div>
-  </div>
-
-  <!-- About Section -->
-  <div id="about-section" class="section">
-    <h2>About BONK BAG</h2>
-    <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
-    <p>The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers. We are committed to transparency, creativity, and meme-powered innovation.</p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Roadmap Section -->
-  <div id="roadmap-section" class="section">
-    <h2>Roadmap</h2>
-    <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Contact Section -->
-  <div id="contact-section" class="section">
-    <h2>Contact Us</h2>
-    <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
-    Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
-    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
   <!-- Wallet Section -->
   <div id="wallet-section" class="section">
-    <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+    <button onclick="connectMetaMask()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect MetaMask</button>
+    <button onclick="connectTrustWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Trust Wallet</button>
     <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
     <p id="matic-balance"></p>
     <p id="bag-balance"></p>
@@ -230,22 +165,9 @@
     <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
   </div>
 
-  <footer>
-    <div class="social-icons" style="margin-bottom: 8px;">
-      <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
-      <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
-      <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
-    </div>
-    <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
-  </footer>
-
 <script>
-   // Код для підключення MetaMask та Trust Wallet (через WalletConnect)
-  let stakingDuration = 0; // 3, 6, or 12 months
-  let balanceBag = 10000; // Example balance, you can dynamically fetch this from wallet
-
-  // Підключення гаманця MetaMask
-  async function connectWallet() {
+  // Підключення MetaMask
+  async function connectMetaMask() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web3 = new Web3(window.ethereum);
