@@ -2,21 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="
-
-Проблема може бути в тому, що JavaScript, який керує відображенням секцій, не працює належним чином. Давайте перевіримо код, щоб впевнитися, що секції відкриваються правильно.
-
-1. Перевіримо, чи є функції, які відповідають за відкриття і закриття секцій.
-2. Перевіримо, чи правильно працюють функції `showSection()` і `resetView()`.
-3. Переконаємося, що усі секції мають правильні id і відповідно до цих id відкриваються через JavaScript.
-
-### Ось оновлений код, який має працювати:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BONK BAG</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -119,24 +104,26 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
-    @media (max-width: 768px) {
-      .top-left-logo, .top-right-menu, .side-buttons {
-        position: static;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        padding: 10px;
-        gap: 10px;
-      }
-      .top-left-logo .title {
-        font-size: 24px;
-      }
-      .top-right-menu a, .side-buttons a {
-        font-size: 14px;
-        padding: 10px;
-        width: 100%;
-        text-align: center;
-      }
+
+    .staking-button {
+      background-color: #00c853;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .staking-button:hover {
+      background-color: #00b344;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -166,9 +153,9 @@
     <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
   </div>
 
-  <!-- Sections start -->
   <div id="airdrop-section" class="section">
     <h2>Airdrop</h2>
+    <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
     <p>We are giving away 250,000,000 BAG tokens!</p>
     <p>1. Like and retweet<br>2. Follow on Twitter<br>3. Join Telegram<br>4. Hold any BAG</p>
     <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Telegram</a> |
@@ -185,13 +172,24 @@
   <div id="staking-section" class="section">
     <h2>Staking</h2>
     <p>Stake your BAG tokens and earn rewards!</p>
-    <button onclick="showStakingDetails()">Select Duration</button>
+    
+    <!-- Buttons to select staking duration -->
+    <button id="3-months" onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
+    <button id="6-months" onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
+    <button id="12-months" onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
+
+    <!-- Display selected staking details -->
     <div id="staking-details" style="display:none;">
-      <button onclick="selectStaking(3)">3 Months</button>
-      <button onclick="selectStaking(6)">6 Months</button>
-      <button onclick="selectStaking(12)">12 Months</button>
+      <p id="selected-duration"></p>
+      <p>Your balance: <span id="balance-bag">0</span> BAG</p>
+      
+      <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
+      <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
+      <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
+
+      <button onclick="submitStaking()">Confirm Staking</button>
+      <button onclick="resetStaking()" style="background-color: #ff4444;">Back</button>
     </div>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
   </div>
 
   <div id="about-section" class="section">
@@ -236,18 +234,99 @@
 
 <script>
   let stakingDuration = 0; // 3, 6, or 12 months
+  let balanceBag = 10000; // Example balance, you can dynamically fetch this from wallet
 
   // Show staking section when a duration is selected
   function selectStaking(months) {
     stakingDuration = months;
-    alert(`${months} months selected for staking.`);
-    document.getElementById("staking-details").style.display = 'none'; // Hide staking details after selection
+    document.getElementById("selected-duration").innerText = `${months} Months Selected`;
+    document.getElementById("staking-details").style.display = 'block';
+    document.getElementById("balance-bag").innerText = balanceBag;
+
+    // Hide the other buttons
+    document.getElementById("3-months").style.display = 'none';
+    document.getElementById("6-months").style.display = 'none';
+    document.getElementById("12-months").style.display = 'none';
+
+    calculateReward();
   }
 
-  function showStakingDetails() {
-    document.getElementById("staking-details").style.display = 'block'; // Show staking options
+  // Update staking amount based on slider
+  function updateStakingAmount() {
+    let sliderValue = document.getElementById("amount-range").value;
+    let amountToStake = (balanceBag * sliderValue) / 100;
+    document.getElementById("amount-to-stake").innerText = amountToStake.toFixed(2);
+    calculateReward();
   }
 
+  // Calculate estimated reward based on selected amount and duration
+  function calculateReward() {
+    let amountToStake = parseFloat(document.getElementById("amount-to-stake").innerText);
+    let rewardPercentage = 0;
+
+    if (stakingDuration === 3) {
+      rewardPercentage = 0.15; // 15% for 3 months
+    } else if (stakingDuration === 6) {
+      rewardPercentage = 0.30; // 30% for 6 months
+    } else if (stakingDuration === 12) {
+      rewardPercentage = 0.60; // 60% for 12 months
+    }
+
+    let estimatedReward = (amountToStake * rewardPercentage).toFixed(2);
+    document.getElementById("estimated-reward").innerText = estimatedReward;
+  }
+
+  // Simulate staking process
+  function submitStaking() {
+    alert(`You have staked ${document.getElementById("amount-to-stake").innerText} BAG tokens. Your reward will be ${document.getElementById("estimated-reward").innerText} BAG.`);
+    resetStaking(); // Reset staking section after submitting
+  }
+
+  // Reset staking section
+  function resetStaking() {
+    document.getElementById("staking-details").style.display = 'none';
+    // Show the staking duration buttons again
+    document.getElementById("3-months").style.display = 'block';
+    document.getElementById("6-months").style.display = 'block';
+    document.getElementById("12-months").style.display = 'block';
+  }
+
+  // Connect wallet using MetaMask
+  async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
+        document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+        const maticBalance = await web3.eth.getBalance(address);
+        document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+        const tokenList = [
+          { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+          { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+          { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+        ];
+
+        for (const token of tokenList) {
+          const contract = new web3.eth.Contract([
+            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+          ], token.address);
+          const balance = await contract.methods.balanceOf(address).call();
+          const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+          document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Connection failed or rejected.");
+      }
+    } else {
+      alert("MetaMask not detected. Please install MetaMask.");
+    }
+  }
+
+  // Reset view (hide all sections)
   function resetView() {
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
     document.querySelector('.top-left-logo').style.display = 'flex';
@@ -257,6 +336,7 @@
     document.getElementById('back-button').style.display = 'none';
   }
 
+  // Show selected section
   function showSection(id) {
     resetView();
     document.getElementById(id).style.display = 'block';
@@ -267,5 +347,6 @@
     document.getElementById('back-button').style.display = 'block';
   }
 </script>
+
 </body>
 </html>
