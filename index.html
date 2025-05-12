@@ -2,6 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="
+
+Проблема може бути в тому, що JavaScript, який керує відображенням секцій, не працює належним чином. Давайте перевіримо код, щоб впевнитися, що секції відкриваються правильно.
+
+1. Перевіримо, чи є функції, які відповідають за відкриття і закриття секцій.
+2. Перевіримо, чи правильно працюють функції `showSection()` і `resetView()`.
+3. Переконаємося, що усі секції мають правильні id і відповідно до цих id відкриваються через JavaScript.
+
+### Ось оновлений код, який має працювати:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BONK BAG</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -152,6 +167,33 @@
   </div>
 
   <!-- Sections start -->
+  <div id="airdrop-section" class="section">
+    <h2>Airdrop</h2>
+    <p>We are giving away 250,000,000 BAG tokens!</p>
+    <p>1. Like and retweet<br>2. Follow on Twitter<br>3. Join Telegram<br>4. Hold any BAG</p>
+    <a href="https://t.me/BONKBAG" target="_blank" style="color:#00e676;">Telegram</a> |
+    <a href="https://x.com/b0nkbag" target="_blank" style="color:#00e676;">Twitter</a>
+    <br><br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
+
+  <div id="tokenomics-section" class="section">
+    <h2>BONK BAG Tokenomics</h2>
+    <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
+
+  <div id="staking-section" class="section">
+    <h2>Staking</h2>
+    <p>Stake your BAG tokens and earn rewards!</p>
+    <button onclick="showStakingDetails()">Select Duration</button>
+    <div id="staking-details" style="display:none;">
+      <button onclick="selectStaking(3)">3 Months</button>
+      <button onclick="selectStaking(6)">6 Months</button>
+      <button onclick="selectStaking(12)">12 Months</button>
+    </div>
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
+
   <div id="about-section" class="section">
     <h2>About BONK BAG</h2>
     <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
@@ -194,87 +236,16 @@
 
 <script>
   let stakingDuration = 0; // 3, 6, or 12 months
-  let balanceBag = 10000; // Example balance, you can dynamically fetch this from wallet
 
   // Show staking section when a duration is selected
   function selectStaking(months) {
     stakingDuration = months;
-    document.getElementById("selected-duration").innerText = `${months} Months Selected`;
-    document.getElementById("staking-details").style.display = 'block';
-    document.getElementById("balance-bag").innerText = balanceBag;
-    calculateReward();
+    alert(`${months} months selected for staking.`);
+    document.getElementById("staking-details").style.display = 'none'; // Hide staking details after selection
   }
 
-  // Update staking amount based on slider
-  function updateStakingAmount() {
-    let sliderValue = document.getElementById("amount-range").value;
-    let amountToStake = (balanceBag * sliderValue) / 100;
-    document.getElementById("amount-to-stake").innerText = amountToStake.toFixed(2);
-    calculateReward();
-  }
-
-  // Calculate estimated reward based on selected amount and duration
-  function calculateReward() {
-    let amountToStake = document.getElementById("amount-to-stake").innerText;
-    let rewardPercentage = 0;
-
-    if (stakingDuration === 3) {
-      rewardPercentage = 0.15; // 15% for 3 months
-    } else if (stakingDuration === 6) {
-      rewardPercentage = 0.30; // 30% for 6 months
-    } else if (stakingDuration === 12) {
-      rewardPercentage = 0.60; // 60% for 12 months
-    }
-
-    let estimatedReward = (amountToStake * rewardPercentage).toFixed(2);
-    document.getElementById("estimated-reward").innerText = estimatedReward;
-  }
-
-  // Simulate staking process
-  function submitStaking() {
-    alert(`You have staked ${document.getElementById("amount-to-stake").innerText} BAG tokens. Your reward will be ${document.getElementById("estimated-reward").innerText} BAG.`);
-    resetStaking(); // Reset staking section after submitting
-  }
-
-  // Reset staking section
-  function resetStaking() {
-    document.getElementById("staking-details").style.display = 'none';
-  }
-</script>
-
-<script>
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web3 = new Web3(window.ethereum);
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
-
-        const maticBalance = await web3.eth.getBalance(address);
-        document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-
-        const tokenList = [
-          { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-          { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-          { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-        ];
-
-        for (const token of tokenList) {
-          const contract = new web3.eth.Contract([
-            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-          ], token.address);
-          const balance = await contract.methods.balanceOf(address).call();
-          const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-          document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Connection failed or rejected.");
-      }
-    } else {
-      alert("MetaMask not detected. Please install MetaMask.");
-    }
+  function showStakingDetails() {
+    document.getElementById("staking-details").style.display = 'block'; // Show staking options
   }
 
   function resetView() {
@@ -296,6 +267,5 @@
     document.getElementById('back-button').style.display = 'block';
   }
 </script>
-
 </body>
 </html>
