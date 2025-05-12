@@ -234,6 +234,56 @@
     </div>
     <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
   </footer>
+  
+<script>
+    let web3;
+    let stakingContract;
+    let userAddress;
+    
+    const stakingTokenAddress = '0x3686568eCB6cE7545765b641932044900d11e584'; // Адреса вашого контракту токену BAG
+    const stakingContractAddress = 'YOUR_STAKING_CONTRACT_ADDRESS'; // Адреса вашого контракту стейкінгу
+
+    // Підключення до MetaMask
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        web3 = new Web3(window.ethereum);
+        try {
+          // Підключення гаманця
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          userAddress = accounts[0];
+          document.getElementById('wallet-address').innerText = `Connected: ${userAddress}`;
+          loadBAGBalance();
+        } catch (error) {
+          console.error('User rejected the request or an error occurred', error);
+        }
+      } else {
+        alert('Please install MetaMask');
+      }
+    }
+
+    // Завантажуємо баланс BAG
+    async function loadBAGBalance() {
+      const contractABI = [
+        // balanceOf method ABI для токену BAG
+        {
+          "constant": true,
+          "inputs": [{ "name": "_owner", "type": "address" }],
+          "name": "balanceOf",
+          "outputs": [{ "name": "balance", "type": "uint256" }],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ];
+
+      const contract = new web3.eth.Contract(contractABI, stakingTokenAddress);
+
+      // Отримуємо баланс токенів BAG для користувача
+      const balance = await contract.methods.balanceOf(userAddress).call();
+      const formattedBalance = web3.utils.fromWei(balance, 'ether'); // Форматуємо баланс для відображення
+      document.getElementById('bag-balance').innerText = `Your BAG Balance: ${formattedBalance}`;
+    }
+</script>
 
 <script>
   // Функція для підключення гаманця через MetaMask
