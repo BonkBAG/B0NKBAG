@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -295,13 +296,23 @@
   }
 
   function showWalletConnectModal(uri) {
-    document.getElementById('walletconnect-modal').style.display = 'flex';
-    const qrContainer = document.getElementById('walletconnect-qr');
-    qrContainer.innerHTML = '';
-    QRCode.toCanvas(uri, { width: 256 }, function (err, canvas) {
-      if (!err) qrContainer.appendChild(canvas);
+  document.getElementById('walletconnect-modal').style.display = 'flex';
+  const qrContainer = document.getElementById('walletconnect-qr');
+  qrContainer.innerHTML = '';
+
+  QRCode.toDataURL(uri)
+    .then(url => {
+      const img = new Image();
+      img.src = url;
+      img.style.maxWidth = '100%';
+      img.style.borderRadius = '8px';
+      qrContainer.appendChild(img);
+    })
+    .catch(err => {
+      console.error("QR error:", err);
+      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
     });
-  }
+}
 
   function closeWalletConnectModal() {
     document.getElementById('walletconnect-modal').style.display = 'none';
