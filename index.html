@@ -153,51 +153,54 @@
   }
 
   /* ========= МОБІЛЬНА АДАПТАЦІЯ ========= */
-  @media (max-width: 768px) {
-    .top-bar {
-      flex-direction: row;
-      padding: 10px 16px;
-    }
-
-    .top-left-logo {
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .top-left-logo .title {
-      font-size: 24px;
-    }
-
-    .top-left-logo img {
-      height: 36px;
-    }
-
-    .wallet-button a {
-      font-size: 13px;
-      padding: 8px 14px;
-    }
-
-    .nav-menu {
-      flex-wrap: nowrap;
-      gap: 6px;
-      margin-top: 70px;
-      justify-content: center;
-    }
-
-    .nav-menu a {
-      font-size: 13px;
-      padding: 8px 12px;
-    }
-
-    .side-buttons {
-      margin-top: 180px;
-    }
-
-    #back-button {
-      top: 10px !important;
-    }
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: row;
+    padding: 10px 16px;
   }
+
+  .top-left-logo {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .top-left-logo .title {
+    font-size: 24px;
+  }
+
+  .top-left-logo img {
+    height: 36px;
+  }
+
+  .wallet-button a {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+
+  .nav-menu {
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-top: 70px;
+    justify-content: center;
+  }
+
+  .nav-menu a {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .side-buttons {
+    margin-top: 100px;
+    position: absolute;
+    top: auto;
+    left: 20px;
+  }
+
+  #back-button {
+    top: 10px !important;
+  }
+}
 </style>
 </head>
 <body>
