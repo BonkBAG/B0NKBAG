@@ -454,6 +454,50 @@
     document.getElementById('walletconnect-modal').style.display = 'none';
   }
 </script>
+<script>
+  async function connectTrustWallet() {
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
+    const provider = new WalletConnectProvider.default({
+      rpc: {
+        137: "https://polygon-rpc.com"
+      },
+      chainId: 137
+    });
+
+    await provider.enable();
+    console.log("WalletConnect URI:", provider.connector.uri);
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const address = accounts[0];
+    document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+    const maticBalance = await web3.eth.getBalance(address);
+    document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+    if (!isMobile) {
+      showWalletConnectModal(provider.connector.uri);
+    }
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      if (token.name === 'BAG') {
+        bagBalance = parseFloat(formatted);
+        document.getElementById('balance-bag').innerText = bagBalance;
+      }
+    }
+  }
+</script>
 </body>
 </html>
