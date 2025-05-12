@@ -240,7 +240,96 @@
   </footer>
 
 <script>
-  // Here goes your previous JS code (WalletConnect, MetaMask etc.)
+   // Код для підключення MetaMask та Trust Wallet (через WalletConnect)
+  let stakingDuration = 0; // 3, 6, or 12 months
+  let balanceBag = 10000; // Example balance, you can dynamically fetch this from wallet
+
+  // Підключення гаманця MetaMask
+  async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const address = accounts[0];
+        document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+        const maticBalance = await web3.eth.getBalance(address);
+        document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+        const tokenList = [
+          { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+          { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+          { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+        ];
+
+        for (const token of tokenList) {
+          const contract = new web3.eth.Contract([
+            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+          ], token.address);
+          const balance = await contract.methods.balanceOf(address).call();
+          const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+          document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Connection failed or rejected.");
+      }
+    } else {
+      alert("MetaMask not detected. Please install MetaMask.");
+    }
+  }
+
+  // Підключення до Trust Wallet через WalletConnect
+  async function connectTrustWallet() {
+    const provider = new WalletConnectProvider({
+      infuraId: "YOUR_INFURA_PROJECT_ID" // Заміни на свій Infura Project ID
+    });
+
+    await provider.enable();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const address = accounts[0];
+    document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+    const maticBalance = await web3.eth.getBalance(address);
+    document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+    }
+  }
+
+  // Reset view (hide all sections)
+  function resetView() {
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.querySelector('.top-left-logo').style.display = 'flex';
+    document.querySelector('.top-right-menu').style.display = 'flex';
+    document.querySelector('.side-buttons').style.display = 'flex';
+    document.querySelector('footer').style.display = 'block';
+    document.getElementById('back-button').style.display = 'none';
+  }
+
+  // Show selected section
+  function showSection(id) {
+    resetView();
+    document.getElementById(id).style.display = 'block';
+    document.querySelector('.top-left-logo').style.display = 'none';
+    document.querySelector('.top-right-menu').style.display = 'none';
+    document.querySelector('.side-buttons').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    document.getElementById('back-button').style.display = 'block';
+  }
 </script>
 
 </body>
