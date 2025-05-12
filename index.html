@@ -18,6 +18,62 @@
       height: 100vh;
       overflow-x: hidden;
     }
+    .top-left-logo, .top-right-menu, .side-buttons, footer {
+      transition: opacity 0.3s ease;
+    }
+    .top-left-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-left-logo .title {
+      font-size: 36px;
+      font-weight: bold;
+      color: #66ff66;
+      text-transform: uppercase;
+    }
+    .top-left-logo img {
+      height: 48px;
+    }
+    .top-right-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .top-right-menu a {
+      background-color: #00c853;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .side-buttons {
+      position: absolute;
+      top: 140px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .side-buttons a {
+      background-color: #00c853;
+      padding: 12px 18px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      width: fit-content;
+    }
     .section {
       display: none;
       position: absolute;
@@ -31,99 +87,174 @@
       padding: 40px 20px;
       text-align: center;
     }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    input[type=range] {
+      width: 70%;
+    }
     #stakeAmount {
-      padding: 6px;
-      border-radius: 4px;
-      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      width: 120px;
+      text-align: center;
     }
-    #stakeRange {
-      width: 100%;
+    footer {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #cccccc;
+      padding: 0 20px;
     }
-    #balance-display {
-      font-weight: bold;
-      color: #00e676;
-      margin-bottom: 10px;
+    .social-icons a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-size: 20px;
     }
-  </style>
+    h2 { color: #66ff66; }
+  </style>  <script>
+    let web3;
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          web3 = new Web3(window.ethereum);
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const address = accounts[0];
+          document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+          const bagContract = new web3.eth.Contract([
+            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+          ], '0x3686568eCB6cE7545765b641932044900d11e584');
+
+          const balance = await bagContract.methods.balanceOf(address).call();
+          const formatted = (balance / 1e18).toFixed(2);
+          document.getElementById("bag-balance").innerText = `Your BAG Balance: ${formatted}`;
+          document.getElementById("stakeAmount").max = formatted;
+          document.getElementById("stakeRange").max = formatted;
+        } catch (err) {
+          console.error(err);
+          alert("Wallet connection failed.");
+        }
+      } else {
+        alert("Please install MetaMask.");
+      }
+    }
+
+    function syncSlider(val) {
+      document.getElementById("stakeAmount").value = val;
+    }
+
+    function syncInput(val) {
+      document.getElementById("stakeRange").value = val;
+    }
+
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      document.getElementById('back-button').style.display = 'none';
+    }
+
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('back-button').style.display = 'block';
+    }
+
+    window.onload = resetView;
+  </script>
 </head>
 <body>
-<div id="staking-section" class="section">
-  <h2>Staking</h2>
-  <div id="balance-display">BAG Balance: 0</div>
-  <input type="range" id="stakeRange" min="0" max="100" value="0" oninput="updateStakeAmount(this.value)" />
-  <p id="range-value">Selected: 0%</p>
-  <input type="number" id="stakeAmount" placeholder="Amount to stake" />
-  <br><br>
-  <button onclick="approveTokens()">Approve</button>
-  <button onclick="stakeTokens()">Stake</button>
-  <br><br>
-  <div id="stake-status" style="color: #66ff66;"></div>
-  <br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+
+<button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
+
+<div class="top-left-logo">
+  <div class="title">BONK BAG</div>
+  <img src="logo.png" alt="Logo">
 </div>
-<script>
-  let bagBalance = 0;
 
-  function updateStakeAmount(percent) {
-    document.getElementById('range-value').innerText = "Selected: " + percent + "%";
-    const stakeAmount = ((bagBalance * percent) / 100).toFixed(4);
-    document.getElementById('stakeAmount').value = stakeAmount;
-  }
+<div class="top-right-menu">
+  <a onclick="showSection('about-section')">About</a>
+  <a onclick="showSection('roadmap-section')">Roadmap</a>
+  <a onclick="showSection('contact-section')">Contact</a>
+  <a onclick="showSection('wallet-section')">Connect Wallet</a>
+</div>
 
-  async function loadBagBalance(web3, address) {
-    const contract = new web3.eth.Contract([
-      { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-    ], "0x3686568eCB6cE7545765b641932044900d11e584");
-    const balance = await contract.methods.balanceOf(address).call();
-    bagBalance = balance / (10 ** 18);
-    document.getElementById("balance-display").innerText = "BAG Balance: " + bagBalance.toFixed(4);
-  }
-</script>
+<div class="side-buttons">
+  <a href="https://www.sushi.com/polygon/swap?token1=0x3686568eCB6cE7545765b641932044900d11e584" target="_blank">Buy BAG</a>
+  <a onclick="showSection('airdrop-section')">Airdrop</a>
+  <a onclick="showSection('tokenomics-section')">Tokenomics</a>
+  <a onclick="showSection('staking-section')">Staking</a>
+</div><div id="staking-section" class="section">
+  <h2>Staking</h2>
+  <p id="bag-balance" style="margin-bottom: 15px;"></p>
+
+  <div class="slider-container">
+    <input type="range" id="stakeRange" min="0" step="0.01" oninput="syncSlider(this.value)">
+    <input type="number" id="stakeAmount" min="0" step="0.01" oninput="syncInput(this.value)">
+  </div>
+
+  <p style="margin-top: 20px;">Choose Lock Period:</p>
+  <select id="lockPeriod" style="padding: 10px; border-radius: 6px;">
+    <option value="3">3 months (15%)</option>
+    <option value="6">6 months (30%)</option>
+    <option value="12">12 months (60%)</option>
+  </select>
+
+  <div style="margin-top: 20px;">
+    <button style="padding: 10px 20px; background: #00c853; border: none; border-radius: 6px; color: white; font-weight: bold;">Approve</button>
+    <button style="padding: 10px 20px; background: #00c853; border: none; border-radius: 6px; color: white; font-weight: bold;">Stake</button>
+  </div>
+
+  <button onclick="resetView()" style="margin-top: 30px; background:#00c853; color:white; padding:10px 20px; border:none; border-radius:8px;">Back</button>
+</div>
+
+<div id="about-section" class="section">
+  <h2>About BONK BAG</h2>
+  <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="roadmap-section" class="section">
+  <h2>Roadmap</h2>
+  <p><strong>Q2:</strong> Launch<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Partnerships</p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="contact-section" class="section">
+  <h2>Contact Us</h2>
+  <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
+     Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a></p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<div id="wallet-section" class="section">
+  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
+  <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
+  <button onclick="resetView()" style="margin-top: 20px; background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div>
+
+<footer>
+  <div class="social-icons" style="margin-bottom: 8px;">
+    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram" style="color:#00e5ff;"></i></a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord" style="color:#7289da;"></i></a>
+    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter" style="color:#1da1f2;"></i></a>
+  </div>
+  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
+</footer>
+
 </body>
-</html><script>
-  let web3;
-  let currentAccount;
-  const bagTokenAddress = "0x3686568eCB6cE7545765b641932044900d11e584";
-  const stakingContractAddress = "0x2FD42050700A491321919a4872490DD621Bbb6F5";
-
-  const erc20Abi = [
-    { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" },
-    { constant: false, inputs: [{ name: "spender", type: "address" }, { name: "value", type: "uint256" }], name: "approve", outputs: [{ name: "", type: "bool" }], type: "function" }
-  ];
-  const stakingAbi = [
-    { inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }, { internalType: "uint8", name: "monthsLock", type: "uint8" }], name: "stake", outputs: [], stateMutability: "nonpayable", type: "function" }
-  ];
-
-  async function connectWeb3() {
-    if (typeof window.ethereum !== 'undefined') {
-      web3 = new Web3(window.ethereum);
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      currentAccount = accounts[0];
-      await loadBagBalance(web3, currentAccount);
-    } else {
-      alert("Please install MetaMask.");
-    }
-  }
-
-  async function approveTokens() {
-    const amount = document.getElementById("stakeAmount").value;
-    const contract = new web3.eth.Contract(erc20Abi, bagTokenAddress);
-    const amountInWei = web3.utils.toWei(amount, 'ether');
-    contract.methods.approve(stakingContractAddress, amountInWei).send({ from: currentAccount })
-      .then(() => document.getElementById("stake-status").innerText = "Approved successfully")
-      .catch(err => document.getElementById("stake-status").innerText = "Approval failed: " + err.message);
-  }
-
-  async function stakeTokens() {
-    const amount = document.getElementById("stakeAmount").value;
-    const lockPeriod = 3; // можна зробити динамічно
-    const contract = new web3.eth.Contract(stakingAbi, stakingContractAddress);
-    const amountInWei = web3.utils.toWei(amount, 'ether');
-    contract.methods.stake(amountInWei, lockPeriod).send({ from: currentAccount })
-      .then(() => document.getElementById("stake-status").innerText = "Staked successfully")
-      .catch(err => document.getElementById("stake-status").innerText = "Staking failed: " + err.message);
-  }
-
-  window.addEventListener("load", async () => {
-    await connectWeb3();
-  });
-</script>
+</html>
