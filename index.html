@@ -125,6 +125,20 @@
       width: 100%;
       margin: 10px 0;
     }
+
+    .staking-start-info {
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .staking-start-info h3 {
+      font-size: 24px;
+      color: #66ff66;
+    }
   </style>
 </head>
 
@@ -153,7 +167,13 @@
     <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
   </div>
 
-  <!-- Airdrop Section -->
+  <!-- Стейкінг розпочнеться на початку Q3 -->
+  <div id="staking-start-info" class="section staking-start-info">
+    <h3>Staking starts at the beginning of Q3</h3>
+    <p>The staking program will begin in Q3. Stay tuned for more updates!</p>
+    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+  </div>
+
   <div id="airdrop-section" class="section">
     <h2>Airdrop</h2>
     <p id="countdown" style="font-size: 18px; color: #66ff66; font-weight: bold; margin-bottom: 20px;"></p>
@@ -164,24 +184,26 @@
     <br><br><button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
   </div>
 
-  <!-- Tokenomics Section -->
   <div id="tokenomics-section" class="section">
     <h2>BONK BAG Tokenomics</h2>
     <img src="tokenomics_chart.png" alt="Tokenomics" style="max-width:100%;margin:20px 0;">
     <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
   </div>
 
-  <!-- Staking Section -->
   <div id="staking-section" class="section">
     <h2>Staking</h2>
     <p>Stake your BAG tokens and earn rewards!</p>
+    
+    <!-- Buttons to select staking duration -->
     <button id="3-months" onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
     <button id="6-months" onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
     <button id="12-months" onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
 
+    <!-- Display selected staking details -->
     <div id="staking-details" style="display:none;">
       <p id="selected-duration"></p>
       <p>Your balance: <span id="balance-bag">0</span> BAG</p>
+      
       <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
       <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
       <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
@@ -191,40 +213,7 @@
     </div>
   </div>
 
-  <!-- About Section -->
-  <div id="about-section" class="section">
-    <h2>About BONK BAG</h2>
-    <p>BONK BAG is a community-driven memecoin created for fun and culture. No financial advice — just BONK energy.</p>
-    <p>The core team behind BONK BAG consists of experienced Web3 enthusiasts, designers, and developers. We are committed to transparency, creativity, and meme-powered innovation.</p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Roadmap Section -->
-  <div id="roadmap-section" class="section">
-    <h2>Roadmap</h2>
-    <p><strong>Q2:</strong> Launch, Website, DEX Listing<br><strong>Q3:</strong> Staking, Contests<br><strong>Q4:</strong> Merch, Partnerships</p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Contact Section -->
-  <div id="contact-section" class="section">
-    <h2>Contact Us</h2>
-    <p>Telegram: <a href="https://t.me/BONKBAG" style="color:#00e676;">@BONKBAG</a><br>
-    Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
-    Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-  </div>
-
-  <!-- Wallet Section -->
-  <div id="wallet-section" class="section">
-    <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Connect Wallet</button>
-    <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
-    <p id="matic-balance"></p>
-    <p id="bag-balance"></p>
-    <p id="usdc-balance"></p>
-    <p id="usdt-balance"></p>
-    <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
-  </div>
+  <!-- Інші секції тут... -->
 
   <footer>
     <div class="social-icons" style="margin-bottom: 8px;">
@@ -234,171 +223,161 @@
     </div>
     <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
   </footer>
-  
-<script>
-    let web3;
-    let stakingContract;
-    let userAddress;
-    
-    const stakingTokenAddress = '0x3686568eCB6cE7545765b641932044900d11e584'; // Адреса вашого контракту токену BAG
-    const stakingContractAddress = 'YOUR_STAKING_CONTRACT_ADDRESS'; // Адреса вашого контракту стейкінгу
 
-    // Підключення до MetaMask
+  <script>
+    let stakingDuration = 0; // 3, 6, or 12 months
+    let balanceBag = 10000; // Example balance, you can dynamically fetch this from wallet
+
+    // Show staking section when a duration is selected
+    function selectStaking(months) {
+      stakingDuration = months;
+      document.getElementById("selected-duration").innerText = `${months} Months Selected`;
+      document.getElementById("staking-details").style.display = 'block';
+      document.getElementById("balance-bag").innerText = balanceBag;
+
+      // Hide the other buttons
+      document.getElementById("3-months").style.display = 'none';
+      document.getElementById("6-months").style.display = 'none';
+      document.getElementById("12-months").style.display = 'none';
+
+      calculateReward();
+    }
+
+    // Update staking amount based on slider
+    function updateStakingAmount() {
+      let sliderValue = document.getElementById("amount-range").value;
+      let amountToStake = (balanceBag * sliderValue) / 100;
+      document.getElementById("amount-to-stake").innerText = amountToStake.toFixed(2);
+      calculateReward();
+    }
+
+    // Calculate estimated reward based on selected amount and duration
+    function calculateReward() {
+      let amountToStake = parseFloat(document.getElementById("amount-to-stake").innerText);
+      let rewardPercentage = 0;
+
+      if (stakingDuration === 3) {
+        rewardPercentage = 0.15; // 15% for 3 months
+      } else if (stakingDuration === 6) {
+        rewardPercentage = 0.30; // 30% for 6 months
+      } else if (stakingDuration === 12) {
+        rewardPercentage = 0.60; // 60% for 12 months
+      }
+
+      let estimatedReward = (amountToStake * rewardPercentage).toFixed(2);
+      document.getElementById("estimated-reward").innerText = estimatedReward;
+    }
+
+    // Simulate staking process
+    function submitStaking() {
+      alert(`You have staked ${document.getElementById("amount-to-stake").innerText} BAG tokens. Your reward will be ${document.getElementById("estimated-reward").innerText} BAG.`);
+      resetStaking(); // Reset staking section after submitting
+    }
+
+    // Reset staking section
+    function resetStaking() {
+      document.getElementById("staking-details").style.display = 'none';
+      // Show the staking duration buttons again
+      document.getElementById("3-months").style.display = 'block';
+      document.getElementById("6-months").style.display = 'block';
+      document.getElementById("12-months").style.display = 'block';
+    }
+
+    // Connect wallet using MetaMask
     async function connectWallet() {
       if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum);
         try {
-          // Підключення гаманця
+          const web3 = new Web3(window.ethereum);
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          userAddress = accounts[0];
-          document.getElementById('wallet-address').innerText = `Connected: ${userAddress}`;
-          loadBAGBalance();
+          const address = accounts[0];
+          document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+          const maticBalance = await web3.eth.getBalance(address);
+          document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+          const tokenList = [
+            { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+            { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+            { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+          ];
+
+          for (const token of tokenList) {
+            const contract = new web3.eth.Contract([
+              { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+            ], token.address);
+            const balance = await contract.methods.balanceOf(address).call();
+            const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+            document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+          }
         } catch (error) {
-          console.error('User rejected the request or an error occurred', error);
+          console.error(error);
+          alert("Connection failed or rejected.");
         }
       } else {
-        alert('Please install MetaMask');
+        alert("MetaMask not detected. Please install MetaMask.");
       }
     }
 
-    // Завантажуємо баланс BAG
-    async function loadBAGBalance() {
-      const contractABI = [
-        // balanceOf method ABI для токену BAG
-        {
-          "constant": true,
-          "inputs": [{ "name": "_owner", "type": "address" }],
-          "name": "balanceOf",
-          "outputs": [{ "name": "balance", "type": "uint256" }],
-          "payable": false,
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ];
-
-      const contract = new web3.eth.Contract(contractABI, stakingTokenAddress);
-
-      // Отримуємо баланс токенів BAG для користувача
-      const balance = await contract.methods.balanceOf(userAddress).call();
-      const formattedBalance = web3.utils.fromWei(balance, 'ether'); // Форматуємо баланс для відображення
-      document.getElementById('bag-balance').innerText = `Your BAG Balance: ${formattedBalance}`;
+    // Reset view (hide all sections)
+    function resetView() {
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none      
+      document.querySelector('.top-left-logo').style.display = 'flex';
+      document.querySelector('.top-right-menu').style.display = 'flex';
+      document.querySelector('.side-buttons').style.display = 'flex';
+      document.querySelector('footer').style.display = 'block';
+      document.getElementById('back-button').style.display = 'none';
     }
-</script>
 
-<script>
-  // Функція для підключення гаманця через MetaMask
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web3 = new Web3(window.ethereum);
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
+    // Show selected section
+    function showSection(id) {
+      resetView();
+      document.getElementById(id).style.display = 'block';
+      document.querySelector('.top-left-logo').style.display = 'none';
+      document.querySelector('.top-right-menu').style.display = 'none';
+      document.querySelector('.side-buttons').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('back-button').style.display = 'block';
+    }
 
-        const maticBalance = await web3.eth.getBalance(address);
-        document.getElementById("matic-balance").innerText = "MATIC: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+    // Countdown for airdrop
+    function updateCountdown() {
+      const deadline = new Date("2025-07-01T00:00:00Z").getTime();
+      const now = new Date().getTime();
+      const diff = deadline - now;
 
-        // Отримання балансу BAG, USDC, USDT
-        const tokenList = [
-          { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-          { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-          { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-        ];
-
-        for (const token of tokenList) {
-          const contract = new web3.eth.Contract([
-            { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-          ], token.address);
-          const balance = await contract.methods.balanceOf(address).call();
-          const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-          document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Connection failed or rejected.");
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Airdrop has ended.";
+        return;
       }
-    } else {
-      alert("MetaMask not detected. Please install MetaMask.");
-    }
-  }
 
-  // Функція для переходу між секціями
-  function resetView() {
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.querySelector('.top-left-logo').style.display = 'flex';
-    document.querySelector('.top-right-menu').style.display = 'flex';
-    document.querySelector('.side-buttons').style.display = 'flex';
-    document.querySelector('footer').style.display = 'block';
-    document.getElementById('back-button').style.display = 'none';
-  }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-  // Функція для показу вибраної секції
-  function showSection(id) {
-    resetView();
-    document.getElementById(id).style.display = 'block';
-    document.querySelector('.top-left-logo').style.display = 'none';
-    document.querySelector('.top-right-menu').style.display = 'none';
-    document.querySelector('.side-buttons').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
-    document.getElementById('back-button').style.display = 'block';
-  }
-
-  // Вибір терміну стейкінгу (3, 6, або 12 місяців)
-  let stakingDuration = 0; // 3, 6, or 12 months
-  let balanceBag = 0; // Сюди буде завантажено ваш баланс BAG
-
-  function selectStaking(months) {
-    stakingDuration = months;
-    document.getElementById("selected-duration").innerText = `${months} Months Selected`;
-    document.getElementById("staking-details").style.display = 'block';
-    calculateReward();
-
-    // Приховуємо інші кнопки стейкінгу після вибору
-    document.getElementById("3-months").style.display = 'none';
-    document.getElementById("6-months").style.display = 'none';
-    document.getElementById("12-months").style.display = 'none';
-  }
-
-  // Оновлення суми стейкінгу на основі повзунка
-  function updateStakingAmount() {
-    let sliderValue = document.getElementById("amount-range").value;
-    let amountToStake = (balanceBag * sliderValue) / 100;
-    document.getElementById("amount-to-stake").innerText = amountToStake.toFixed(2);
-    calculateReward();
-  }
-
-  // Розрахунок потенційної винагороди в залежності від терміну
-  function calculateReward() {
-    let amountToStake = parseFloat(document.getElementById("amount-to-stake").innerText);
-    let rewardPercentage = 0;
-
-    if (stakingDuration === 3) {
-      rewardPercentage = 0.15; // 15% for 3 months
-    } else if (stakingDuration === 6) {
-      rewardPercentage = 0.30; // 30% for 6 months
-    } else if (stakingDuration === 12) {
-      rewardPercentage = 0.60; // 60% for 12 months
+      document.getElementById("countdown").innerText =
+        `Airdrop ends in: ${days} days ${hours} hours ${minutes} minutes`;
     }
 
-    let estimatedReward = (amountToStake * rewardPercentage).toFixed(2);
-    document.getElementById("estimated-reward").innerText = estimatedReward;
-  }
+    window.onload = function () {
+      resetView();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // Функція для підтвердження стейкінгу
-  function submitStaking() {
-    alert(`You have staked ${document.getElementById("amount-to-stake").innerText} BAG tokens. Your reward will be ${document.getElementById("estimated-reward").innerText} BAG.`);
-    resetStaking(); // Reset staking section after submitting
-  }
-
-  // Функція для скидання стейкінгу
-  function resetStaking() {
-    document.getElementById("staking-details").style.display = 'none';
-    // Показуємо кнопки для вибору терміну стейкінгу
-    document.getElementById("3-months").style.display = 'block';
-    document.getElementById("6-months").style.display = 'block';
-    document.getElementById("12-months").style.display = 'block';
-  }
-</script>
-
+      const savedAddress = localStorage.getItem("walletAddress");
+      if (savedAddress) {
+        connected = true;
+        document.getElementById("wallet-address").innerText = "Connected: " + savedAddress;
+        document.querySelector("#wallet-section button").innerText = "Disconnect Wallet";
+        document.getElementById("matic-balance").innerText = "MATIC: " + localStorage.getItem("matic");
+        ["bag", "usdc", "usdt"].forEach(token => {
+          const value = localStorage.getItem(token);
+          if (value) {
+            document.getElementById(token + "-balance").innerText = token.toUpperCase() + ": " + value;
+          }
+        });
+      }
+    };
+  </script>
 </body>
 </html>
