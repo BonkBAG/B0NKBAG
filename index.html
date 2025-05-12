@@ -104,21 +104,39 @@
       font-size: 20px;
     }
     h2 { color: #66ff66; }
-
-    button {
+    button { cursor: pointer; }
+    .staking-button {
+      background-color: #00c853;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .staking-button:hover {
+      background-color: #00b344;
+    }
+    input[type="range"] {
+      width: 100%;
+      margin: 10px 0;
     }
   </style>
 </head>
-<body>  <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
+<body>
 
-  <!-- Логотип сайту -->
+  <!-- BACK BUTTON -->
+  <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
+
+  <!-- LOGO -->
   <div class="top-left-logo">
     <div class="title">BONK BAG</div>
     <img src="logo.png" alt="Logo">
   </div>
 
-  <!-- Верхнє меню -->
+  <!-- MENU -->
   <div class="top-right-menu">
     <a onclick="showSection('about-section')">About</a>
     <a onclick="showSection('roadmap-section')">Roadmap</a>
@@ -126,7 +144,7 @@
     <a onclick="showSection('wallet-section')">Connect Wallet</a>
   </div>
 
-  <!-- Бокові кнопки -->
+  <!-- SIDE BUTTONS -->
   <div class="side-buttons">
     <a onclick="showSection('airdrop-section')">Airdrop</a>
     <a onclick="showSection('staking-section')">Staking</a>
@@ -191,6 +209,16 @@
     <p id="usdt-balance"></p>
 
     <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
+  </div>
+
+  <!-- WalletConnect QR Modal -->
+  <div id="walletconnect-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:12px; text-align:center; max-width:300px;">
+      <p style="color:black;">Scan with Trust Wallet:</p>
+      <div id="walletconnect-qr"></div>
+      <br>
+      <button onclick="closeWalletConnectModal()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Close</button>
+    </div>
   </div>  <!-- Staking Section -->
   <div id="staking-section" class="section">
     <h2>Staking</h2>
@@ -211,7 +239,10 @@
       <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
       <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
     </div>
-  </div><script>
+  </div><script src="https://unpkg.com/@walletconnect/client@1.6.6/dist/umd/index.min.js"></script>
+<script src="https://unpkg.com/qrcode@1.5.0/build/qrcode.min.js"></script>
+
+<script>
   let selectedMonths = 0;
   let bagBalance = 0;
   const rewardPool = 500000000;
@@ -223,7 +254,6 @@
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
         document.getElementById("wallet-address").innerText = "Connected: " + address;
-
         await fetchBalances(web3, address);
       } catch (error) {
         console.error(error);
@@ -235,17 +265,46 @@
   }
 
   async function connectTrustWallet() {
-    const provider = new WalletConnectProvider({
-      infuraId: "fc66622795a34e40a71d5c8b8048077e"
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+    const connector = new WalletConnect.default({
+      bridge: "https://bridge.walletconnect.org",
+      qrcode: false,
     });
 
-    await provider.enable();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    const address = accounts[0];
-    document.getElementById("wallet-address").innerText = "Connected: " + address;
+    if (!connector.connected) {
+      await connector.createSession();
+    }
 
-    await fetchBalances(web3, address);
+    const uri = connector.uri;
+
+    if (isMobile) {
+      window.location.href = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
+    } else {
+      showWalletConnectModal(uri);
+    }
+
+    connector.on("connect", async (error, payload) => {
+      if (error) return console.error(error);
+      const { accounts } = payload.params[0];
+      const address = accounts[0];
+      document.getElementById("wallet-address").innerText = "Connected: " + address;
+      const web3 = new Web3(connector);
+      await fetchBalances(web3, address);
+      closeWalletConnectModal();
+    });
+  }
+
+  function showWalletConnectModal(uri) {
+    document.getElementById('walletconnect-modal').style.display = 'flex';
+    const qrContainer = document.getElementById('walletconnect-qr');
+    qrContainer.innerHTML = '';
+    QRCode.toCanvas(uri, { width: 256 }, function (err, canvas) {
+      if (!err) qrContainer.appendChild(canvas);
+    });
+  }
+
+  function closeWalletConnectModal() {
+    document.getElementById('walletconnect-modal').style.display = 'none';
   }
 
   async function fetchBalances(web3, address) {
@@ -324,7 +383,8 @@
     document.querySelector('footer').style.display = 'none';
     document.getElementById('back-button').style.display = 'block';
   }
-</script>  <footer>
+</script>  <!-- Footer -->
+  <footer>
     <div class="social-icons" style="margin-bottom: 8px;">
       <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
       <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
