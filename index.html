@@ -408,19 +408,17 @@
 </script><script>
   async function connectTrustWallet() {
     const provider = await EthereumProvider.init({
-      projectId: "f7fdd45554886cf3cf66c3dc4d343646", // публічний projectId від WalletConnect
+      projectId: "f7fdd45554886cf3cf66c3dc4d343646", // публічний WalletConnect projectId
       chains: [137],
       showQrModal: true,
       rpcMap: {
         137: "https://polygon-rpc.com"
       },
-      methods: ["eth_sendTransaction", "personal_sign", "eth_sign", "eth_signTypedData"],
-      optionalChains: [137],
       metadata: {
         name: "BONK BAG",
         description: "Connect to BONK BAG",
-        url: "https://bonkbag.github.io/B0NKBAG",
-        icons: ["https://bonkbag.github.io/B0NKBAG/logo.png"]
+        url: "https://bonkbag.github.io",
+        icons: ["https://bonkbag.github.io/logo.png"]
       }
     });
 
