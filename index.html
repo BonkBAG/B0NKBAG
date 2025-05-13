@@ -58,7 +58,10 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
-    }    .nav-menu {
+      cursor: pointer;
+    }
+
+    .nav-menu {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -74,6 +77,7 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
+      cursor: pointer;
     }
 
     .side-buttons {
@@ -94,6 +98,7 @@
       font-weight: bold;
       font-size: 16px;
       width: fit-content;
+      cursor: pointer;
     }
 
     .section {
@@ -142,7 +147,9 @@
       font-weight: bold;
       margin: 8px;
       cursor: pointer;
-    }    @media (min-width: 769px) {
+    }
+
+    @media (min-width: 769px) {
       .top-left-logo .title {
         font-size: 48px;
       }
@@ -201,8 +208,7 @@
     }
   </style>
 </head>
-<body>
-<!-- BACK BUTTON -->
+<body><!-- BACK BUTTON -->
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
 <!-- TOP BAR -->
@@ -221,7 +227,9 @@
   <a onclick="showSection('about-section')">About</a>
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
-</div><!-- SIDE BUTTONS -->
+</div>
+
+<!-- SIDE BUTTONS -->
 <div class="side-buttons">
   <a onclick="showSection('airdrop-section')">Airdrop</a>
   <a onclick="showSection('staking-section')">Staking</a>
@@ -259,7 +267,9 @@
   <p>Exclusive BONK BAG NFT collection coming soon!</p>
   <p>Show off your BONK power with rare, meme-powered digital collectibles.</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div><!-- About Section -->
+</div>
+
+<!-- About Section -->
 <div id="about-section" class="section">
   <h2>About BONK BAG</h2>
   <p>BONK BAG is a memecoin made for fun, culture, and community.</p>
@@ -283,9 +293,7 @@
      Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<!-- Продовжити з Staking Section? --><!-- Staking Section -->
+</div><!-- Staking Section -->
 <div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
@@ -305,13 +313,15 @@
     <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
     <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
   </div>
-</div><!-- Wallet Section -->
+</div>
+
+<!-- Wallet Section -->
 <div id="wallet-section" class="section">
   <h2>Connect Wallet</h2>
   <button onclick="connectWallet()" style="background:#f6851b;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">MetaMask</button>
   <button onclick="connectTrustWallet()" style="background:#3b99fc;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">Trust Wallet</button>
   <button onclick="disconnectWallet()" style="background:#9e9e9e;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">Disconnect</button>
-  
+
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
   <p id="bag-balance"></p>
@@ -319,7 +329,9 @@
   <p id="usdt-balance"></p>
 
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
-</div><!-- WalletConnect QR Modal -->
+</div>
+
+<!-- WalletConnect QR Modal -->
 <div id="walletconnect-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
   <div style="background:#fff; padding:20px; border-radius:12px; text-align:center; max-width:300px;">
     <p style="color:black;">Scan with Trust Wallet:</p>
@@ -341,7 +353,6 @@
   let selectedMonths = 0;
   let bagBalance = 0;
   const rewardPool = 500000000;
-  let provider;
 
   function resetView() {
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
@@ -399,7 +410,29 @@
     document.getElementById('walletconnect-modal').style.display = 'none';
   }
 
+  function showWalletConnectModal(uri) {
+    document.getElementById('walletconnect-modal').style.display = 'flex';
+    const qrContainer = document.getElementById('walletconnect-qr');
+    qrContainer.innerHTML = '';
+    QRCode.toDataURL(uri).then(url => {
+      const img = new Image();
+      img.src = url;
+      img.style.maxWidth = '100%';
+      img.style.borderRadius = '8px';
+      qrContainer.appendChild(img);
+    }).catch(err => {
+      console.error("QR error:", err);
+      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
+    });
+  }
+</script><script>
+  let provider;
+  let isConnecting = false;
+
   async function connectWallet() {
+    if (isConnecting) return;
+    isConnecting = true;
+
     if (typeof window.ethereum !== 'undefined') {
       const web3 = new Web3(window.ethereum);
       try {
@@ -416,12 +449,18 @@
     } else {
       alert("No wallet found. Please open this site in MetaMask or Trust Wallet browser.");
     }
+
+    isConnecting = false;
   }
 
   async function connectTrustWallet() {
+    if (isConnecting) return;
+    isConnecting = true;
+
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
     if (typeof window.ethereum !== 'undefined') {
+      isConnecting = false;
       return connectWallet();
     }
 
@@ -459,6 +498,8 @@
     } catch (err) {
       alert("Trust Wallet connection failed: " + err.message);
     }
+
+    isConnecting = false;
   }
 
   async function fetchTokenBalances(web3, address) {
@@ -492,20 +533,6 @@
       provider.disconnect();
     }
   }
-
-  function showWalletConnectModal(uri) {
-    document.getElementById('walletconnect-modal').style.display = 'flex';
-    const qrContainer = document.getElementById('walletconnect-qr');
-    qrContainer.innerHTML = '';
-    QRCode.toDataURL(uri).then(url => {
-      const img = new Image();
-      img.src = url;
-      img.style.maxWidth = '100%';
-      img.style.borderRadius = '8px';
-      qrContainer.appendChild(img);
-    }).catch(err => {
-      console.error("QR error:", err);
-      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
-    });
-  }
 </script>
+</body>
+</html>
