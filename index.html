@@ -404,11 +404,12 @@
   function closeWalletConnectModal() {
     document.getElementById('walletconnect-modal').style.display = 'none';
   }
-</script><script>
+</script>
+<script>
   let provider;
 
   async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
+    if (typeof window.ethereum !== 'undefined') {
       const web3 = new Web3(window.ethereum);
       try {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -419,20 +420,25 @@
         document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(balance, 'ether')).slice(0, 6);
         await fetchTokenBalances(web3, address);
       } catch (err) {
-        alert("MetaMask connection failed: " + err.message);
+        alert("Connection failed: " + err.message);
       }
     } else {
-      alert("MetaMask is not installed.");
+      alert("No wallet found. Please open this site in MetaMask or Trust Wallet browser.");
     }
   }
 
   async function connectTrustWallet() {
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
+    if (typeof window.ethereum !== 'undefined') {
+      // Якщо Trust Wallet відкрив через вбудований браузер
+      return connectWallet();
+    }
+
     provider = await EthereumProvider.init({
       projectId: "f7fdd45554886cf3cf66c3dc4d343646",
       chains: [137],
-      showQrModal: !isMobile,
+      showQrModal: false,
       rpcMap: { 137: "https://polygon-rpc.com" },
       metadata: {
         name: "BONK BAG",
@@ -441,6 +447,15 @@
         icons: ["https://bonkbag.github.io/logo.png"]
       }
     });
+
+    const uri = provider.connector?.uri || provider.session?.uri;
+
+    if (isMobile && uri) {
+      const deepLink = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
+      window.location.href = deepLink;
+    } else if (uri) {
+      showWalletConnectModal(uri);
+    }
 
     try {
       await provider.enable();
@@ -464,19 +479,15 @@
     ];
 
     for (const token of tokenList) {
-      try {
-        const contract = new web3.eth.Contract([
-          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-        ], token.address);
-        const balance = await contract.methods.balanceOf(address).call();
-        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        if (token.name === 'BAG') {
-          bagBalance = parseFloat(formatted);
-          document.getElementById('balance-bag').innerText = bagBalance;
-        }
-      } catch (e) {
-        console.warn(`Unable to fetch ${token.name} balance`, e);
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      if (token.name === 'BAG') {
+        bagBalance = parseFloat(formatted);
+        document.getElementById('balance-bag').innerText = bagBalance;
       }
     }
   }
@@ -490,6 +501,22 @@
     if (provider && provider.disconnect) {
       provider.disconnect();
     }
+  }
+
+  function showWalletConnectModal(uri) {
+    document.getElementById('walletconnect-modal').style.display = 'flex';
+    const qrContainer = document.getElementById('walletconnect-qr');
+    qrContainer.innerHTML = '';
+    QRCode.toDataURL(uri).then(url => {
+      const img = new Image();
+      img.src = url;
+      img.style.maxWidth = '100%';
+      img.style.borderRadius = '8px';
+      qrContainer.appendChild(img);
+    }).catch(err => {
+      console.error("QR error:", err);
+      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
+    });
   }
 </script>
 </body>
