@@ -58,9 +58,7 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
-    }
-
-    .nav-menu {
+    }    .nav-menu {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -110,7 +108,9 @@
       border-radius: 12px;
       padding: 40px 20px;
       text-align: center;
-    }    footer {
+    }
+
+    footer {
       position: absolute;
       bottom: 20px;
       left: 0;
@@ -407,10 +407,12 @@
   }
 </script><script>
   async function connectTrustWallet() {
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
     const provider = await EthereumProvider.init({
-      projectId: "f7fdd45554886cf3cf66c3dc4d343646", // публічний WalletConnect projectId
+      projectId: "f7fdd45554886cf3cf66c3dc4d343646",
       chains: [137],
-      showQrModal: true,
+      showQrModal: !isMobile,
       rpcMap: {
         137: "https://polygon-rpc.com"
       },
@@ -422,6 +424,16 @@
       }
     });
 
+    if (isMobile) {
+      await provider.connect();
+      const uri = provider.session?.uri || provider.connector?.uri;
+      if (uri) {
+        const deepLink = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
+        window.location.href = deepLink;
+        return;
+      }
+    }
+
     try {
       await provider.enable();
       const web3 = new Web3(provider);
@@ -432,43 +444,48 @@
       const maticBalance = await web3.eth.getBalance(address);
       document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
 
-      const tokenList = [
-        { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-        { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-        { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-      ];
-
-      for (const token of tokenList) {
-        const contract = new web3.eth.Contract([
-          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
-        ], token.address);
-        const balance = await contract.methods.balanceOf(address).call();
-        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
-        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-        if (token.name === 'BAG') {
-          bagBalance = parseFloat(formatted);
-          document.getElementById('balance-bag').innerText = bagBalance;
-        }
-      }
-    } catch (error) {
-      alert("Connection failed: " + error.message);
+      await fetchTokenBalances(web3, address);
+    } catch (err) {
+      alert("Connection failed: " + err.message);
     }
   }
 
   function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+      window.ethereum.request({ method: 'eth_requestAccounts' }).then(async accounts => {
         const address = accounts[0];
         document.getElementById("wallet-address").innerText = "Connected: " + address;
         const web3 = new Web3(window.ethereum);
-        web3.eth.getBalance(address).then(balance => {
-          document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(balance, 'ether')).slice(0, 6);
-        });
+        const balance = await web3.eth.getBalance(address);
+        document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(balance, 'ether')).slice(0, 6);
+
+        await fetchTokenBalances(web3, address);
       }).catch(err => {
         alert("MetaMask connection failed: " + err.message);
       });
     } else {
       alert("MetaMask is not installed.");
+    }
+  }
+
+  async function fetchTokenBalances(web3, address) {
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      if (token.name === 'BAG') {
+        bagBalance = parseFloat(formatted);
+        document.getElementById('balance-bag').innerText = bagBalance;
+      }
     }
   }
 </script>
