@@ -6,7 +6,7 @@
   <title>BONK BAG</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.9.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
@@ -110,9 +110,7 @@
       border-radius: 12px;
       padding: 40px 20px;
       text-align: center;
-    }
-
-    footer {
+    }    footer {
       position: absolute;
       bottom: 20px;
       left: 0;
@@ -132,7 +130,9 @@
     h2 {
       color: #66ff66;
       font-size: 28px;
-    }    @media (min-width: 769px) {
+    }
+
+    @media (min-width: 769px) {
       .top-left-logo .title {
         font-size: 48px;
       }
@@ -366,9 +366,7 @@
   function submitStaking() {
     alert("Staking functionality coming soon!");
   }
-</script>
 
-<script>
   function resetView() {
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
     document.querySelector('.top-bar').style.display = 'flex';
@@ -409,13 +407,21 @@
   }
 </script><script>
   async function connectTrustWallet() {
-    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-
-    const provider = new WalletConnectProvider.default({
-      rpc: {
+    const provider = await EthereumProvider.init({
+      projectId: "f7fdd45554886cf3cf66c3dc4d343646", // публічний projectId від WalletConnect
+      chains: [137],
+      showQrModal: true,
+      rpcMap: {
         137: "https://polygon-rpc.com"
       },
-      chainId: 137
+      methods: ["eth_sendTransaction", "personal_sign", "eth_sign", "eth_signTypedData"],
+      optionalChains: [137],
+      metadata: {
+        name: "BONK BAG",
+        description: "Connect to BONK BAG",
+        url: "https://bonkbag.github.io/B0NKBAG",
+        icons: ["https://bonkbag.github.io/B0NKBAG/logo.png"]
+      }
     });
 
     try {
@@ -427,10 +433,6 @@
 
       const maticBalance = await web3.eth.getBalance(address);
       document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
-
-      if (!isMobile) {
-        showWalletConnectModal(provider.connector.uri);
-      }
 
       const tokenList = [
         { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
