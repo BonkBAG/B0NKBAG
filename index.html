@@ -58,9 +58,7 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
-    }
-
-    .nav-menu {
+    }    .nav-menu {
       display: flex;
       justify-content: center;
       gap: 10px;
@@ -144,9 +142,7 @@
       font-weight: bold;
       margin: 8px;
       cursor: pointer;
-    }
-
-    @media (min-width: 769px) {
+    }    @media (min-width: 769px) {
       .top-left-logo .title {
         font-size: 48px;
       }
@@ -205,7 +201,8 @@
     }
   </style>
 </head>
-<body><!-- BACK BUTTON -->
+<body>
+<!-- BACK BUTTON -->
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
 <!-- TOP BAR -->
@@ -224,9 +221,7 @@
   <a onclick="showSection('about-section')">About</a>
   <a onclick="showSection('roadmap-section')">Roadmap</a>
   <a onclick="showSection('contact-section')">Contact</a>
-</div>
-
-<!-- SIDE BUTTONS -->
+</div><!-- SIDE BUTTONS -->
 <div class="side-buttons">
   <a onclick="showSection('airdrop-section')">Airdrop</a>
   <a onclick="showSection('staking-section')">Staking</a>
@@ -264,9 +259,7 @@
   <p>Exclusive BONK BAG NFT collection coming soon!</p>
   <p>Show off your BONK power with rare, meme-powered digital collectibles.</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
-
-<!-- About Section -->
+</div><!-- About Section -->
 <div id="about-section" class="section">
   <h2>About BONK BAG</h2>
   <p>BONK BAG is a memecoin made for fun, culture, and community.</p>
@@ -290,7 +283,9 @@
      Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div><!-- Staking Section -->
+</div>
+
+<!-- Продовжити з Staking Section? --><!-- Staking Section -->
 <div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
@@ -324,9 +319,7 @@
   <p id="usdt-balance"></p>
 
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
-</div>
-
-<!-- WalletConnect QR Modal -->
+</div><!-- WalletConnect QR Modal -->
 <div id="walletconnect-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
   <div style="background:#fff; padding:20px; border-radius:12px; text-align:center; max-width:300px;">
     <p style="color:black;">Scan with Trust Wallet:</p>
@@ -348,6 +341,7 @@
   let selectedMonths = 0;
   let bagBalance = 0;
   const rewardPool = 500000000;
+  let provider;
 
   function resetView() {
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
@@ -404,9 +398,6 @@
   function closeWalletConnectModal() {
     document.getElementById('walletconnect-modal').style.display = 'none';
   }
-</script>
-<script>
-  let provider;
 
   async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
@@ -431,7 +422,6 @@
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
     if (typeof window.ethereum !== 'undefined') {
-      // Якщо Trust Wallet відкрив через вбудований браузер
       return connectWallet();
     }
 
@@ -519,5 +509,3 @@
     });
   }
 </script>
-</body>
-</html>
