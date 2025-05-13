@@ -319,7 +319,17 @@
     <br>
     <button onclick="closeWalletConnectModal()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Close</button>
   </div>
-</div><script>
+</div><!-- Footer -->
+<footer>
+  <div class="social-icons" style="margin-bottom: 8px;">
+    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
+    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
+  </div>
+  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
+</footer>
+
+<script>
   let selectedMonths = 0;
   let bagBalance = 0;
   const rewardPool = 500000000;
@@ -356,7 +366,9 @@
   function submitStaking() {
     alert("Staking functionality coming soon!");
   }
+</script>
 
+<script>
   function resetView() {
     document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
     document.querySelector('.top-bar').style.display = 'flex';
@@ -364,7 +376,6 @@
     document.querySelector('.side-buttons').style.display = 'flex';
     document.querySelector('footer').style.display = 'block';
     document.getElementById('back-button').style.display = 'none';
-    resetStaking();
   }
 
   function showSection(id) {
@@ -388,6 +399,7 @@
       img.style.borderRadius = '8px';
       qrContainer.appendChild(img);
     }).catch(err => {
+      console.error("QR error:", err);
       qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
     });
   }
@@ -395,69 +407,68 @@
   function closeWalletConnectModal() {
     document.getElementById('walletconnect-modal').style.display = 'none';
   }
-
-  async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web3 = new Web3(window.ethereum);
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const address = accounts[0];
-        document.getElementById("wallet-address").innerText = "Connected: " + address;
-        await fetchBalances(web3, address);
-      } catch (error) {
-        alert("Connection failed or rejected.");
-      }
-    } else {
-      alert("MetaMask not detected. Please install MetaMask.");
-    }
-  }
-
+</script><script>
   async function connectTrustWallet() {
     const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
     const provider = new WalletConnectProvider.default({
-      rpc: { 137: "https://polygon-rpc.com" },
+      rpc: {
+        137: "https://polygon-rpc.com"
+      },
       chainId: 137
     });
 
-    await provider.enable();
-    const web3 = new Web3(provider);
-    const address = (await web3.eth.getAccounts())[0];
-    document.getElementById("wallet-address").innerText = "Connected: " + address;
-    document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(await web3.eth.getBalance(address), 'ether')).slice(0, 6);
+    try {
+      await provider.enable();
+      const web3 = new Web3(provider);
+      const accounts = await web3.eth.getAccounts();
+      const address = accounts[0];
+      document.getElementById("wallet-address").innerText = "Connected: " + address;
 
-    if (!isMobile) {
-      showWalletConnectModal(provider.connector.uri);
+      const maticBalance = await web3.eth.getBalance(address);
+      document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+      if (!isMobile) {
+        showWalletConnectModal(provider.connector.uri);
+      }
+
+      const tokenList = [
+        { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+        { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+        { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+      ];
+
+      for (const token of tokenList) {
+        const contract = new web3.eth.Contract([
+          { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+        ], token.address);
+        const balance = await contract.methods.balanceOf(address).call();
+        const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+        document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+        if (token.name === 'BAG') {
+          bagBalance = parseFloat(formatted);
+          document.getElementById('balance-bag').innerText = bagBalance;
+        }
+      }
+    } catch (error) {
+      alert("Connection failed: " + error.message);
     }
-
-    await fetchBalances(web3, address);
   }
 
-  async function fetchBalances(web3, address) {
-    const tokens = [
-      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
-      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
-      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
-    ];
-
-    for (let token of tokens) {
-      const contract = new web3.eth.Contract([
-        {
-          constant: true,
-          inputs: [{ name: "_owner", type: "address" }],
-          name: "balanceOf",
-          outputs: [{ name: "balance", type: "uint256" }],
-          type: "function"
-        }
-      ], token.address);
-
-      const raw = await contract.methods.balanceOf(address).call();
-      const formatted = (raw / (10 ** token.decimals)).toFixed(4);
-      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
-      if (token.name === 'BAG') {
-        bagBalance = parseFloat(formatted);
-        document.getElementById('balance-bag').innerText = bagBalance;
-      }
+  function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+      window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+        const address = accounts[0];
+        document.getElementById("wallet-address").innerText = "Connected: " + address;
+        const web3 = new Web3(window.ethereum);
+        web3.eth.getBalance(address).then(balance => {
+          document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(balance, 'ether')).slice(0, 6);
+        });
+      }).catch(err => {
+        alert("MetaMask connection failed: " + err.message);
+      });
+    } else {
+      alert("MetaMask is not installed.");
     }
   }
 </script>
