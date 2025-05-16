@@ -264,13 +264,18 @@
 <div id="nft-section" class="section">
   <h2>Claim Your BONK BAG NFT</h2>
   <p>Only 100 exclusive NFTs available for early supporters!</p>
-  
-  <div id="connect-wallet" style="margin: 10px 0; font-weight: bold;"></div>
-  
-  <button id="claim-nft" style="background:#00c853;color:white;padding:12px 20px;border:none;border-radius:6px;font-weight:bold;">Claim BONK BAG NFT</button>
-  
+
+  <div id="connect-wallet" style="margin: 10px 0; font-weight: bold;">Wallet: Not connected</div>
+
+  <button id="claim-nft" style="background:#00c853;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+    Claim BONK BAG NFT
+  </button>
+
   <br><br>
-  <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+
+  <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">
+    Back
+  </button>
 </div>
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -542,16 +547,25 @@
   const sdk = new thirdweb.ThirdwebSDK("polygon");
 
   async function connectAndClaim() {
+    const wallet = await sdk.wallet.connect();
+    document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
+
+    const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+
     try {
-      // Підключення гаманця
-      const wallet = await sdk.wallet.connect();
-      document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
-
-      // Підключення до контракту NFT Drop
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-
-      // Клейм NFT (1 шт)
-      const tx = await contract.erc721.claim(1);
+      const tx = await contract.call("claim", [
+        wallet.address,
+        1,
+        "0x0000000000000000000000000000000000001010", // POL (Wrapped MATIC)
+        "5000000000000000000", // 5 POL in wei
+        {
+          proof: [],
+          quantityLimitPerWallet: 0,
+          pricePerToken: "5000000000000000000",
+          currency: "0x0000000000000000000000000000000000001010"
+        },
+        "0x"
+      ]);
       alert("NFT Claimed Successfully!");
       console.log(tx);
     } catch (err) {
@@ -560,7 +574,6 @@
     }
   }
 
-  // Прив’язка до кнопки
   document.getElementById("claim-nft").addEventListener("click", connectAndClaim);
 </script>
 </body>
