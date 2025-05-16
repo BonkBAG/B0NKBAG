@@ -261,13 +261,8 @@
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 
-<!-- NFT Section -->
-<div id="nft-section" class="section">
-  <h2>Our NFTs</h2>
-  <p>Exclusive BONK BAG NFT collection coming soon!</p>
-  <p>Show off your BONK power with rare, meme-powered digital collectibles.</p>
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div>
+<div id="connect-wallet"></div>
+<button id="claim-nft">Claim BONK BAG NFT</button>
 
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -534,5 +529,28 @@
     }
   }
 </script>
+  <!-- Скрипт для підключення та mint -->
+  <script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
+  <script>
+    const sdk = new thirdweb.ThirdwebSDK("polygon");
+
+    async function connectAndClaim() {
+      const wallet = await sdk.wallet.connect();
+      document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
+
+      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+
+      try {
+        const tx = await contract.erc721.claim(1);
+        alert("NFT Claimed Successfully!");
+        console.log(tx);
+      } catch (err) {
+        alert("Error: " + err.message);
+        console.error(err);
+      }
+    }
+
+    document.getElementById("claim-nft").addEventListener("click", connectAndClaim);
+  </script>
 </body>
 </html>
