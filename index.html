@@ -534,7 +534,7 @@
     }
   }
 </script>
-<<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
+<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
 <script>
   const sdk = new thirdweb.ThirdwebSDK("polygon");
 
@@ -543,22 +543,9 @@
       const wallet = await sdk.wallet.connect();
       document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
 
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b");
+      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
-      const tx = await contract.call("claim", [
-        wallet.address,
-        1,
-        "0x0000000000000000000000000000000000000000", // native MATIC/POL
-        0,
-        {
-          proof: [],
-          quantityLimitPerWallet: 0,
-          pricePerToken: 0,
-          currency: "0x0000000000000000000000000000000000000000"
-        },
-        "0x"
-      ]);
-
+      const tx = await contract.erc721.claimTo(wallet.address, 1); // 1 NFT
       alert("NFT Claimed Successfully!");
       console.log(tx);
     } catch (err) {
