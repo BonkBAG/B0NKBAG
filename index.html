@@ -265,7 +265,7 @@
   <h2>Claim Your BONK BAG NFT</h2>
   <p>Only 100 exclusive NFTs available for early supporters!</p>
   <div id="connect-wallet" style="margin: 10px 0; font-weight: bold;"></div>
-  <button id="claim-nft" style="background:#00c853; color:white; padding:12px 20px; border:none; border-radius:8px; font-weight:bold;">Claim BONK BAG NFT</button>
+  <button id="claim-nft" onclick="connectAndClaim()" style="background:#00c853;color:white;padding:12px 20px; border:none; border-radius:6px;">Claim BONK BAG NFT</button>
   <br><br>
   <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
@@ -535,27 +535,25 @@
   }
 </script>
   <!-- Скрипт для підключення та mint -->
-  <script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
-  <script>
-    const sdk = new thirdweb.ThirdwebSDK("polygon");
+<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
+<script>
+  const sdk = new thirdweb.ThirdwebSDK("polygon");
 
-    async function connectAndClaim() {
-      const wallet = await sdk.wallet.connect();
-      document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
+  async function connectAndClaim() {
+    const wallet = await sdk.wallet.connect();
+    document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
 
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+    const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
-      try {
-        const tx = await contract.erc721.claim(1);
-        alert("NFT Claimed Successfully!");
-        console.log(tx);
-      } catch (err) {
-        alert("Error: " + err.message);
-        console.error(err);
-      }
+    try {
+      const tx = await contract.erc721.claim(1);
+      alert("NFT Claimed Successfully!");
+      console.log(tx);
+    } catch (err) {
+      alert("Error: " + err.message);
+      console.error(err);
     }
-
-    document.getElementById("claim-nft").addEventListener("click", connectAndClaim);
-  </script>
+  }
+</script>
 </body>
 </html>
