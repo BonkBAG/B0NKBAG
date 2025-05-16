@@ -264,18 +264,10 @@
 <div id="nft-section" class="section">
   <h2>Claim Your BONK BAG NFT</h2>
   <p>Only 100 exclusive NFTs available for early supporters!</p>
-
-  <div id="connect-wallet" style="margin: 10px 0; font-weight: bold;">Wallet: Not connected</div>
-
-  <button id="claim-nft" style="background:#00c853;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
-    Claim BONK BAG NFT
-  </button>
-
+  <p id="connect-wallet" style="font-weight: bold;">Wallet: Not connected</p>
+  <button id="claim-nft" style="background:#00c853;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;">Claim BONK BAG NFT</button>
   <br><br>
-
-  <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">
-    Back
-  </button>
+  <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -542,30 +534,31 @@
     }
   }
 </script>
-<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
+<<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.min.js"></script>
 <script>
   const sdk = new thirdweb.ThirdwebSDK("polygon");
 
   async function connectAndClaim() {
-    const wallet = await sdk.wallet.connect();
-    document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
-
-    const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-
     try {
+      const wallet = await sdk.wallet.connect();
+      document.getElementById("connect-wallet").innerText = "Wallet: " + wallet.address;
+
+      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b");
+
       const tx = await contract.call("claim", [
         wallet.address,
         1,
-        "0x0000000000000000000000000000000000001010", // POL (Wrapped MATIC)
-        "5000000000000000000", // 5 POL in wei
+        "0x0000000000000000000000000000000000000000", // native MATIC/POL
+        0,
         {
           proof: [],
           quantityLimitPerWallet: 0,
-          pricePerToken: "5000000000000000000",
-          currency: "0x0000000000000000000000000000000000001010"
+          pricePerToken: 0,
+          currency: "0x0000000000000000000000000000000000000000"
         },
         "0x"
       ]);
+
       alert("NFT Claimed Successfully!");
       console.log(tx);
     } catch (err) {
