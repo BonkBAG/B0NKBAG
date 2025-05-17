@@ -302,13 +302,13 @@ f<!DOCTYPE html>
   <p>15% Owner | 50% DEX | 20% Airdrop | 15% Staking Pool</p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
-<!-- NFT Claim Section -->
+<!-- NFT Buy Section -->
 <div id="nft-section" class="section">
-  <h1>Claim BONK BAG NFT</h1>
+  <h1>Buy BONK BAG NFT</h1>
   <p id="wallet">Wallet: Not connected</p>
   <button onclick="connectWallet()">Connect Wallet</button>
   <br><br>
-  <button onclick="claimNFT()">Claim BONK BAG NFT (5 MATIC)</button>
+  <button onclick="buyNFT()">Buy BONK BAG NFT (5 MATIC)</button>
 </div>
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -469,53 +469,51 @@ f<!DOCTYPE html>
 </script>
 
   <script>
-    let userAddress = "";
+  let userAddress = "";
 
-    async function connectWallet() {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAddress = accounts[0];
-        document.getElementById("wallet").innerText = "Wallet: " + userAddress;
-      } else {
-        alert("Please install MetaMask!");
-      }
+  async function connectWallet() {
+    if (!window.ethereum) {
+      alert("Please install MetaMask!");
+      return;
     }
 
-    async function claimNFT() {
-      if (!userAddress) {
-        alert("Connect wallet first");
-        return;
-      }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    document.getElementById("wallet").innerText = "Wallet: " + userAddress;
+  }
 
-      const button = document.querySelector('button[onclick="claimNFT()"]');
-      button.disabled = true;
-      const originalText = button.innerText;
-      button.innerText = "Claiming...";
-
-      try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-
-        await window.sdkReady;
-        const sdk = new ThirdwebSDK(signer);
-
-        const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-
-        const tx = await contract.erc721.claimTo(userAddress, 1, {
-          value: ethers.utils.parseEther("5")
-        });
-
-        alert("Claim successful!");
-        console.log("Transaction:", tx);
-      } catch (e) {
-        alert("Error: " + (e.message || e));
-        console.error(e);
-      } finally {
-        button.disabled = false;
-        button.innerText = originalText;
-      }
+  async function buyNFT() {
+    if (!userAddress) {
+      alert("Connect wallet first");
+      return;
     }
-  </script>
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    const contract = new ethers.Contract(
+      "0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", // адреса NFT Drop контракту
+      [
+        "function claimTo(address receiver, uint256 quantity) payable"
+      ],
+      signer
+    );
+
+    try {
+      const tx = await contract.claimTo(userAddress, 1, {
+        value: ethers.utils.parseEther("5") // 5 MATIC
+      });
+
+      await tx.wait();
+      alert("NFT bought successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Error: " + (error.message || error));
+    }
+  }
+</script>
 </body>
 </html>
 
