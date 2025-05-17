@@ -533,8 +533,8 @@
     }
   }
 </script>
-<!-- Підключення Thirdweb SDK і Ethers -->
-<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<!-- Thirdweb SDK та Ethers.js -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.umd.min.js"></script>
 
 <script>
@@ -542,28 +542,36 @@
 
   async function connectWallet() {
     if (typeof window.ethereum === "undefined") {
-      alert("No wallet found. Please use MetaMask or Trust Wallet browser.");
+      alert("No wallet found. Please use MetaMask or Trust Wallet.");
       return;
     }
 
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       userAddress = await signer.getAddress();
 
+      const network = await provider.getNetwork();
+      if (network.chainId !== 137) {
+        alert("Please switch to the Polygon network in your wallet.");
+        return;
+      }
+
       document.getElementById("wallet").innerText = "Wallet: " + userAddress;
       document.getElementById("wallet-address").innerText = "Connected: " + userAddress;
 
-      console.log("Connected wallet:", userAddress);
+      const balance = await provider.getBalance(userAddress);
+      document.getElementById("matic-balance").innerText = "POL: " + ethers.utils.formatEther(balance).slice(0, 6);
     } catch (err) {
-      alert("Connection error: " + err.message);
+      alert("Connection failed: " + err.message);
+      console.error(err);
     }
   }
 
   async function claimNFT() {
     if (!userAddress) {
-      alert("Please connect wallet first");
+      alert("Connect wallet first");
       return;
     }
 
@@ -575,19 +583,19 @@
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const sdk = new ThirdwebSDK(signer, { chainId: 137 }); // Polygon
+      const sdk = new thirdweb.ThirdwebSDK(signer, { chainId: 137 });
 
       const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
       const tx = await contract.erc721.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5") // 5 MATIC
+        value: ethers.utils.parseEther("5")
       });
 
-      console.log("NFT claimed!", tx);
-      alert("NFT claimed successfully!");
+      alert("Claim successful!");
+      console.log("Transaction:", tx);
     } catch (e) {
-      console.error("Claim error:", e);
-      alert("Claim failed: " + e.message);
+      alert("Error: " + (e.message || e));
+      console.error(e);
     } finally {
       button.disabled = false;
       button.innerText = originalText;
