@@ -533,11 +533,37 @@
     }
   }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<!-- Підключення Thirdweb SDK і Ethers -->
+<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/thirdweb.umd.min.js"></script>
+
 <script>
+  let userAddress = "";
+
+  async function connectWallet() {
+    if (typeof window.ethereum === "undefined") {
+      alert("No wallet found. Please use MetaMask or Trust Wallet browser.");
+      return;
+    }
+
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+
+      document.getElementById("wallet").innerText = "Wallet: " + userAddress;
+      document.getElementById("wallet-address").innerText = "Connected: " + userAddress;
+
+      console.log("Connected wallet:", userAddress);
+    } catch (err) {
+      alert("Connection error: " + err.message);
+    }
+  }
+
   async function claimNFT() {
     if (!userAddress) {
-      alert("Connect wallet first");
+      alert("Please connect wallet first");
       return;
     }
 
@@ -547,18 +573,21 @@
     button.innerText = "Claiming...";
 
     try {
-      const sdk = new ThirdwebSDK(window.ethereum, { chainId: 137 });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const sdk = new ThirdwebSDK(signer, { chainId: 137 }); // Polygon
+
       const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
       const tx = await contract.erc721.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5") // Ціна за 1 NFT = 5 MATIC
+        value: ethers.utils.parseEther("5") // 5 MATIC
       });
 
-      alert("Claim successful!");
-      console.log("Transaction:", tx);
+      console.log("NFT claimed!", tx);
+      alert("NFT claimed successfully!");
     } catch (e) {
-      alert("Error: " + e.message);
-      console.error(e);
+      console.error("Claim error:", e);
+      alert("Claim failed: " + e.message);
     } finally {
       button.disabled = false;
       button.innerText = originalText;
