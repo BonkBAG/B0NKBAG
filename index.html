@@ -16,13 +16,24 @@ f<!DOCTYPE html>
 
   <!-- QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
-  <!-- Thirdweb UMD SDK -->
+<!-- Thirdweb SDK UMD (працює з Vercel/GitHub Pages) -->
 <script src="https://unpkg.com/@thirdweb-dev/sdk@3.17.2/dist/sdk.umd.js"></script>
 <script>
   window.sdkReady = new Promise((resolve) => {
-    window.ThirdwebSDK = thirdweb.ThirdwebSDK;
-    resolve();
+    // Якщо thirdweb уже завантажений
+    if (typeof thirdweb !== 'undefined') {
+      window.ThirdwebSDK = thirdweb.ThirdwebSDK;
+      resolve();
+    } else {
+      // Інакше чекаємо, поки завантажиться
+      const interval = setInterval(() => {
+        if (typeof thirdweb !== 'undefined') {
+          clearInterval(interval);
+          window.ThirdwebSDK = thirdweb.ThirdwebSDK;
+          resolve();
+        }
+      }, 50);
+    }
   });
 </script>
   <!-- Перевірка, чи SDK завантажився -->
