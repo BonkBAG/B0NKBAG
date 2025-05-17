@@ -426,12 +426,15 @@ f<!DOCTYPE html>
     });
   }
 </script>
-<!-- Thirdweb SDK та Ethers.js -->
+<!-- Підключення SDK Thirdweb та Ethers.js -->
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/sdk.umd.js"></script>
+
 <script>
+  // Глобальна змінна для збереження адреси
   let userAddress = "";
 
+  // Підключення гаманця
   async function connectWallet() {
     if (typeof window.ethereum === "undefined") {
       alert("No wallet found. Please use MetaMask or Trust Wallet.");
@@ -461,6 +464,7 @@ f<!DOCTYPE html>
     }
   }
 
+  // Клейм NFT
   async function claimNFT() {
     if (!userAddress) {
       alert("Connect wallet first");
@@ -475,12 +479,13 @@ f<!DOCTYPE html>
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
+
       const sdk = new thirdweb.ThirdwebSDK(signer, { chainId: 137 });
 
       const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
       const tx = await contract.erc721.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5")
+        value: ethers.utils.parseEther("5") // 5 MATIC
       });
 
       alert("Claim successful!");
