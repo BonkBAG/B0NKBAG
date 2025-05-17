@@ -8,7 +8,12 @@ f<!DOCTYPE html>
   <!-- Точно робочі бібліотеки: -->
 
   <!-- Thirdweb SDK (UMD для браузера) -->
-  <script src="https://unpkg.com/@thirdweb-dev/sdk@4.6.3/dist/sdk.umd.js"></script>
+  <script src="https://unpkg.com/@thirdweb-dev/sdk@3.17.2/dist/sdk.umd.js"></script>
+  <script>
+  if (!window.thirdweb) {
+    alert("Thirdweb SDK не завантажено!");
+  }
+  </script>
 
   <!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -440,40 +445,6 @@ f<!DOCTYPE html>
 </script>
 
 <script>
-  // Глобальна змінна для збереження адреси
-  let userAddress = "";
-
-  // Підключення гаманця
-  async function connectWallet() {
-    if (typeof window.ethereum === "undefined") {
-      alert("No wallet found. Please use MetaMask or Trust Wallet.");
-      return;
-    }
-
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      userAddress = await signer.getAddress();
-
-      const network = await provider.getNetwork();
-      if (network.chainId !== 137) {
-        alert("Please switch to the Polygon network in your wallet.");
-        return;
-      }
-
-      document.getElementById("wallet").innerText = "Wallet: " + userAddress;
-      document.getElementById("wallet-address").innerText = "Connected: " + userAddress;
-
-      const balance = await provider.getBalance(userAddress);
-      document.getElementById("matic-balance").innerText = "POL: " + ethers.utils.formatEther(balance).slice(0, 6);
-    } catch (err) {
-      alert("Connection failed: " + err.message);
-      console.error(err);
-    }
-  }
-
-  // Клейм NFT
   async function claimNFT() {
     if (!userAddress) {
       alert("Connect wallet first");
@@ -489,12 +460,15 @@ f<!DOCTYPE html>
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      const sdk = new thirdweb.ThirdwebSDK(signer, { chainId: 137 });
+      // НЕ передаємо chainId!
+      const sdk = new thirdweb.ThirdwebSDK(signer);
 
+      // Підключення до NFT Drop контракту
       const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
+      // Клейм NFT з оплатою (або без)
       const tx = await contract.erc721.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5") // 5 MATIC
+        value: ethers.utils.parseEther("5") // видалити якщо безкоштовно
       });
 
       alert("Claim successful!");
