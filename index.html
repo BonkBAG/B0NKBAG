@@ -9,6 +9,9 @@ f<!DOCTYPE html>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.9.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <!-- SDK Thirdweb обовʼязково першим -->
+<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/sdk.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -426,9 +429,6 @@ f<!DOCTYPE html>
     });
   }
 </script>
-<!-- Підключення SDK Thirdweb та Ethers.js -->
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/sdk.umd.js"></script>
 
 <script>
   // Глобальна змінна для збереження адреси
