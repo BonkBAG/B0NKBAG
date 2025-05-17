@@ -389,6 +389,11 @@ f<!DOCTYPE html>
   </div>
 </div>
 
+  <div class="wallet-button">
+  <button onclick="connectWallet()">Connect Wallet</button>
+  <p id="wallet-address" style="color:#66ff66;"></p>
+</div>
+
 <!-- Footer -->
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
@@ -475,6 +480,28 @@ f<!DOCTYPE html>
   }
 </script>
 
+<script>
+  let userAddress = "";
+
+  async function connectWallet() {
+    if (typeof window.ethereum === 'undefined') {
+      alert("Please install MetaMask or a Web3 wallet!");
+      return;
+    }
+
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      document.getElementById("wallet-address").innerText = "Wallet: " + userAddress;
+    } catch (error) {
+      console.error(error);
+      alert("Wallet connection failed");
+    }
+  }
+</script>
+  
   <script>
   let userAddress = "";
 
