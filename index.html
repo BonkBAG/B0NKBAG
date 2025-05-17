@@ -534,12 +534,17 @@
   }
 </script>
 
-  <script>
+ <script>
   async function claimNFT() {
     if (!userAddress) {
       alert("Connect wallet first");
       return;
     }
+
+    const button = document.querySelector('button[onclick="claimNFT()"]');
+    button.disabled = true;
+    const originalText = button.innerText;
+    button.innerText = "Claiming...";
 
     try {
       console.log("Starting NFT claim...");
@@ -552,44 +557,13 @@
     } catch (e) {
       alert("Error: " + e.message);
       console.error(e);
+    } finally {
+      button.disabled = false;
+      button.innerText = originalText;
     }
   }
 </script>
 <!-- Thirdweb SDK (правильне підключення) -->
 <script src="https://sdk.thirdweb.com/js/thirdweb.umd.min.js"></script>
-<!-- Claim NFT Script -->
-  <script>
-      let userAddress;
-
-      async function connectWallet() {
-        if (!window.ethereum) {
-          alert("Please install MetaMask.");
-          return;
-        }
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await web3.eth.getAccounts();
-        userAddress = accounts[0];
-        document.getElementById("wallet").innerText = "Wallet: " + userAddress;
-      }
-
-      async function claimNFT() {
-        if (!userAddress) {
-          alert("Connect wallet first");
-          return;
-        }
-
-        try {
-          const sdk = new ThirdwebSDK(window.ethereum, { chainId: 137 });
-          const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-          const tx = await contract.erc721.claimTo(userAddress, 1);
-          alert("Claim successful!");
-          console.log(tx);
-        } catch (e) {
-          alert("Error: " + e.message);
-          console.error(e);
-        }
-      }
-    </script>
 </body>
 </html>
