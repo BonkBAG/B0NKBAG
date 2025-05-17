@@ -262,12 +262,11 @@
 </div>
 <!-- NFT Claim Section -->
 <div id="nft-section" class="section">
-  <h2>Claim Your BONK BAG NFT</h2>
-  <p>Only 100 exclusive NFTs available for early supporters!</p>
-  <p id="connect-wallet" style="font-weight: bold;">Wallet: Not connected</p>
-  <button id="claim-nft" style="background:#00c853;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;">Claim BONK BAG NFT</button>
-  <br><br>
-  <button onclick="resetView()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+    <h1>Claim BONK BAG NFT</h1>
+    <p id="wallet">Wallet: Not connected</p>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <br><br>
+    <button onclick="claimNFT()">Claim BONK BAG NFT</button>
 </div>
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -536,45 +535,41 @@
 </script>
 <!-- Thirdweb SDK -->
 <script src="./js/thirdweb.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 
 <!-- Claim NFT Script -->
-<script>
-  async function claimNFT() {
-    try {
-      if (!window.ethereum) {
-        alert("Please connect your wallet first.");
-        return;
+    <script>
+      let userAddress;
+
+      async function connectWallet() {
+        if (!window.ethereum) {
+          alert("Please install MetaMask.");
+          return;
+        }
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await web3.eth.getAccounts();
+        userAddress = accounts[0];
+        document.getElementById("wallet").innerText = "Wallet: " + userAddress;
       }
 
-      const web3 = new Web3(window.ethereum);
-      const accounts = await web3.eth.getAccounts();
-      const userAddress = accounts[0];
+      async function claimNFT() {
+        if (!userAddress) {
+          alert("Connect wallet first");
+          return;
+        }
 
-      if (!userAddress) {
-        alert("Wallet not connected");
-        return;
+        try {
+          const sdk = new ThirdwebSDK(window.ethereum, { chainId: 137 });
+          const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+          const tx = await contract.erc721.claimTo(userAddress, 1);
+          alert("Claim successful!");
+          console.log(tx);
+        } catch (e) {
+          alert("Error: " + e.message);
+          console.error(e);
+        }
       }
-
-      document.getElementById("connect-wallet").innerText = "Wallet: " + userAddress;
-
-      // Використовуємо правильний клас для UMD
-      const sdk = new ThirdwebSDK(window.ethereum, {
-        chainId: 137
-      });
-
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-
-      const tx = await contract.erc721.claimTo(userAddress, 1);
-
-      alert("NFT Claimed Successfully!");
-      console.log(tx);
-    } catch (err) {
-      alert("Error: " + err.message);
-      console.error(err);
-    }
-  }
-
-  document.getElementById("claim-nft").addEventListener("click", claimNFT);
-</script>
+    </script>
 </body>
 </html>
