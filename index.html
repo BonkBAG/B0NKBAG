@@ -534,9 +534,18 @@
     }
   }
 </script>
+<!-- Thirdweb SDK -->
+<script src="https://unpkg.com/@thirdweb-dev/sdk/dist/browser.umd.js"></script>
+
+<!-- Claim NFT Script -->
 <script>
   async function claimNFT() {
     try {
+      if (!window.ethereum) {
+        alert("Please connect your wallet first.");
+        return;
+      }
+
       const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.getAccounts();
       const userAddress = accounts[0];
@@ -548,13 +557,15 @@
 
       document.getElementById("connect-wallet").innerText = "Wallet: " + userAddress;
 
-      const sdk = new thirdweb.ThirdwebSDK(window.ethereum, {
-        chainId: 137,
+      // Використовуємо правильний клас для UMD
+      const sdk = new ThirdwebSDK(window.ethereum, {
+        chainId: 137
       });
 
       const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
       const tx = await contract.erc721.claimTo(userAddress, 1);
+
       alert("NFT Claimed Successfully!");
       console.log(tx);
     } catch (err) {
@@ -565,6 +576,5 @@
 
   document.getElementById("claim-nft").addEventListener("click", claimNFT);
 </script>
-<script src="https://unpkg.com/@thirdweb-dev/sdk/dist/browser.umd.js"></script>
 </body>
 </html>
