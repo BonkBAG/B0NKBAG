@@ -535,12 +535,9 @@
   }
 </script>
 <script>
-  const sdk = new thirdweb.ThirdwebSDK("polygon");
-
   async function claimNFT() {
     try {
-      const provider = window.ethereum;
-      const web3 = new Web3(provider);
+      const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.getAccounts();
       const userAddress = accounts[0];
 
@@ -551,9 +548,13 @@
 
       document.getElementById("connect-wallet").innerText = "Wallet: " + userAddress;
 
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
-      const tx = await contract.erc721.claimTo(userAddress, 1); // 1 NFT
+      const sdk = new thirdweb.ThirdwebSDK(window.ethereum, {
+        chainId: 137,
+      });
 
+      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+
+      const tx = await contract.erc721.claimTo(userAddress, 1);
       alert("NFT Claimed Successfully!");
       console.log(tx);
     } catch (err) {
@@ -564,5 +565,6 @@
 
   document.getElementById("claim-nft").addEventListener("click", claimNFT);
 </script>
+<script src="https://unpkg.com/@thirdweb-dev/sdk/dist/browser.umd.js"></script>
 </body>
 </html>
