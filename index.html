@@ -18,14 +18,7 @@ f<!DOCTYPE html>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <!-- Thirdweb SDK (ES module через Skypack) -->
-  <script type="module">
-    import { ThirdwebSDK } from "https://cdn.skypack.dev/@thirdweb-dev/sdk";
-
-    window.sdkReady = new Promise((resolve) => {
-      window.ThirdwebSDK = ThirdwebSDK;
-      resolve();
-    });
-  </script>
+  <script type="module" src="./thirdweb-init.js"></script>
 
   <!-- Перевірка, чи SDK завантажився -->
   <script>
