@@ -5,12 +5,7 @@ f<!DOCTYPE html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BONK BAG</title>
-  title>
-
-  <!-- Thirdweb SDK UMD (перевірено, працює) -->
-  <script src="https://unpkg.com/@thirdweb-dev/sdk@3.17.2/dist/sdk.umd.js"></script>
-
-  <!-- Ethers.js -->
+<!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
   <!-- Web3.js -->
@@ -22,14 +17,30 @@ f<!DOCTYPE html>
   <!-- QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
-  <!-- Перевірка, що thirdweb підвантажився -->
+  <!-- Thirdweb SDK (ES module через Skypack) -->
+  <script type="module">
+    import { ThirdwebSDK } from "https://cdn.skypack.dev/@thirdweb-dev/sdk";
+
+    window.sdkReady = new Promise((resolve) => {
+      window.ThirdwebSDK = ThirdwebSDK;
+      resolve();
+    });
+  </script>
+
+  <!-- Перевірка, чи SDK завантажився -->
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      if (typeof thirdweb === "undefined") {
+    window.addEventListener("DOMContentLoaded", async () => {
+      await window.sdkReady;
+      if (!window.ThirdwebSDK) {
         alert("Thirdweb SDK не завантажено!");
       }
     });
   </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+  </style>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -284,11 +295,11 @@ f<!DOCTYPE html>
 </div>
 <!-- NFT Claim Section -->
 <div id="nft-section" class="section">
-    <h1>Claim BONK BAG NFT</h1>
-    <p id="wallet">Wallet: Not connected</p>
-    <button onclick="connectWallet()">Connect Wallet</button>
-    <br><br>
-    <button onclick="claimNFT()">Claim BONK BAG NFT</button>
+  <h1>Claim BONK BAG NFT</h1>
+  <p id="wallet">Wallet: Not connected</p>
+  <button onclick="connectWallet()">Connect Wallet</button>
+  <br><br>
+  <button onclick="claimNFT()">Claim BONK BAG NFT (5 MATIC)</button>
 </div>
 <!-- About Section -->
 <div id="about-section" class="section">
@@ -448,44 +459,54 @@ f<!DOCTYPE html>
   }
 </script>
 
-<script>
-  async function claimNFT() {
-    if (!userAddress) {
-      alert("Connect wallet first");
-      return;
+  <script>
+    let userAddress = "";
+
+    async function connectWallet() {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        document.getElementById("wallet").innerText = "Wallet: " + userAddress;
+      } else {
+        alert("Please install MetaMask!");
+      }
     }
 
-    const button = document.querySelector('button[onclick="claimNFT()"]');
-    button.disabled = true;
-    const originalText = button.innerText;
-    button.innerText = "Claiming...";
+    async function claimNFT() {
+      if (!userAddress) {
+        alert("Connect wallet first");
+        return;
+      }
 
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const button = document.querySelector('button[onclick="claimNFT()"]');
+      button.disabled = true;
+      const originalText = button.innerText;
+      button.innerText = "Claiming...";
 
-      // НЕ передаємо chainId!
-      const sdk = new thirdweb.ThirdwebSDK(signer);
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
 
-      // Підключення до NFT Drop контракту
-      const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
+        await window.sdkReady;
+        const sdk = new ThirdwebSDK(signer);
 
-      // Клейм NFT з оплатою (або без)
-      const tx = await contract.erc721.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5") // видалити якщо безкоштовно
-      });
+        const contract = await sdk.getContract("0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", "nft-drop");
 
-      alert("Claim successful!");
-      console.log("Transaction:", tx);
-    } catch (e) {
-      alert("Error: " + (e.message || e));
-      console.error(e);
-    } finally {
-      button.disabled = false;
-      button.innerText = originalText;
+        const tx = await contract.erc721.claimTo(userAddress, 1, {
+          value: ethers.utils.parseEther("5")
+        });
+
+        alert("Claim successful!");
+        console.log("Transaction:", tx);
+      } catch (e) {
+        alert("Error: " + (e.message || e));
+        console.error(e);
+      } finally {
+        button.disabled = false;
+        button.innerText = originalText;
+      }
     }
-  }
-</script>
+  </script>
 </body>
 </html>
 
