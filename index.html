@@ -342,7 +342,7 @@
      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
 </div>
- <!-- New Staking Section -->
+<!-- Staking Section -->
 <div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
@@ -353,15 +353,18 @@
 
   <div id="staking-details" style="display:none; margin-top:20px;">
     <p><strong>Selected:</strong> <span id="selected-duration"></span> months</p>
-    
-    <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
-    
-    <p id="bag-balance"></p>
-    <p id="matic-balance"></p>
-    <p id="usdc-balance"></p>
-    <p id="usdt-balance"></p>
+    <p>Your BAG Balance: <span id="balance-bag">0</span></p>
 
-    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
+    <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
+    <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
+    <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
+
+    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">
+      Confirm Staking
+    </button>
+    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">
+      Back
+    </button>
   </div>
 </div>
 <!-- Wallet Info Section -->
@@ -431,30 +434,12 @@ async function stakeTokens() {
     alert("Staking failed: " + (err.message || err));
   } 
 }
-
+<script>
 let selectedMonths = 0;
 let bagBalance = 0;
-const rewardPool = 500000000;
+const rewardPool = 500000000; // Пул винагород
 
-function resetView() {
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.querySelector('.top-bar').style.display = 'flex';
-  document.querySelector('.nav-menu').style.display = 'flex';
-  document.querySelector('.side-buttons').style.display = 'flex';
-  document.querySelector('footer').style.display = 'block';
-  document.getElementById('back-button').style.display = 'none';
-}
-
-function showSection(id) {
-  resetView();
-  document.getElementById(id).style.display = 'block';
-  document.querySelector('.top-bar').style.display = 'none';
-  document.querySelector('.nav-menu').style.display = 'none';
-  document.querySelector('.side-buttons').style.display = 'none';
-  document.querySelector('footer').style.display = 'none';
-  document.getElementById('back-button').style.display = 'block';
-}
-
+// Вибір тривалості стейкінгу
 function selectStaking(months) {
   selectedMonths = months;
   document.getElementById('selected-duration').innerText = months;
@@ -462,6 +447,7 @@ function selectStaking(months) {
   updateStakingAmount();
 }
 
+// Оновлення суми та винагороди при зміні повзунка
 function updateStakingAmount() {
   const percent = parseInt(document.getElementById('amount-range').value);
   const amount = (bagBalance * percent / 100).toFixed(2);
@@ -476,6 +462,7 @@ function updateStakingAmount() {
   document.getElementById('estimated-reward').innerText = reward;
 }
 
+// Скидання значень
 function resetStaking() {
   document.getElementById('staking-details').style.display = 'none';
   document.getElementById('amount-range').value = 0;
@@ -484,46 +471,11 @@ function resetStaking() {
   document.getElementById('selected-duration').innerText = '';
 }
 
+// Тимчасова кнопка
 function submitStaking() {
   alert("Staking functionality coming soon!");
 }
-
-function closeWalletConnectModal() {
-  document.getElementById('walletconnect-modal').style.display = 'none';
-}
-
-function showWalletConnectModal(uri) {
-  document.getElementById('walletconnect-modal').style.display = 'flex';
-  const qrContainer = document.getElementById('walletconnect-qr');
-  qrContainer.innerHTML = '';
-  QRCode.toDataURL(uri).then(url => {
-    const img = new Image();
-    img.src = url;
-    img.style.maxWidth = '100%';
-    img.style.borderRadius = '8px';
-    qrContainer.appendChild(img);
-  }).catch(err => {
-    console.error("QR error:", err);
-    qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
-  });
-}
 </script>
-<!-- Wallet Info Section -->
-<div id="wallet-info" class="section">
-  <button id="wallet-button-toggle" onclick="toggleWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:bold;">
-    Connect Wallet
-  </button>
-
-  <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
-  <p id="bag-balance"></p>
-  <p id="matic-balance"></p>
-  <p id="usdc-balance"></p>
-  <p id="usdt-balance"></p>
-
-  <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">
-    Back
-  </button>
-</div>
 </body>
 </html>
 
