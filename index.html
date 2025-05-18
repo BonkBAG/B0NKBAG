@@ -1,5 +1,5 @@
 
-f<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -388,7 +388,6 @@ f<!DOCTYPE html>
     Back
   </button>
 </div>
-<!-- Footer -->
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
     <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
@@ -397,9 +396,9 @@ f<!DOCTYPE html>
   </div>
   <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
   </footer>
-   <script>
-  const tokenAddress = "0x3686568eCB6cE7545765b641932044900d11e584"; // BAG
-const stakingAddress = "0xYourStakingContractAddressHere"; // твій контракт
+  <script>
+const tokenAddress = "0x3686568eCB6cE7545765b641932044900d11e584"; // BAG
+const stakingAddress = "0xYourStakingContractAddressHere"; // заміни на свою адресу
 
 async function approveTokens() {
   try {
@@ -429,7 +428,7 @@ async function stakeTokens() {
     ], signer);
 
     const amount = document.getElementById("stake-amount").value;
-    const duration = selectedMonths; // вже вибрана тривалість
+    const duration = selectedMonths;
 
     const tx = await staking.stake(ethers.utils.parseUnits(amount, 18), duration);
     await tx.wait();
@@ -438,138 +437,147 @@ async function stakeTokens() {
   } catch (err) {
     console.error(err);
     alert("Staking failed: " + (err.message || err));
-  <script>
-    
-  <script>
-  let selectedMonths = 0;
-  let bagBalance = 0;
-  const rewardPool = 500000000;
+  } 
+}
 
-  function resetView() {
-    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-    document.querySelector('.top-bar').style.display = 'flex';
-    document.querySelector('.nav-menu').style.display = 'flex';
-    document.querySelector('.side-buttons').style.display = 'flex';
-    document.querySelector('footer').style.display = 'block';
-    document.getElementById('back-button').style.display = 'none';
-  }
+let selectedMonths = 0;
+let bagBalance = 0;
+const rewardPool = 500000000;
 
-  function showSection(id) {
-    resetView();
-    document.getElementById(id).style.display = 'block';
-    document.querySelector('.top-bar').style.display = 'none';
-    document.querySelector('.nav-menu').style.display = 'none';
-    document.querySelector('.side-buttons').style.display = 'none';
-    document.querySelector('footer').style.display = 'none';
-    document.getElementById('back-button').style.display = 'block';
-  }
+function resetView() {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.querySelector('.top-bar').style.display = 'flex';
+  document.querySelector('.nav-menu').style.display = 'flex';
+  document.querySelector('.side-buttons').style.display = 'flex';
+  document.querySelector('footer').style.display = 'block';
+  document.getElementById('back-button').style.display = 'none';
+}
 
-  function selectStaking(months) {
-    selectedMonths = months;
-    document.getElementById('selected-duration').innerText = months;
-    document.getElementById('staking-details').style.display = 'block';
-    updateStakingAmount();
-  }
+function showSection(id) {
+  resetView();
+  document.getElementById(id).style.display = 'block';
+  document.querySelector('.top-bar').style.display = 'none';
+  document.querySelector('.nav-menu').style.display = 'none';
+  document.querySelector('.side-buttons').style.display = 'none';
+  document.querySelector('footer').style.display = 'none';
+  document.getElementById('back-button').style.display = 'block';
+}
 
-  function updateStakingAmount() {
-    const percent = parseInt(document.getElementById('amount-range').value);
-    const amount = (bagBalance * percent / 100).toFixed(2);
-    document.getElementById('amount-to-stake').innerText = amount;
+function selectStaking(months) {
+  selectedMonths = months;
+  document.getElementById('selected-duration').innerText = months;
+  document.getElementById('staking-details').style.display = 'block';
+  updateStakingAmount();
+}
 
-    let rewardPercent = 0;
-    if (selectedMonths === 3) rewardPercent = 15;
-    else if (selectedMonths === 6) rewardPercent = 30;
-    else if (selectedMonths === 12) rewardPercent = 60;
+function updateStakingAmount() {
+  const percent = parseInt(document.getElementById('amount-range').value);
+  const amount = (bagBalance * percent / 100).toFixed(2);
+  document.getElementById('amount-to-stake').innerText = amount;
 
-    const reward = ((amount / 5000000000) * rewardPool * (rewardPercent / 100)).toFixed(2);
-    document.getElementById('estimated-reward').innerText = reward;
-  }
+  let rewardPercent = 0;
+  if (selectedMonths === 3) rewardPercent = 15;
+  else if (selectedMonths === 6) rewardPercent = 30;
+  else if (selectedMonths === 12) rewardPercent = 60;
 
-  function resetStaking() {
-    document.getElementById('staking-details').style.display = 'none';
-    document.getElementById('amount-range').value = 0;
-    document.getElementById('amount-to-stake').innerText = '0';
-    document.getElementById('estimated-reward').innerText = '0';
-    document.getElementById('selected-duration').innerText = '';
-  }
+  const reward = ((amount / 5000000000) * rewardPool * (rewardPercent / 100)).toFixed(2);
+  document.getElementById('estimated-reward').innerText = reward;
+}
 
-  function submitStaking() {
-    alert("Staking functionality coming soon!");
-  }
+function resetStaking() {
+  document.getElementById('staking-details').style.display = 'none';
+  document.getElementById('amount-range').value = 0;
+  document.getElementById('amount-to-stake').innerText = '0';
+  document.getElementById('estimated-reward').innerText = '0';
+  document.getElementById('selected-duration').innerText = '';
+}
 
-  function closeWalletConnectModal() {
-    document.getElementById('walletconnect-modal').style.display = 'none';
-  }
+function submitStaking() {
+  alert("Staking functionality coming soon!");
+}
 
-  function showWalletConnectModal(uri) {
-    document.getElementById('walletconnect-modal').style.display = 'flex';
-    const qrContainer = document.getElementById('walletconnect-qr');
-    qrContainer.innerHTML = '';
-    QRCode.toDataURL(uri).then(url => {
-      const img = new Image();
-      img.src = url;
-      img.style.maxWidth = '100%';
-      img.style.borderRadius = '8px';
-      qrContainer.appendChild(img);
-    }).catch(err => {
-      console.error("QR error:", err);
-      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
-    });
-  }
+function closeWalletConnectModal() {
+  document.getElementById('walletconnect-modal').style.display = 'none';
+}
+
+function showWalletConnectModal(uri) {
+  document.getElementById('walletconnect-modal').style.display = 'flex';
+  const qrContainer = document.getElementById('walletconnect-qr');
+  qrContainer.innerHTML = '';
+  QRCode.toDataURL(uri).then(url => {
+    const img = new Image();
+    img.src = url;
+    img.style.maxWidth = '100%';
+    img.style.borderRadius = '8px';
+    qrContainer.appendChild(img);
+  }).catch(err => {
+    console.error("QR error:", err);
+    qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
+  });
+}
 </script>
 
+<!-- Новий окремий блок для підключення гаманця -->
 <script>
-  let userAddress = "";
-  const bagAddress = "0x3686568eCB6cE7545765b641932044900d11e584";
-  const usdcAddress = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
-  const usdtAddress = "0xC2132D05D31c914a87C6611C10748AaCBfA1F7f0";
+let userAddress = "";
+const bagAddress = "0x3686568eCB6cE7545765b641932044900d11e584";
+const usdcAddress = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+const usdtAddress = "0xC2132D05D31c914a87C6611C10748AaCBfA1F7f0";
 
-  async function connectWallet() {
-    if (typeof window.ethereum === "undefined") {
-      alert("Please install MetaMask or Trust Wallet");
-      return;
-    }
-
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      userAddress = await signer.getAddress();
-      document.getElementById("wallet-address").innerText = "Wallet: " + userAddress;
-
-      await showBalances(provider);
-      await showBAGinStaking(provider); // щоб оновити в стейкингу
-    } catch (err) {
-      console.error(err);
-      alert("Connection failed");
-    }
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert("Please install MetaMask or Trust Wallet");
+    return;
   }
 
-  async function showBalances(provider) {
-    const matic = await provider.getBalance(userAddress);
-    document.getElementById("matic-balance").innerText = "POL (MATIC): " + ethers.utils.formatEther(matic).slice(0, 6);
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    document.getElementById("wallet-address").innerText = "Wallet: " + userAddress;
 
-    const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-    const usdc = new ethers.Contract(usdcAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-    const usdt = new ethers.Contract(usdtAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-
-    const bagBal = await bag.balanceOf(userAddress);
-    const usdcBal = await usdc.balanceOf(userAddress);
-    const usdtBal = await usdt.balanceOf(userAddress);
-
-    document.getElementById("bag-balance").innerText = "BAG: " + (bagBal / 1e18).toFixed(2);
-    document.getElementById("usdc-balance").innerText = "USDC: " + (usdcBal / 1e6).toFixed(2);
-    document.getElementById("usdt-balance").innerText = "USDT: " + (usdtBal / 1e6).toFixed(2);
+    await showBalances(provider);
+    document.getElementById("balance-bag").innerText = await getBAGBalance(provider);
+  } catch (err) {
+    console.error(err);
+    alert("Connection failed");
   }
+}
 
-  function disconnectWallet() {
-    userAddress = "";
-    document.getElementById("wallet-address").innerText = "";
-    document.getElementById("matic-balance").innerText = "";
-    document.getElementById("bag-balance").innerText = "";
-    document.getElementById("usdc-balance").innerText = "";
-    document.getElementById("usdt-balance").innerText = "";
-  }
+async function showBalances(provider) {
+  const matic = await provider.getBalance(userAddress);
+  document.getElementById("matic-balance").innerText = "POL (MATIC): " + ethers.utils.formatEther(matic).slice(0, 6);
+
+  const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+  const usdc = new ethers.Contract(usdcAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+  const usdt = new ethers.Contract(usdtAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+
+  const bagBal = await bag.balanceOf(userAddress);
+  const usdcBal = await usdc.balanceOf(userAddress);
+  const usdtBal = await usdt.balanceOf(userAddress);
+
+  bagBalance = bagBal / 1e18;
+
+  document.getElementById("bag-balance").innerText = "BAG: " + bagBalance.toFixed(2);
+  document.getElementById("usdc-balance").innerText = "USDC: " + (usdcBal / 1e6).toFixed(2);
+  document.getElementById("usdt-balance").innerText = "USDT: " + (usdtBal / 1e6).toFixed(2);
+}
+
+async function getBAGBalance(provider) {
+  const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+  const bagBal = await bag.balanceOf(userAddress);
+  return (bagBal / 1e18).toFixed(2);
+}
+
+function disconnectWallet() {
+  userAddress = "";
+  document.getElementById("wallet-address").innerText = "";
+  document.getElementById("matic-balance").innerText = "";
+  document.getElementById("bag-balance").innerText = "";
+  document.getElementById("usdc-balance").innerText = "";
+  document.getElementById("usdt-balance").innerText = "";
+}
 </script>
 </body>
 </html>
