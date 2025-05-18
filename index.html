@@ -341,50 +341,42 @@
      Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
-</div><!-- Staking Section -->
+</div>
+ <!-- New Staking Section -->
 <div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
-<p>Enter amount to stake:</p>
-<input id="stake-amount" type="number" placeholder="Enter amount" style="padding: 8px; border-radius: 6px;" />
 
-<br><br>
-<button onclick="approveTokens()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Approve</button>
-<button onclick="stakeTokens()" style="background:#ffab00;color:white;padding:10px 20px;border:none;border-radius:8px;margin-left:10px;">Stake</button>
   <button onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
   <button onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
   <button onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
 
   <div id="staking-details" style="display:none; margin-top:20px;">
     <p><strong>Selected:</strong> <span id="selected-duration"></span> months</p>
-    <p>Your BAG Balance: <span id="balance-bag">0</span></p>
+    
+    <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
+    
+    <p id="bag-balance"></p>
+    <p id="matic-balance"></p>
+    <p id="usdc-balance"></p>
+    <p id="usdt-balance"></p>
 
-    <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
-    <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
-    <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
-
-    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
     <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
   </div>
 </div>
-
-<!-- Wallet Section -->
-<div id="wallet-section" class="section">
-  <h2>Connect Wallet</h2>
-  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">
+<!-- Wallet Info Section -->
+<div id="wallet-info" class="section">
+  <button id="wallet-button-toggle" onclick="toggleWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:bold;">
     Connect Wallet
   </button>
-  <button onclick="disconnectWallet()" style="background:#9e9e9e;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">
-    Disconnect
-  </button>
 
-  <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
-  <p id="matic-balance"></p>
+  <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
   <p id="bag-balance"></p>
+  <p id="matic-balance"></p>
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
 
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">
+  <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">
     Back
   </button>
 </div>
@@ -516,69 +508,22 @@ function showWalletConnectModal(uri) {
   });
 }
 </script>
+<!-- Wallet Info Section -->
+<div id="wallet-info" class="section">
+  <button id="wallet-button-toggle" onclick="toggleWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:bold;">
+    Connect Wallet
+  </button>
 
-<!-- Новий окремий блок для підключення гаманця -->
-<script>
-let userAddress = "";
-const bagAddress = "0x3686568eCB6cE7545765b641932044900d11e584";
-const usdcAddress = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
-const usdtAddress = "0xC2132D05D31c914a87C6611C10748AaCBfA1F7f0";
+  <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
+  <p id="bag-balance"></p>
+  <p id="matic-balance"></p>
+  <p id="usdc-balance"></p>
+  <p id="usdt-balance"></p>
 
-async function connectWallet() {
-  if (!window.ethereum) {
-    alert("Please install MetaMask or Trust Wallet");
-    return;
-  }
-
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    userAddress = await signer.getAddress();
-    document.getElementById("wallet-address").innerText = "Wallet: " + userAddress;
-
-    await showBalances(provider);
-    document.getElementById("balance-bag").innerText = await getBAGBalance(provider);
-  } catch (err) {
-    console.error(err);
-    alert("Connection failed");
-  }
-}
-
-async function showBalances(provider) {
-  const matic = await provider.getBalance(userAddress);
-  document.getElementById("matic-balance").innerText = "POL (MATIC): " + ethers.utils.formatEther(matic).slice(0, 6);
-
-  const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-  const usdc = new ethers.Contract(usdcAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-  const usdt = new ethers.Contract(usdtAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-
-  const bagBal = await bag.balanceOf(userAddress);
-  const usdcBal = await usdc.balanceOf(userAddress);
-  const usdtBal = await usdt.balanceOf(userAddress);
-
-  bagBalance = bagBal / 1e18;
-
-  document.getElementById("bag-balance").innerText = "BAG: " + bagBalance.toFixed(2);
-  document.getElementById("usdc-balance").innerText = "USDC: " + (usdcBal / 1e6).toFixed(2);
-  document.getElementById("usdt-balance").innerText = "USDT: " + (usdtBal / 1e6).toFixed(2);
-}
-
-async function getBAGBalance(provider) {
-  const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
-  const bagBal = await bag.balanceOf(userAddress);
-  return (bagBal / 1e18).toFixed(2);
-}
-
-function disconnectWallet() {
-  userAddress = "";
-  document.getElementById("wallet-address").innerText = "";
-  document.getElementById("matic-balance").innerText = "";
-  document.getElementById("bag-balance").innerText = "";
-  document.getElementById("usdc-balance").innerText = "";
-  document.getElementById("usdt-balance").innerText = "";
-}
-</script>
+  <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">
+    Back
+  </button>
+</div>
 </body>
 </html>
 
