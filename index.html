@@ -345,7 +345,12 @@ f<!DOCTYPE html>
 <div id="staking-section" class="section">
   <h2>Staking</h2>
   <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
+<p>Enter amount to stake:</p>
+<input id="stake-amount" type="number" placeholder="Enter amount" style="padding: 8px; border-radius: 6px;" />
 
+<br><br>
+<button onclick="approveTokens()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Approve</button>
+<button onclick="stakeTokens()" style="background:#ffab00;color:white;padding:10px 20px;border:none;border-radius:8px;margin-left:10px;">Stake</button>
   <button onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
   <button onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
   <button onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
@@ -366,7 +371,12 @@ f<!DOCTYPE html>
 <!-- Wallet Section -->
 <div id="wallet-section" class="section">
   <h2>Connect Wallet</h2>
-  <button onclick="connectWalletUnified()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">Connect Wallet</button>
+  <button onclick="connectWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">
+    Connect Wallet
+  </button>
+  <button onclick="disconnectWallet()" style="background:#9e9e9e;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">
+    Disconnect
+  </button>
 
   <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
   <p id="matic-balance"></p>
@@ -374,9 +384,10 @@ f<!DOCTYPE html>
   <p id="usdc-balance"></p>
   <p id="usdt-balance"></p>
 
-  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">
+    Back
+  </button>
 </div>
-
 <!-- Footer -->
 <footer>
   <div class="social-icons" style="margin-bottom: 8px;">
@@ -385,7 +396,52 @@ f<!DOCTYPE html>
     <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
   </div>
   <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
-</footer><script>
+  </footer>
+   <script>
+  const tokenAddress = "0x3686568eCB6cE7545765b641932044900d11e584"; // BAG
+const stakingAddress = "0xYourStakingContractAddressHere"; // твій контракт
+
+async function approveTokens() {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const bag = new ethers.Contract(tokenAddress, [
+      "function approve(address spender, uint256 amount) public returns (bool)"
+    ], signer);
+
+    const amount = document.getElementById("stake-amount").value;
+    const tx = await bag.approve(stakingAddress, ethers.utils.parseUnits(amount, 18));
+    await tx.wait();
+
+    alert("Approved!");
+  } catch (err) {
+    console.error(err);
+    alert("Approval failed: " + (err.message || err));
+  }
+}
+
+async function stakeTokens() {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const staking = new ethers.Contract(stakingAddress, [
+      "function stake(uint256 amount, uint256 duration) public"
+    ], signer);
+
+    const amount = document.getElementById("stake-amount").value;
+    const duration = selectedMonths; // вже вибрана тривалість
+
+    const tx = await staking.stake(ethers.utils.parseUnits(amount, 18), duration);
+    await tx.wait();
+
+    alert("Staked!");
+  } catch (err) {
+    console.error(err);
+    alert("Staking failed: " + (err.message || err));
+  }
+}
+  <script>
+  <script>
   let selectedMonths = 0;
   let bagBalance = 0;
   const rewardPool = 500000000;
@@ -462,96 +518,58 @@ f<!DOCTYPE html>
     });
   }
 </script>
+
 <script>
   let userAddress = "";
-  const tokenContracts = {
-    BAG: "0x3686568eCB6cE7545765b641932044900d11e584",
-    USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-    USDT: "0xC2132D05D31c914a87C6611C10748AaCbA5fE4f0"
-  };
+  const bagAddress = "0x3686568eCB6cE7545765b641932044900d11e584";
+  const usdcAddress = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+  const usdtAddress = "0xC2132D05D31c914a87C6611C10748AaCBfA1F7f0";
 
-  const erc20ABI = [
-    "function balanceOf(address) view returns (uint256)",
-    "function decimals() view returns (uint8)"
-  ];
+  async function connectWallet() {
+    if (typeof window.ethereum === "undefined") {
+      alert("Please install MetaMask or Trust Wallet");
+      return;
+    }
 
-  async function connectWalletUnified() {
     try {
-      const provider = window.ethereum 
-        ? new ethers.providers.Web3Provider(window.ethereum)
-        : new WalletConnectProvider({
-            rpc: { 137: "https://polygon-rpc.com" },
-            chainId: 137
-          });
-
-      if (!window.ethereum) await provider.enable();
-
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       userAddress = await signer.getAddress();
       document.getElementById("wallet-address").innerText = "Wallet: " + userAddress;
 
-      // MATIC
-      const maticBalance = await provider.getBalance(userAddress);
-      document.getElementById("matic-balance").innerText = "MATIC: " + ethers.utils.formatEther(maticBalance);
-
-      // ERC20 tokens
-      for (const [symbol, address] of Object.entries(tokenContracts)) {
-        const contract = new ethers.Contract(address, erc20ABI, provider);
-        const balance = await contract.balanceOf(userAddress);
-        const decimals = await contract.decimals();
-        const formatted = ethers.utils.formatUnits(balance, decimals);
-        document.getElementById(symbol.toLowerCase() + "-balance").innerText = `${symbol}: ${formatted}`;
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Wallet connection failed.");
+      await showBalances(provider);
+      await showBAGinStaking(provider); // щоб оновити в стейкингу
+    } catch (err) {
+      console.error(err);
+      alert("Connection failed");
     }
   }
-</script>
-  <script>
-  let userAddress = "";
 
-  async function connectWallet() {
-    if (!window.ethereum) {
-      alert("Please install MetaMask!");
-      return;
-    }
+  async function showBalances(provider) {
+    const matic = await provider.getBalance(userAddress);
+    document.getElementById("matic-balance").innerText = "POL (MATIC): " + ethers.utils.formatEther(matic).slice(0, 6);
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    userAddress = await signer.getAddress();
-    document.getElementById("wallet").innerText = "Wallet: " + userAddress;
+    const bag = new ethers.Contract(bagAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+    const usdc = new ethers.Contract(usdcAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+    const usdt = new ethers.Contract(usdtAddress, ["function balanceOf(address) view returns (uint256)"], provider);
+
+    const bagBal = await bag.balanceOf(userAddress);
+    const usdcBal = await usdc.balanceOf(userAddress);
+    const usdtBal = await usdt.balanceOf(userAddress);
+
+    document.getElementById("bag-balance").innerText = "BAG: " + (bagBal / 1e18).toFixed(2);
+    document.getElementById("usdc-balance").innerText = "USDC: " + (usdcBal / 1e6).toFixed(2);
+    document.getElementById("usdt-balance").innerText = "USDT: " + (usdtBal / 1e6).toFixed(2);
   }
 
-  async function buyNFT() {
-    if (!userAddress) {
-      alert("Connect wallet first");
-      return;
-    }
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-
-    const contract = new ethers.Contract(
-      "0x031C189f4DF33b55cD7881D1a8e10D9f5fAfB82b", // адреса NFT Drop контракту
-      [
-        "function claimTo(address receiver, uint256 quantity) payable"
-      ],
-      signer
-    );
-
-    try {
-      const tx = await contract.claimTo(userAddress, 1, {
-        value: ethers.utils.parseEther("5") // 5 MATIC
-      });
-
-      await tx.wait();
-      alert("NFT bought successfully!");
-    } catch (error) {
-      console.error(error);
-      alert("Error: " + (error.message || error));
-    }
+  function disconnectWallet() {
+    userAddress = "";
+    document.getElementById("wallet-address").innerText = "";
+    document.getElementById("matic-balance").innerText = "";
+    document.getElementById("bag-balance").innerText = "";
+    document.getElementById("usdc-balance").innerText = "";
+    document.getElementById("usdt-balance").innerText = "";
   }
 </script>
 </body>
