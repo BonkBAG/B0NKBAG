@@ -1,55 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BONK BAG</title>
-<!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-  <!-- Web3.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-
-  <!-- WalletConnect -->
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.9.0/dist/umd/index.min.js"></script>
-
-  <!-- QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<!-- Thirdweb SDK UMD (працює з Vercel/GitHub Pages) -->
-<script src="https://unpkg.com/@thirdweb-dev/sdk@3.17.2/dist/sdk.umd.js"></script>
-<script>
-  window.sdkReady = new Promise((resolve) => {
-    // Якщо thirdweb уже завантажений
-    if (typeof thirdweb !== 'undefined') {
-      window.ThirdwebSDK = thirdweb.ThirdwebSDK;
-      resolve();
-    } else {
-      // Інакше чекаємо, поки завантажиться
-      const interval = setInterval(() => {
-        if (typeof thirdweb !== 'undefined') {
-          clearInterval(interval);
-          window.ThirdwebSDK = thirdweb.ThirdwebSDK;
-          resolve();
-        }
-      }, 50);
-    }
-  });
-</script>
-  <!-- Перевірка, чи SDK завантажився -->
-  <script>
-    window.addEventListener("DOMContentLoaded", async () => {
-      await window.sdkReady;
-      if (!window.ThirdwebSDK) {
-        alert("Thirdweb SDK не завантажено!");
-      }
-    });
-  </script>
-
-  <style>
-    html { scroll-behavior: smooth; }
-    body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
-  </style>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -100,7 +58,6 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
-      cursor: pointer;
     }
 
     .nav-menu {
@@ -119,7 +76,6 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 14px;
-      cursor: pointer;
     }
 
     .side-buttons {
@@ -140,7 +96,6 @@
       font-weight: bold;
       font-size: 16px;
       width: fit-content;
-      cursor: pointer;
     }
 
     .section {
@@ -177,18 +132,6 @@
     h2 {
       color: #66ff66;
       font-size: 28px;
-    }
-
-    .staking-button {
-      background-color: #00c853;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 14px 28px;
-      font-size: 16px;
-      font-weight: bold;
-      margin: 8px;
-      cursor: pointer;
     }
 
     @media (min-width: 769px) {
@@ -249,8 +192,9 @@
       }
     }
   </style>
-</head>
-<body><!-- BACK BUTTON -->
+</head><body>
+
+<!-- BACK BUTTON -->
 <button id="back-button" onclick="resetView()" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #00c853; color: white; border: none; padding: 10px 20px; font-weight: bold; font-size: 16px; border-radius: 8px; cursor: pointer; z-index: 1000;">Back</button>
 
 <!-- TOP BAR -->
@@ -281,9 +225,7 @@
   <a href="https://dexscreener.com/polygon/0xBa2627A3E3a66A67409Fbd284Ba35B846b5CaE6F" target="_blank">DEX Screener</a>
   <a href="https://www.geckoterminal.com/uk/polygon_pos/pools/0xba2627a3e3a66a67409fbd284ba35b846b5cae6f" target="_blank">GeckoTerminal</a>
   <a href="https://app.unvest.io/projects/137/0x3686568ecb6ce7545765b641932044900d11e584/liquidity-locks" target="_blank">Liquidity Lock</a>
-</div>
-
-<!-- Airdrop Section -->
+</div><!-- Airdrop Section -->
 <div id="airdrop-section" class="section">
   <h2>Airdrop</h2>
   <p>We are giving away 250,000,000 BAG tokens!</p>
@@ -341,7 +283,82 @@
      Twitter: <a href="https://x.com/b0nkbag" style="color:#00e676;">@b0nkbag</a><br>
      Email: <a href="mailto:bonkbag1@gmail.com" style="color:#00e676;">bonkbag1@gmail.com</a></p>
   <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Back</button>
+</div><!-- Staking Section -->
+<div id="staking-section" class="section">
+  <h2>Staking</h2>
+  <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
+
+  <button onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
+  <button onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
+  <button onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
+
+  <div id="staking-details" style="display:none; margin-top:20px;">
+    <p><strong>Selected:</strong> <span id="selected-duration"></span> months</p>
+    <p>Your BAG Balance: <span id="balance-bag">0</span></p>
+
+    <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
+    <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
+    <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
+
+    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
+    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
+  </div>
 </div>
+
+  <!-- Staking Section -->
+<div id="staking-section" class="section">
+  <h2>Staking</h2>
+  <p>Choose your staking period and earn from a 500,000,000 BAG reward pool!</p>
+
+  <button onclick="selectStaking(3)" class="staking-button">3 Months (15%)</button>
+  <button onclick="selectStaking(6)" class="staking-button">6 Months (30%)</button>
+  <button onclick="selectStaking(12)" class="staking-button">12 Months (60%)</button>
+
+  <div id="staking-details" style="display:none; margin-top:20px;">
+    <p><strong>Selected:</strong> <span id="selected-duration"></span> months</p>
+    <p>Your BAG Balance: <span id="balance-bag">0</span></p>
+
+    <input type="range" id="amount-range" min="0" max="100" value="0" step="1" oninput="updateStakingAmount()" />
+    <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
+    <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
+
+    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
+    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
+  </div>
+</div>
+
+<!-- Wallet Section -->
+<div id="wallet-section" class="section">
+  <h2>Connect Wallet</h2>
+  <button onclick="connectWallet()" style="background:#f6851b;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">MetaMask</button>
+  <button onclick="connectTrustWallet()" style="background:#3b99fc;color:white;padding:10px 20px;border:none;border-radius:8px;margin:10px;">Trust Wallet</button>
+  <p id="wallet-address" style="margin-top:15px;color:#66ff66;"></p>
+  <p id="matic-balance"></p>
+  <p id="bag-balance"></p>
+  <p id="usdc-balance"></p>
+  <p id="usdt-balance"></p>
+  <button onclick="resetView()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:20px;">Back</button>
+</div>
+
+<!-- WalletConnect QR Modal -->
+<div id="walletconnect-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:20px; border-radius:12px; text-align:center; max-width:300px;">
+    <p style="color:black;">Scan with Trust Wallet:</p>
+    <div id="walletconnect-qr"></div>
+    <br>
+    <button onclick="closeWalletConnectModal()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">Close</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="social-icons" style="margin-bottom: 8px;">
+    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
+    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
+    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
+  </div>
+  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
+</footer>
 <!-- Staking Section -->
 <div id="staking-section" class="section">
   <h2>Staking</h2>
@@ -359,123 +376,134 @@
     <p>Amount to stake: <span id="amount-to-stake">0</span> BAG</p>
     <p>Estimated reward: <span id="estimated-reward">0</span> BAG</p>
 
-    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">
-      Confirm Staking
-    </button>
-    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">
-      Back
-    </button>
+    <button onclick="submitStaking()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Confirm Staking</button>
+    <button onclick="resetStaking()" style="background:#ff4444;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:10px;">Back</button>
   </div>
 </div>
-<!-- Wallet Info Section -->
-<div id="wallet-info" class="section">
-  <button id="wallet-button-toggle" onclick="toggleWallet()" style="background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:bold;">
-    Connect Wallet
-  </button>
 
-  <p id="wallet-address" style="background:#00c853;color:white;padding:10px;border-radius:8px;margin-top:15px;"></p>
-  <p id="bag-balance"></p>
-  <p id="matic-balance"></p>
-  <p id="usdc-balance"></p>
-  <p id="usdt-balance"></p>
-
-  <button onclick="resetView()" style="margin-top:20px;background:#00c853;color:white;padding:10px 20px;border:none;border-radius:8px;">
-    Back
-  </button>
-</div>
-<footer>
-  <div class="social-icons" style="margin-bottom: 8px;">
-    <a href="https://t.me/BONKBAG" target="_blank"><i class="fab fa-telegram fa-lg" style="color:#00e5ff;"></i></a>
-    <a href="https://discord.gg/QgJVTKBg" target="_blank"><i class="fab fa-discord fa-lg" style="color:#7289da;"></i></a>
-    <a href="https://x.com/b0nkbag" target="_blank"><i class="fab fa-twitter fa-lg" style="color:#1da1f2;"></i></a>
-  </div>
-  <p>This project is for entertainment purposes only and does not constitute financial advice.</p>
-  </footer>
-  <script>
-const tokenAddress = "0x3686568eCB6cE7545765b641932044900d11e584"; // BAG
-const stakingAddress = "0xYourStakingContractAddressHere"; // заміни на свою адресу
-
-async function approveTokens() {
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const bag = new ethers.Contract(tokenAddress, [
-      "function approve(address spender, uint256 amount) public returns (bool)"
-    ], signer);
-
-    const amount = document.getElementById("stake-amount").value;
-    const tx = await bag.approve(stakingAddress, ethers.utils.parseUnits(amount, 18));
-    await tx.wait();
-
-    alert("Approved!");
-  } catch (err) {
-    console.error(err);
-    alert("Approval failed: " + (err.message || err));
-  }
-}
-
-async function stakeTokens() {
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const staking = new ethers.Contract(stakingAddress, [
-      "function stake(uint256 amount, uint256 duration) public"
-    ], signer);
-
-    const amount = document.getElementById("stake-amount").value;
-    const duration = selectedMonths;
-
-    const tx = await staking.stake(ethers.utils.parseUnits(amount, 18), duration);
-    await tx.wait();
-
-    alert("Staked!");
-  } catch (err) {
-    console.error(err);
-    alert("Staking failed: " + (err.message || err));
-  } 
-}
 <script>
-let selectedMonths = 0;
-let bagBalance = 0;
-const rewardPool = 500000000; // Пул винагород
+  let selectedMonths = 0;
+  let bagBalance = 0;
+  const rewardPool = 500000000;
 
-// Вибір тривалості стейкінгу
-function selectStaking(months) {
-  selectedMonths = months;
-  document.getElementById('selected-duration').innerText = months;
-  document.getElementById('staking-details').style.display = 'block';
-  updateStakingAmount();
-}
+  function selectStaking(months) {
+    selectedMonths = months;
+    document.getElementById('selected-duration').innerText = months;
+    document.getElementById('staking-details').style.display = 'block';
+    updateStakingAmount();
+  }
 
-// Оновлення суми та винагороди при зміні повзунка
-function updateStakingAmount() {
-  const percent = parseInt(document.getElementById('amount-range').value);
-  const amount = (bagBalance * percent / 100).toFixed(2);
-  document.getElementById('amount-to-stake').innerText = amount;
+  function updateStakingAmount() {
+    const percent = parseInt(document.getElementById('amount-range').value);
+    const amount = (bagBalance * percent / 100).toFixed(2);
+    document.getElementById('amount-to-stake').innerText = amount;
 
-  let rewardPercent = 0;
-  if (selectedMonths === 3) rewardPercent = 15;
-  else if (selectedMonths === 6) rewardPercent = 30;
-  else if (selectedMonths === 12) rewardPercent = 60;
+    let rewardPercent = 0;
+    if (selectedMonths === 3) rewardPercent = 15;
+    else if (selectedMonths === 6) rewardPercent = 30;
+    else if (selectedMonths === 12) rewardPercent = 60;
 
-  const reward = ((amount / 5000000000) * rewardPool * (rewardPercent / 100)).toFixed(2);
-  document.getElementById('estimated-reward').innerText = reward;
-}
+    const reward = ((amount / 5000000000) * rewardPool * (rewardPercent / 100)).toFixed(2);
+    document.getElementById('estimated-reward').innerText = reward;
+  }
 
-// Скидання значень
-function resetStaking() {
-  document.getElementById('staking-details').style.display = 'none';
-  document.getElementById('amount-range').value = 0;
-  document.getElementById('amount-to-stake').innerText = '0';
-  document.getElementById('estimated-reward').innerText = '0';
-  document.getElementById('selected-duration').innerText = '';
-}
+  function resetStaking() {
+    document.getElementById('staking-details').style.display = 'none';
+    document.getElementById('amount-range').value = 0;
+    document.getElementById('amount-to-stake').innerText = '0';
+    document.getElementById('estimated-reward').innerText = '0';
+    document.getElementById('selected-duration').innerText = '';
+  }
 
-// Тимчасова кнопка
-function submitStaking() {
-  alert("Staking functionality coming soon!");
-}
+  function submitStaking() {
+    alert("Staking functionality coming soon!");
+  }
+</script>
+<!-- Scripts -->
+<script>
+  function resetView() {
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.querySelector('.top-bar').style.display = 'flex';
+    document.querySelector('.nav-menu').style.display = 'flex';
+    document.querySelector('.side-buttons').style.display = 'flex';
+    document.querySelector('footer').style.display = 'block';
+    document.getElementById('back-button').style.display = 'none';
+  }
+
+  function showSection(id) {
+    resetView();
+    document.getElementById(id).style.display = 'block';
+    document.querySelector('.top-bar').style.display = 'none';
+    document.querySelector('.nav-menu').style.display = 'none';
+    document.querySelector('.side-buttons').style.display = 'none';
+    document.querySelector('footer').style.display = 'none';
+    document.getElementById('back-button').style.display = 'block';
+  }
+
+  function showWalletConnectModal(uri) {
+    document.getElementById('walletconnect-modal').style.display = 'flex';
+    const qrContainer = document.getElementById('walletconnect-qr');
+    qrContainer.innerHTML = '';
+    QRCode.toDataURL(uri).then(url => {
+      const img = new Image();
+      img.src = url;
+      img.style.maxWidth = '100%';
+      img.style.borderRadius = '8px';
+      qrContainer.appendChild(img);
+    }).catch(err => {
+      console.error("QR error:", err);
+      qrContainer.innerHTML = '<p style="color:red;">QR generation failed.</p>';
+    });
+  }
+
+  function closeWalletConnectModal() {
+    document.getElementById('walletconnect-modal').style.display = 'none';
+  }
+</script>
+<script>
+  async function connectTrustWallet() {
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    const provider = new WalletConnectProvider.default({
+      rpc: {
+        137: "https://polygon-rpc.com"
+      },
+      chainId: 137
+    });
+
+    await provider.enable();
+    console.log("WalletConnect URI:", provider.connector.uri);
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const address = accounts[0];
+    document.getElementById("wallet-address").innerText = "Connected: " + address;
+
+    const maticBalance = await web3.eth.getBalance(address);
+    document.getElementById("matic-balance").innerText = "POL: " + (web3.utils.fromWei(maticBalance, 'ether')).slice(0, 6);
+
+    if (!isMobile) {
+      showWalletConnectModal(provider.connector.uri);
+    }
+
+    const tokenList = [
+      { name: 'BAG', address: '0x3686568eCB6cE7545765b641932044900d11e584', decimals: 18 },
+      { name: 'USDC', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+      { name: 'USDT', address: '0xC2132D05D31c914A87C6611C10748AaCbA5f3c2f', decimals: 6 }
+    ];
+
+    for (const token of tokenList) {
+      const contract = new web3.eth.Contract([
+        { constant: true, inputs: [{ name: "_owner", type: "address" }], name: "balanceOf", outputs: [{ name: "balance", type: "uint256" }], type: "function" }
+      ], token.address);
+      const balance = await contract.methods.balanceOf(address).call();
+      const formatted = (balance / (10 ** token.decimals)).toFixed(4);
+      document.getElementById(token.name.toLowerCase() + "-balance").innerText = `${token.name}: ${formatted}`;
+      if (token.name === 'BAG') {
+        bagBalance = parseFloat(formatted);
+        document.getElementById('balance-bag').innerText = bagBalance;
+      }
+    }
+  }
 </script>
 </body>
 </html>
-
